@@ -159,15 +159,17 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
 
                     return (
                       <div key={idx} className="relative group/member">
-                        {/* Tag gomb / pill - Tiszta, Fix Elrendezés */}
-                        <div className="w-full px-3 py-2.5 rounded-xl bg-white/10 border border-white/10 hover:bg-white/20 hover:border-white/30 transition-all cursor-pointer flex items-center justify-between text-xs gap-2">
-                          <span className="font-semibold text-white/90 shrink-0">
+                        {/* Tag gomb / pill - Truncate megoldás, sosem lóg ki semmi */}
+                        <div className="w-full px-3 py-2.5 rounded-xl bg-white/10 border border-white/10 hover:bg-white/20 hover:border-white/30 transition-all cursor-pointer flex items-center justify-between text-xs gap-2 min-w-0">
+                          
+                          {/* NÉV: min-w-0 és truncate biztosítja, hogy ha hosszú, lekapja a végét és nem tolja ki a badge-et */}
+                          <span className="font-semibold text-white/90 truncate min-w-0 flex-1" title={member.name}>
                             {member.name}
                           </span>
                           
-                          {/* Csak az 1. számú fő szerepkör kis jelvényként */}
+                          {/* SZEREPKÖR: shrink-0 miatt ez a kis jelvény SOHASEM fog összenyomódni vagy kicsúszni */}
                           {primaryRole && (
-                            <span className="text-[10px] text-pink-300 font-medium bg-pink-500/15 border border-pink-500/20 px-2 py-0.5 rounded-md shrink-0">
+                            <span className="text-[10px] text-pink-300 font-medium bg-pink-500/15 border border-pink-500/20 px-2 py-0.5 rounded-md shrink-0 whitespace-nowrap">
                               {primaryRole}
                             </span>
                           )}
