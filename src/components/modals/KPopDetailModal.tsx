@@ -94,7 +94,7 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
         </div>
 
         {/* JOBB OLDAL: Tartalom */}
-        <div className="w-full md:w-7/12 p-6 sm:p-8 overflow-y-auto flex flex-col justify-between space-y-6">
+        <div className="w-full md:w-7/12 p-6 sm:p-8 overflow-y-auto scrollbar-none [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden flex flex-col justify-between space-y-6">
           <div className="space-y-5">
             <div>
               <span className="text-xs font-bold tracking-widest text-pink-400 uppercase">
@@ -109,7 +109,7 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
               {group.description || group.tagline}
             </p>
 
-            {/* INFO CSEMPÉK (Létszám, Ügynökség, FANDOM) */}
+            {/* INFO CSEMPÉK */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1">
               <div className="p-3 rounded-2xl bg-white/5 border border-white/10">
                 <div className="text-[10px] font-bold tracking-wider uppercase text-neutral-400">
@@ -129,7 +129,7 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
                 </div>
               </div>
 
-              {/* ÚJ: FANDOM CSEMPEM */}
+              {/* FANDOM CSEMPEM */}
               <div className="p-3 rounded-2xl bg-pink-500/10 border border-pink-500/20 col-span-2 sm:col-span-1">
                 <div className="text-[10px] font-bold tracking-wider uppercase text-pink-300 flex items-center gap-1">
                   <Heart className="w-3 h-3 text-pink-400 fill-pink-400/30" />
@@ -141,63 +141,73 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
               </div>
             </div>
 
-            {/* TAGOK LISTÁJA (Stabil 2 Oszlopos Grid elrendezéssel) */}
+            {/* TAGOK LISTÁJA */}
             {group.membersList && group.membersList.length > 0 && (
               <div className="space-y-2 pt-2">
                 <div className="text-[11px] font-bold tracking-widest uppercase text-neutral-400">
                   Tagok ({group.members})
                 </div>
                 
-                {/* 2 Oszlopos rács a rendezett megjelenésért */}
+                {/* 2 Oszlopos rács */}
                 <div className="grid grid-cols-2 gap-2">
                   {group.membersList.map((rawMember, idx) => {
                     const member = parseMember(rawMember);
-
-                    // Pozicionálás: Ha a bal oszlopban van (páros index), a képet kissé jobbra toljuk, ha a jobb oszlopban, balra toljuk, így SOHA nem lóg ki a képernyőről!
                     const isLeftColumn = idx % 2 === 0;
+
+                    // Csak az elsődleges fő szerepkört vesszük ki (pl. "Leader, Main Dancer" -> "Leader")
+                    const primaryRole = member.role ? member.role.split(',')[0].trim() : null;
 
                     return (
                       <div key={idx} className="relative group/member">
-                        {/* Tag gomb / pill */}
-                        <div className="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/10 hover:bg-white/20 hover:border-white/30 transition-all cursor-pointer flex items-center justify-between text-xs">
-                          <span className="font-semibold text-white/90 truncate">
+                        {/* Tag gomb / pill - Tiszta, Fix Elrendezés */}
+                        <div className="w-full px-3 py-2.5 rounded-xl bg-white/10 border border-white/10 hover:bg-white/20 hover:border-white/30 transition-all cursor-pointer flex items-center justify-between text-xs gap-2">
+                          <span className="font-semibold text-white/90 shrink-0">
                             {member.name}
                           </span>
-                          {member.role && (
-                            <span className="text-[10px] text-pink-300 font-normal truncate ml-1">
-                              {member.role}
+                          
+                          {/* Csak az 1. számú fő szerepkör kis jelvényként */}
+                          {primaryRole && (
+                            <span className="text-[10px] text-pink-300 font-medium bg-pink-500/15 border border-pink-500/20 px-2 py-0.5 rounded-md shrink-0">
+                              {primaryRole}
                             </span>
                           )}
                         </div>
 
-                        {/* HOVER TOOLTIP KÉP - Intelligens pozícionálással */}
+                        {/* HOVER TOOLTIP KÉP */}
                         {member.image && (
                           <div 
                             className={`absolute bottom-full mb-3 opacity-0 group-hover/member:opacity-100 pointer-events-none transition-all duration-300 transform translate-y-2 group-hover/member:translate-y-0 z-50 ${
                               isLeftColumn ? "left-0" : "right-0"
                             }`}
                           >
-                            <div className="w-48 h-48 sm:w-52 sm:h-52 rounded-2xl overflow-hidden border-2 border-white/30 shadow-[0_25px_60px_-10px_rgba(0,0,0,0.9)] bg-neutral-900 p-1 relative flex flex-col justify-end">
+                            <div className="w-52 h-64 sm:w-56 sm:h-72 rounded-2xl overflow-hidden border border-white/20 shadow-[0_25px_60px_-10px_rgba(0,0,0,0.9)] bg-neutral-900 relative flex flex-col justify-end group/card">
+                              
+                              {/* 1. Teljes kártyás kép */}
                               <img
                                 src={member.image}
                                 alt={member.name}
-                                className="absolute inset-0 w-full h-full object-cover rounded-xl"
+                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
                               />
                               
-                              <div className="relative z-10 p-2.5 bg-linear-to-t from-black/95 via-black/70 to-transparent rounded-b-xl">
-                                <div className="text-xs font-bold text-white tracking-wide">
+                              {/* 2. FINOM, LÁGY SZÍNÁTMENETES SÖTÉTÍTÉS (Gradiens a kép alján) */}
+                              <div className="absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-black/90 via-black/50 to-transparent pointer-events-none" />
+
+                              {/* 3. Szöveges tartalom lágyan a gradiensre ültetve */}
+                              <div className="relative z-10 p-4 space-y-0.5">
+                                <div className="text-sm font-extrabold text-white tracking-wide drop-shadow-md">
                                   {member.name}
                                 </div>
+                                
                                 {member.role && (
-                                  <div className="text-[10px] text-pink-300 font-medium truncate mt-0.5">
+                                  <p className="text-[11px] text-pink-300 font-medium leading-snug wrap-break-word drop-shadow">
                                     {member.role}
-                                  </div>
+                                  </p>
                                 )}
                               </div>
                             </div>
                             
-                            {/* Nyíl a kártya alján az adott oszlophoz igazítva */}
-                            <div className={`w-3 h-3 bg-neutral-900 rotate-45 -mt-1.5 border-r border-b border-white/30 ${
+                            {/* Nyíl a kártya alján */}
+                            <div className={`w-3 h-3 bg-neutral-900 rotate-45 -mt-1.5 border-r border-b border-white/20 ${
                               isLeftColumn ? "ml-6" : "ml-auto mr-6"
                             }`} />
                           </div>
