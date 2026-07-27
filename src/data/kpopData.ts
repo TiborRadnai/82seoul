@@ -10,6 +10,7 @@ export interface KPopGroupData {
   tagline: string;
   image: string;
   members: string;
+  fandom?: string; // 👈 ÚJ MEZŐ: Fandom neve (pl. ARMY, BLINK)
   membersList: KPopMember[];
   agency: string;
   description: string;
@@ -22,6 +23,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     tagline: "A világot összekötő érzelmek hangja",
     image: "/images/kpop/bts-mini.webp",
     members: "7 tag",
+    fandom: "ARMY",
     membersList: [
       { name: "RM", role: "Leader, Main Rapper", image: "/images/kpop/members/bts-rm.webp" },
       { name: "Jin", role: "Vocalist, Visual", image: "/images/kpop/members/bts-jin.webp" },
@@ -40,6 +42,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     tagline: "A K-Pop koronázatlan királynői",
     image: "/images/kpop/blackpink-mini.webp",
     members: "4 tag",
+    fandom: "BLINK",
     membersList: [
       { name: "Jennie", role: "Main Rapper, Lead Vocalist", image: "/images/kpop/members/blackpink-jennie.webp" },
       { name: "Jisoo", role: "Lead Vocalist, Visual", image: "/images/kpop/members/blackpink-jisoo.webp" },
@@ -55,6 +58,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     tagline: "A saját szabályaikat író, energiától robbanó úttörők",
     image: "/images/kpop/stray-kids-mini.webp",
     members: "8 tag",
+    fandom: "STAY",
     membersList: [
       { name: "Bang Chan", role: "Leader, Producer, Vocalist", image: "/images/kpop/members/straykids-bangchan.webp" },
       { name: "Lee Know", role: "Main Dancer, Vocalist", image: "/images/kpop/members/straykids-leeknow.webp" },
@@ -74,6 +78,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     tagline: "A K-Pop megunhatatlan és ragyogó szupersztárjai",
     image: "/images/kpop/twice-mini.webp",
     members: "9 tag",
+    fandom: "ONCE",
     membersList: [
       { name: "Jihyo", role: "Leader, Main Vocalist", image: "/images/kpop/members/twice-jihyo.webp" },
       { name: "Nayeon", role: "Lead Vocalist, Lead Dancer, Center", image: "/images/kpop/members/twice-nayeon.webp" },
@@ -94,6 +99,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     tagline: "A nosztalgikus Y2K életérzés és a laza elegancia ikonjai",
     image: "/images/kpop/new-jeans-mini.webp",
     members: "5 tag",
+    fandom: "Bunnies (Bonnies)",
     membersList: [
       { name: "Minji", role: "Vocalist, Dancer", image: "/images/kpop/members/newjeans-minji.webp" },
       { name: "Hanni", role: "Vocalist, Dancer", image: "/images/kpop/members/newjeans-hanni.webp" },
@@ -110,6 +116,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     tagline: "A digitális világ és a valóság határán született ikonok",
     image: "/images/kpop/aespa-mini.webp",
     members: "4 tag",
+    fandom: "MY",
     membersList: [
       { name: "Karina", role: "Leader, Main Dancer, Lead Rapper, Visual", image: "/images/kpop/members/aespa-karina.webp" },
       { name: "Giselle", role: "Main Rapper, Sub Vocalist", image: "/images/kpop/members/aespa-giselle.webp" },
@@ -124,10 +131,10 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     name: "ENHYPEN",
     tagline: "A sötét elegancia és a misztikus történetek mesterei",
     image: "/images/kpop/enhypen-mini.webp",
-    members: "7 tag",
+    members: "6 tag",
+    fandom: "ENGENE",
     membersList: [
       { name: "Jungwon", role: "Leader, Lead Vocalist, Lead Dancer", image: "/images/kpop/members/enhypen-jungwon.webp" },
-      { name: "Heeseung", role: "Main Vocalist, Lead Dancer", image: "/images/kpop/members/enhypen-heeseung.webp" },
       { name: "Jay", role: "Main Rapper, Lead Dancer", image: "/images/kpop/members/enhypen-jay.webp" },
       { name: "Jake", role: "Rapper, Vocalist", image: "/images/kpop/members/enhypen-jake.webp" },
       { name: "Sunghoon", role: "Lead Dancer, Vocalist, Visual", image: "/images/kpop/members/enhypen-sunghoon.webp" },
@@ -143,6 +150,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     tagline: "Félelem nélküli, megtörhetetlen dívák",
     image: "/images/kpop/le-sserafim-mini.webp",
     members: "5 tag",
+    fandom: "FEARNOT",
     membersList: [
       { name: "Chaewon", role: "Leader, Lead Vocalist, Lead Dancer", image: "/images/kpop/members/lesserafim-chaewon.webp" },
       { name: "Sakura", role: "Vocalist, Visual", image: "/images/kpop/members/lesserafim-sakura.webp" },
@@ -159,6 +167,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     tagline: "A magabiztos elegancia és a slágerlista-uralom megtestesítői",
     image: "/images/kpop/ive-mini.webp",
     members: "6 tag",
+    fandom: "DIVE",
     membersList: [
       { name: "An Yujin", role: "Leader, Main Vocalist, Lead Dancer", image: "/images/kpop/members/ive-anyujin.webp" },
       { name: "Gaeul", role: "Main Rapper, Lead Dancer", image: "/images/kpop/members/ive-gaeul.webp" },
@@ -176,6 +185,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     tagline: "Önálló, merész és megalkuvást nem ismerő látnokok",
     image: "/images/kpop/idle-mini.webp",
     members: "5 tag",
+    fandom: "NEVERLAND",
     membersList: [
       { name: "Soyeon", role: "Leader, Main Rapper, Producer", image: "/images/kpop/members/gidle-soyeon.webp" },
       { name: "Miyeon", role: "Main Vocalist, Visual", image: "/images/kpop/members/gidle-miyeon.webp" },
@@ -192,6 +202,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     tagline: "A nyers tehetség és az új generáció pusztító energiája",
     image: "/images/kpop/babymonster-mini.webp",
     members: "7 tag",
+    fandom: "MONSTIEZ",
     membersList: [
       { name: "Pharita", role: "Vocalist", image: "/images/kpop/members/babymonster-pharita.webp" },
       { name: "Ruka", role: "Main Rapper, Main Dancer", image: "/images/kpop/members/babymonster-ruka.webp" },
@@ -210,6 +221,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     tagline: "A színpadi jelenlét és a teátrális intenzitás királyai",
     image: "/images/kpop/ateez-mini.webp",
     members: "8 tag",
+    fandom: "ATINY",
     membersList: [
       { name: "Hongjoong", role: "Leader, Lead Rapper, Producer", image: "/images/kpop/members/ateez-hongjoong.webp" },
       { name: "Seonghwa", role: "Lead Vocalist, Visual", image: "/images/kpop/members/ateez-seonghwa.webp" },
@@ -229,6 +241,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     tagline: "Az álomszerű, varázslatos és fülbemászó világ megteremtői",
     image: "/images/kpop/illit-mini.webp",
     members: "5 tag",
+    fandom: "GLLIT",
     membersList: [
       { name: "Yunah", role: "Vocalist, Dancer", image: "/images/kpop/members/illit-yunah.webp" },
       { name: "Minju", role: "Vocalist", image: "/images/kpop/members/illit-minju.webp" },
@@ -245,6 +258,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     tagline: "A színtiszta fiatalos erő és a megállíthatalan közösségi vibe",
     image: "/images/kpop/treasure-mini.webp",
     members: "10 tag",
+    fandom: "Teume",
     membersList: [
       { name: "Choi Hyun-suk", role: "Leader, Main Rapper, Main Dancer", image: "/images/kpop/members/treasure-choihyunsuk.webp" },
       { name: "Jihoon", role: "Leader, Main Dancer, Lead Vocalist", image: "/images/kpop/members/treasure-jihoon.webp" },
@@ -266,6 +280,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     tagline: "A szomszéd fiúk közvetlen, szerethető és friss stílusa",
     image: "/images/kpop/boynextdoor-mini.webp",
     members: "6 tag",
+    fandom: "ONEDOOR",
     membersList: [
       { name: "Jaehyun", role: "Leader, Main Vocalist, Rapper", image: "/images/kpop/members/boynextdoor-jaehyun.webp" },
       { name: "Sungho", role: "Main Vocalist", image: "/images/kpop/members/boynextdoor-sungho.webp" },
@@ -283,6 +298,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     tagline: "A kecses vagányság és a prémium attitude új arca",
     image: "/images/kpop/meovv-mini.webp",
     members: "5 tag",
+    fandom: "MEOVV CHUU",
     membersList: [
       { name: "Ella", role: "Vocalist, Model", image: "/images/kpop/members/meovv-ella.webp" },
       { name: "Gawon", role: "Vocalist, Rapper", image: "/images/kpop/members/meovv-gawon.webp" },
@@ -299,6 +315,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
 //     tagline: "A mesebeli történetek és a fiatalság narrátorai",
 //     image: "/images/kpop/txt-mini.webp",
 //     members: "5 tag",
+//     fandom: "MOA",
 //     membersList: [
 //       { name: "Soobin", role: "Leader, Vocalist", image: "/images/kpop/members/txt-soobin.webp" },
 //       { name: "Yeonjun", role: "Main Dancer, Main Rapper, Vocalist", image: "/images/kpop/members/txt-yeonjun.webp" },
@@ -315,6 +332,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
 //     tagline: "A tökéletes szinkronitás és az önálló alkotás mesterei",
 //     image: "/images/kpop/seventeen-mini.webp",
 //     members: "13 tag",
+//     fandom: "CARAT",
 //     membersList: [
 //       { name: "S.Coups", role: "Leader, Hip-Hop Leader, Main Rapper", image: "/images/kpop/members/seventeen-scoups.webp" },
 //       { name: "Jeonghan", role: "Lead Vocalist, Visual", image: "/images/kpop/members/seventeen-jeonghan.webp" },
@@ -339,6 +357,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
 //     tagline: "A művészi sokoldalúság és a koncepcionális varázs királynői",
 //     image: "/images/kpop/red-velvet-mini.webp",
 //     members: "5 tag",
+//     fandom: "ReVeluv",
 //     membersList: [
 //       { name: "Irene", role: "Leader, Main Rapper, Lead Dancer, Visual", image: "/images/kpop/members/redvelvet-irene.webp" },
 //       { name: "Seulgi", role: "Main Dancer, Lead Vocalist", image: "/images/kpop/members/redvelvet-seulgi.webp" },
@@ -355,6 +374,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
 //     tagline: "Az önelfogadás és a kitörő energia nagykövetei",
 //     image: "/images/kpop/itzy-mini.webp",
 //     members: "5 tag",
+//     fandom: "MIDZY",
 //     membersList: [
 //       { name: "Yeji", role: "Leader, Main Dancer, Lead Vocalist, Sub Rapper", image: "/images/kpop/members/itzy-yeji.webp" },
 //       { name: "Lia", role: "Main Vocalist", image: "/images/kpop/members/itzy-lia.webp" },
@@ -371,6 +391,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
 //     tagline: "Az érzelmes pop és a folyamatos fejlődés úttörői",
 //     image: "/images/kpop/riize-mini.webp",
 //     members: "6 tag",
+//     fandom: "BRIIZE",
 //     membersList: [
 //       { name: "Shotaro", role: "Main Dancer", image: "/images/kpop/members/riize-shotaro.webp" },
 //       { name: "Eunseok", role: "Vocalist, Visual", image: "/images/kpop/members/riize-eunseok.webp" },
@@ -388,6 +409,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
 //     tagline: "A rajongók erejéből született ragyogó csillagok",
 //     image: "/images/kpop/zerobaseone-mini.webp",
 //     members: "9 tag",
+//     fandom: "ZEROSE",
 //     membersList: [
 //       { name: "Sung Han Bin", role: "Leader, Main Dancer, Lead Vocalist", image: "/images/kpop/members/zerobaseone-sunghanbin.webp" },
 //       { name: "Kim Ji Woong", role: "Lead Rapper, Lead Dancer, Visual", image: "/images/kpop/members/zerobaseone-kimjiwoong.webp" },
@@ -408,6 +430,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
 //     tagline: "A nyers vokalitás és az autentikus R&B újjászületése",
 //     image: "/images/kpop/kiss-of-life-mini.webp",
 //     members: "4 tag",
+//     fandom: "KISSY",
 //     membersList: [
 //       { name: "Julie", role: "Leader, Main Rapper, Lead Dancer", image: "/images/kpop/members/kissoflife-julie.webp" },
 //       { name: "Natty", role: "Main Dancer, Lead Rapper, Sub Vocalist", image: "/images/kpop/members/kissoflife-natty.webp" },
@@ -423,6 +446,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
 //     tagline: "A műfajokat egyesítő MIXX POP varázslói",
 //     image: "/images/kpop/nmixx-mini.webp",
 //     members: "6 tag",
+//     fandom: "NSWER",
 //     membersList: [
 //       { name: "Lily", role: "Main Vocalist", image: "/images/kpop/members/nmixx-lily.webp" },
 //       { name: "Haewon", role: "Leader, Main Vocalist", image: "/images/kpop/members/nmixx-haewon.webp" },
