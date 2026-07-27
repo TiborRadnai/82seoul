@@ -143,7 +143,7 @@ export default function KoreaSection() {
           {/* ALSÓ SOR 2: Utazási Kisokos & Tippek */}
           <Link
             href="/korea-travel#guide"
-            className="lg:col-span-6 group relative h-72 md:h-80 rounded-3xl overflow-hidden bg-linear-to-br from-slate-900 via-slate-800 to-indigo-950 border border-slate-700/80 shadow-xl transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-12px_rgba(14,165,233,0.2)] hover:border-sky-400/60 block cursor-pointer p-8 flex flex-col justify-between"
+            className="lg:col-span-6 group relative h-72 md:h-80 rounded-3xl overflow-hidden bg-linear-to-br from-slate-900 via-slate-800 to-indigo-950 border border-slate-700/80 shadow-xl transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-12px_rgba(14,165,233,0.2)] hover:border-sky-400/60 cursor-pointer p-8 flex flex-col justify-between"
           >
             <div className="flex items-center justify-between z-10">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/20 border border-sky-400/30 text-sky-300 text-[10px] font-bold tracking-wider uppercase">
