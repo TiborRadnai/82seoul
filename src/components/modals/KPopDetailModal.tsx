@@ -159,17 +159,20 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
 
                     return (
                       <div key={idx} className="relative group/member">
-                        {/* Tag gomb / pill - Truncate megoldás, sosem lóg ki semmi */}
+                        {/* Tag gomb / pill - A NÉV a fontosabb, a SZEREPKÖR rövidül, ha nem fér el */}
                         <div className="w-full px-3 py-2.5 rounded-xl bg-white/10 border border-white/10 hover:bg-white/20 hover:border-white/30 transition-all cursor-pointer flex items-center justify-between text-xs gap-2 min-w-0">
                           
-                          {/* NÉV: min-w-0 és truncate biztosítja, hogy ha hosszú, lekapja a végét és nem tolja ki a badge-et */}
-                          <span className="font-semibold text-white/90 truncate min-w-0 flex-1" title={member.name}>
+                          {/* NÉV: Teljesen kiírva, nem nyomódik össze (shrink-0) */}
+                          <span className="font-semibold text-white/90 shrink-0">
                             {member.name}
                           </span>
                           
-                          {/* SZEREPKÖR: shrink-0 miatt ez a kis jelvény SOHASEM fog összenyomódni vagy kicsúszni */}
+                          {/* SZEREPKÖR: Ha a név túl hosszú, a szerepkör kap 3 pontot a végére (truncate min-w-0) */}
                           {primaryRole && (
-                            <span className="text-[10px] text-pink-300 font-medium bg-pink-500/15 border border-pink-500/20 px-2 py-0.5 rounded-md shrink-0 whitespace-nowrap">
+                            <span 
+                              className="text-[10px] text-pink-300 font-medium bg-pink-500/15 border border-pink-500/20 px-2 py-0.5 rounded-md truncate min-w-0 max-w-[110px]"
+                              title={primaryRole}
+                            >
                               {primaryRole}
                             </span>
                           )}
