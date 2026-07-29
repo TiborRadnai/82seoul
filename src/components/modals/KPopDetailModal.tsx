@@ -170,7 +170,7 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
                           {/* SZEREPKÖR: Ha a név túl hosszú, a szerepkör kap 3 pontot a végére (truncate min-w-0) */}
                           {primaryRole && (
                             <span 
-                              className="text-[10px] text-pink-300 font-medium bg-pink-500/15 border border-pink-500/20 px-2 py-0.5 rounded-md truncate min-w-0 max-w-[110px]"
+                              className="text-[10px] text-pink-300 font-medium bg-pink-500/15 border border-pink-500/20 px-2 py-0.5 rounded-md truncate min-w-0 max-w-27.5"
                               title={primaryRole}
                             >
                               {primaryRole}

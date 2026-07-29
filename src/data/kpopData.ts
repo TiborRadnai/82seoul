@@ -9,6 +9,7 @@ export interface KPopGroupData {
   name: string;
   tagline: string;
   image: string;
+  wideImage: string;
   members: string;
   fandom?: string; // 👈 ÚJ MEZŐ: Fandom neve (pl. ARMY, BLINK)
   membersList: KPopMember[];
@@ -22,6 +23,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     name: "BTS",
     tagline: "A világot összekötő érzelmek hangja",
     image: "/images/kpop/bts-mini.webp",
+    wideImage: '/images/kpop/bts.webp',
     members: "7 tag",
     fandom: "ARMY",
     membersList: [
@@ -41,6 +43,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     name: "Blackpink",
     tagline: "A K-Pop koronázatlan királynői",
     image: "/images/kpop/blackpink-mini.webp",
+    wideImage: '/images/kpop/blackpink.webp',
     members: "4 tag",
     fandom: "BLINK",
     membersList: [
@@ -57,6 +60,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     name: "Stray Kids",
     tagline: "A saját szabályaikat író, energiától robbanó úttörők",
     image: "/images/kpop/stray-kids-mini.webp",
+    wideImage: '/images/kpop/straykids.webp',
     members: "8 tag",
     fandom: "STAY",
     membersList: [
@@ -77,6 +81,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     name: "TWICE",
     tagline: "A K-Pop megunhatatlan és ragyogó szupersztárjai",
     image: "/images/kpop/twice-mini.webp",
+    wideImage: '/images/kpop/twice.webp',
     members: "9 tag",
     fandom: "ONCE",
     membersList: [
@@ -98,6 +103,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     name: "NewJeans",
     tagline: "A nosztalgikus Y2K életérzés és a laza elegancia ikonjai",
     image: "/images/kpop/new-jeans-mini.webp",
+    wideImage: '/images/kpop/new-jeans.webp',
     members: "5 tag",
     fandom: "Bunnies (Bonnies)",
     membersList: [
@@ -115,6 +121,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     name: "Aespa",
     tagline: "A digitális világ és a valóság határán született ikonok",
     image: "/images/kpop/aespa-mini.webp",
+    wideImage: '/images/kpop/aespa.webp',
     members: "4 tag",
     fandom: "MY",
     membersList: [
@@ -131,6 +138,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     name: "ENHYPEN",
     tagline: "A sötét elegancia és a misztikus történetek mesterei",
     image: "/images/kpop/enhypen-mini.webp",
+    wideImage: '/images/kpop/enhypen.webp',
     members: "6 tag",
     fandom: "ENGENE",
     membersList: [
@@ -149,6 +157,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     name: "LE SSERAFIM",
     tagline: "Félelem nélküli, megtörhetetlen dívák",
     image: "/images/kpop/le-sserafim-mini.webp",
+    wideImage: '/images/kpop/le sserafim.webp',
     members: "5 tag",
     fandom: "FEARNOT",
     membersList: [
@@ -166,6 +175,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     name: "IVE",
     tagline: "A magabiztos elegancia és a slágerlista-uralom megtestesítői",
     image: "/images/kpop/ive-mini.webp",
+    wideImage: '/images/kpop/ive.webp',
     members: "6 tag",
     fandom: "DIVE",
     membersList: [
@@ -184,6 +194,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     name: "(G)I-DLE",
     tagline: "Önálló, merész és megalkuvást nem ismerő látnokok",
     image: "/images/kpop/idle-mini.webp",
+    wideImage: '/images/kpop/idle.webp',
     members: "5 tag",
     fandom: "NEVERLAND",
     membersList: [
@@ -201,6 +212,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     name: "BABYMONSTER",
     tagline: "A nyers tehetség és az új generáció pusztító energiája",
     image: "/images/kpop/babymonster-mini.webp",
+    wideImage: '/images/kpop/babymonster.webp',
     members: "7 tag",
     fandom: "MONSTIEZ",
     membersList: [
@@ -220,6 +232,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     name: "ATEEZ",
     tagline: "A színpadi jelenlét és a teátrális intenzitás királyai",
     image: "/images/kpop/ateez-mini.webp",
+    wideImage: '/images/kpop/ateez.webp',
     members: "8 tag",
     fandom: "ATINY",
     membersList: [
@@ -240,6 +253,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     name: "ILLIT",
     tagline: "Az álomszerű, varázslatos és fülbemászó világ megteremtői",
     image: "/images/kpop/illit-mini.webp",
+    wideImage: '/images/kpop/illit.webp',
     members: "5 tag",
     fandom: "GLLIT",
     membersList: [
@@ -257,6 +271,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     name: "TREASURE",
     tagline: "A színtiszta fiatalos erő és a megállíthatalan közösségi vibe",
     image: "/images/kpop/treasure-mini.webp",
+    wideImage: '/images/kpop/treasure.webp',
     members: "10 tag",
     fandom: "Teume",
     membersList: [
@@ -279,6 +294,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     name: "Boynextdoor",
     tagline: "A szomszéd fiúk közvetlen, szerethető és friss stílusa",
     image: "/images/kpop/boynextdoor-mini.webp",
+    wideImage: '/images/kpop/boynextdoor.webp',
     members: "6 tag",
     fandom: "ONEDOOR",
     membersList: [
@@ -297,6 +313,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     name: "MEOVV",
     tagline: "A kecses vagányság és a prémium attitude új arca",
     image: "/images/kpop/meovv-mini.webp",
+    wideImage: '/images/kpop/meovv.webp',
     members: "5 tag",
     fandom: "MEOVV CHUU",
     membersList: [
@@ -314,6 +331,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
 //     name: "TOMORROW X TOGETHER",
 //     tagline: "A mesebeli történetek és a fiatalság narrátorai",
 //     image: "/images/kpop/txt-mini.webp",
+//     wideImage: '/images/kpop/bts.webp',
 //     members: "5 tag",
 //     fandom: "MOA",
 //     membersList: [
@@ -331,6 +349,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
 //     name: "SEVENTEEN",
 //     tagline: "A tökéletes szinkronitás és az önálló alkotás mesterei",
 //     image: "/images/kpop/seventeen-mini.webp",
+//     wideImage: '/images/kpop/bts.webp',
 //     members: "13 tag",
 //     fandom: "CARAT",
 //     membersList: [
@@ -356,6 +375,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
 //     name: "Red Velvet",
 //     tagline: "A művészi sokoldalúság és a koncepcionális varázs királynői",
 //     image: "/images/kpop/red-velvet-mini.webp",
+//     wideImage: '/images/kpop/bts.webp',
 //     members: "5 tag",
 //     fandom: "ReVeluv",
 //     membersList: [
@@ -373,6 +393,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
 //     name: "ITZY",
 //     tagline: "Az önelfogadás és a kitörő energia nagykövetei",
 //     image: "/images/kpop/itzy-mini.webp",
+//     wideImage: '/images/kpop/bts.webp',
 //     members: "5 tag",
 //     fandom: "MIDZY",
 //     membersList: [
@@ -390,6 +411,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
 //     name: "RIIZE",
 //     tagline: "Az érzelmes pop és a folyamatos fejlődés úttörői",
 //     image: "/images/kpop/riize-mini.webp",
+//     wideImage: '/images/kpop/bts.webp',
 //     members: "6 tag",
 //     fandom: "BRIIZE",
 //     membersList: [
@@ -408,6 +430,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
 //     name: "ZEROBASEONE",
 //     tagline: "A rajongók erejéből született ragyogó csillagok",
 //     image: "/images/kpop/zerobaseone-mini.webp",
+//     wideImage: '/images/kpop/bts.webp',
 //     members: "9 tag",
 //     fandom: "ZEROSE",
 //     membersList: [
@@ -429,6 +452,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
 //     name: "KISS OF LIFE",
 //     tagline: "A nyers vokalitás és az autentikus R&B újjászületése",
 //     image: "/images/kpop/kiss-of-life-mini.webp",
+//     wideImage: '/images/kpop/bts.webp',
 //     members: "4 tag",
 //     fandom: "KISSY",
 //     membersList: [
@@ -445,6 +469,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
 //     name: "NMIXX",
 //     tagline: "A műfajokat egyesítő MIXX POP varázslói",
 //     image: "/images/kpop/nmixx-mini.webp",
+//     wideImage: '/images/kpop/bts.webp',
 //     members: "6 tag",
 //     fandom: "NSWER",
 //     membersList: [
