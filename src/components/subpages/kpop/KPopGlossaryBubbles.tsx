@@ -181,40 +181,40 @@ export default function KPopGlossaryBubbles() {
         </p>
       </div>
 
-      {/* MOBIL NÉZET: Grid elrendezés (csak sm alatt látszik) */}
-      <div className="sm:hidden w-full px-4 grid grid-cols-3 gap-3">
+      {/* MOBIL / TABLET / KISEBB LAPTOP NÉZET (< 1280px): Színes, rádiuszos kártyák rácsban */}
+      <div className="xl:hidden w-full px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 max-w-5xl mx-auto">
         {GLOSSARY_TERMS.map((item) => (
           <div
             key={`mob-${item.id}`}
             onClick={() => setSelectedTerm(item)}
-            className={`group cursor-pointer flex items-center justify-center rounded-full transition-transform duration-300 hover:scale-110 active:scale-95 mx-auto ${item.animClass}`}
+            className={`group cursor-pointer p-4 rounded-2xl bg-linear-to-br ${item.glassGradient} backdrop-blur-md border border-white/80 shadow-md transition-all duration-300 active:scale-[0.98] flex items-center justify-between`}
             style={{
-              width: 'clamp(90px, 28vw, 120px)',
-              height: 'clamp(90px, 28vw, 120px)',
+              boxShadow: `0 10px 25px -5px ${item.glowColor}`,
             }}
           >
-            <div 
-              className={`absolute inset-0 rounded-full bg-linear-to-br ${item.glassGradient} backdrop-blur-md border border-white/80 transition-all duration-300 group-hover:border-white group-hover:shadow-xl`}
-              style={{
-                boxShadow: `
-                  inset 0 4px 8px 0 rgba(255, 255, 255, 0.9), 
-                  inset 0 -6px 12px 0 rgba(0, 0, 0, 0.05), 
-                  0 15px 30px -6px ${item.glowColor}
-                `,
-              }}
-            >
-              <div className="absolute top-2 left-3 w-2/5 h-1/3 bg-linear-to-b from-white/90 to-transparent rounded-full blur-[1px] pointer-events-none" />
+            <div>
+              {item.korean && (
+                <span className="text-[10px] font-black tracking-widest uppercase text-pink-600 block mb-0.5">
+                  {item.korean}
+                </span>
+              )}
+              <h3 className="text-lg font-extrabold text-zinc-900 tracking-tight">
+                {item.term}
+              </h3>
+              <p className="text-xs text-zinc-700 font-medium line-clamp-1 mt-0.5">
+                {item.definition}
+              </p>
             </div>
-
-            <span className="relative z-10 text-[10px] font-bold tracking-wider text-zinc-800 uppercase text-center px-1">
-              {item.term}
-            </span>
+            
+            <div className="w-8 h-8 rounded-full bg-white/70 border border-white flex items-center justify-center text-zinc-800 font-bold text-xs shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+              →
+            </div>
           </div>
         ))}
       </div>
 
-      {/* DESKTOP NÉZET: Teljes szélességű abszolút tér (csak sm-től látszik, hiba nélkül) */}
-      <div className="hidden sm:block relative w-full h-155 px-4">
+      {/* NAGY DESKTOP NÉZET (>= 1280px): Biztonságos távolságú, lebegő buborék-térkép */}
+      <div className="hidden xl:block relative w-full h-155 max-w-7xl mx-auto px-4">
         {GLOSSARY_TERMS.map((item) => (
           <div
             key={`desk-${item.id}`}
@@ -247,7 +247,7 @@ export default function KPopGlossaryBubbles() {
         ))}
       </div>
 
-      {/* NAGY BUBORÉK MODAL */}
+      {/* NAGY BUBORÉK MODAL (Közös mindkét nézethez) */}
       <AnimatePresence>
         {selectedTerm && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/20 backdrop-blur-sm">
