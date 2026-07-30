@@ -733,30 +733,51 @@ export const KPOP_SOLOISTS: KPopGroupData[] = [
   }
 ];
 
-export const getKPopGroupById = (id: string): KPopGroupData | undefined => {
-  return KPOP_GROUPS.find((group) => group.id === id);
+// ==========================================
+// 💥 1. EGYESÍTETT ADATBÁZIS ÉS RENDEZÉS
+// ==========================================
+
+// Összefűzzük a csoportokat és a szólókat egyetlen teljes tömbbe
+export const ALL_KPOP_DATA: KPopGroupData[] = [...KPOP_GROUPS, ...KPOP_SOLOISTS];
+
+// Rendezzük az összes előadót a 'rank' mező alapján (legnépszerűbbek elöl)
+export const getSortedKPopData = (): KPopGroupData[] => {
+  return [...ALL_KPOP_DATA].sort((a, b) => a.rank - b.rank);
 };
+
+// ==========================================
+// 💥 2. RÉSZLETES OLDAL / EGYEDI LEKÉRÉS
+// ==========================================
+
+export const getKPopGroupById = (id: string): KPopGroupData | undefined => {
+  // Kis- és nagybetű független keresés a teljes adatbázisban!
+  return ALL_KPOP_DATA.find((item) => item.id.toLowerCase() === id.toLowerCase());
+};
+
+// ==========================================
+// 💥 3. GOLYÓÁLLÓ KERESŐFÜGGVÉNY
+// ==========================================
 
 export const searchKPopGroups = (query: string): KPopGroupData[] => {
   const q = query.toLowerCase().trim();
-  if (!q) return KPOP_GROUPS;
+  if (!q) return getSortedKPopData();
 
-  return KPOP_GROUPS.filter((group) => {
+  return getSortedKPopData().filter((item) => {
     // 1. Keresés a névben
-    const matchesName = group.name.toLowerCase().includes(q);
+    const matchesName = item.name.toLowerCase().includes(q);
     
-    // 2. Keresés az ügynökségben (Agency)
-    const matchesAgency = group.agency.toLowerCase().includes(q);
+    // 2. Keresés az ügynökségben
+    const matchesAgency = item.agency.toLowerCase().includes(q);
 
-    // 3. Keresés a leírásban vagy tagline-ban (ha van)
-    const matchesDescription = group.description.toLowerCase().includes(q) ||
-      (group.tagline && group.tagline.toLowerCase().includes(q));
+    // 3. Keresés a leírásban és tagline-ban
+    const matchesDescription = item.description.toLowerCase().includes(q) ||
+      (item.tagline ? item.tagline.toLowerCase().includes(q) : false);
 
-    // 4. Keresés a Fandom névben (ha van)
-    const matchesFandom = group.fandom ? group.fandom.toLowerCase().includes(q) : false;
+    // 4. Keresés a Fandom névben
+    const matchesFandom = item.fandom ? item.fandom.toLowerCase().includes(q) : false;
 
-    // 5. Keresés a Tagok közt (BIZTONSÁGOSAN: Optional chaining '?.')
-    const matchesMembers = group.membersList?.some((m) => {
+    // 5. Keresés a Tagok neveiben és szerepköreiben (biztonságos chaining-gel)
+    const matchesMembers = item.membersList?.some((m) => {
       if (typeof m === "string") {
         return (m as string).toLowerCase().includes(q);
       }
@@ -767,5 +788,20 @@ export const searchKPopGroups = (query: string): KPopGroupData[] => {
     }) ?? false;
 
     return matchesName || matchesAgency || matchesDescription || matchesFandom || matchesMembers;
+  });
+};
+
+// ==========================================
+// 💥 4. KATEGÓRIA ÉS ÜGYNÖKSÉG SZŰRŐ (UI gombokhoz)
+// ==========================================
+
+export const filterKPopData = (
+  category?: 'all' | 'bg' | 'gg' | 'solo',
+  agency?: 'ALL' | 'HYBE' | 'SM' | 'YG' | 'JYP' | 'OTHER'
+): KPopGroupData[] => {
+  return getSortedKPopData().filter((item) => {
+    const matchCategory = !category || category === 'all' || item.category === category;
+    const matchAgency = !agency || agency === 'ALL' || item.filterAgency === agency;
+    return matchCategory && matchAgency;
   });
 };
