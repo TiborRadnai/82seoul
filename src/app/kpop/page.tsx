@@ -15,7 +15,7 @@ export default function KPopPage() {
       {/* 3. LOGÓSÁV */}
       <LogoMarquee />
 
-      {/* 4. BANDÁK LISTÁJA */}
+      {/* 4. BANDÁK LISTÁJA (Itt lesz a tetején a szűrő is!) */}
       <KPopGroupList />
     </main>
   );

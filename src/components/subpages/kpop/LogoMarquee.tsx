@@ -23,14 +23,14 @@ export default function LogoMarquee() {
           {LOGOS.map((logo, idx) => (
             <div 
               key={`a-${idx}`} 
-              className="w-32 sm:w-40 h-12 sm:h-16 flex items-center justify-center shrink-0 opacity-90 transition-all duration-300 hover:grayscale hover:opacity-50"
+              className="relative w-32 sm:w-40 h-12 sm:h-16 flex items-center justify-center shrink-0 opacity-90 transition-all duration-300 hover:grayscale hover:opacity-50"
             >
               <Image
                 src={logo.src}
                 alt={logo.name}
-                width={160}
-                height={64}
-                className="max-h-full max-w-full w-auto h-auto object-contain"
+                fill
+                sizes="(max-width: 640px) 128px, 160px"
+                className="object-contain p-1"
               />
             </div>
           ))}
@@ -41,14 +41,14 @@ export default function LogoMarquee() {
           {LOGOS.map((logo, idx) => (
             <div 
               key={`b-${idx}`} 
-              className="w-32 sm:w-40 h-12 sm:h-16 flex items-center justify-center shrink-0 opacity-90 transition-all duration-300 hover:grayscale hover:opacity-50"
+              className="relative w-32 sm:w-40 h-12 sm:h-16 flex items-center justify-center shrink-0 opacity-90 transition-all duration-300 hover:grayscale hover:opacity-50"
             >
               <Image
                 src={logo.src}
                 alt={logo.name}
-                width={160}
-                height={64}
-                className="max-h-full max-w-full w-auto h-auto object-contain"
+                fill
+                sizes="(max-width: 640px) 128px, 160px"
+                className="object-contain p-1"
               />
             </div>
           ))}

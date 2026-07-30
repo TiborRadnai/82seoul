@@ -124,28 +124,29 @@ export default function KPopGroupCard({ band, index }: KPopGroupCardProps) {
           </p>
         </motion.div>
 
-{/* --- KÉP BLOKK --- */}
-<motion.div
-  initial="hidden"
-  whileInView="visible"
-  viewport={{ once: true, margin: '-100px' }}
-  variants={imageUnrollVariant}
-  className={`lg:col-span-6 ${
-    isEven ? 'lg:order-2' : 'lg:order-1'
-  }`}
->
-  <Link href={`/kpop/${band.id}`} className="block group">
-    {/* ITT A VÁLTOZTATÁS: aspect-[21/9] a szuper lapos, cinematic hatáshoz */}
-    <div className="relative w-full aspect-21/9 rounded-none border-none shadow-2xl overflow-hidden bg-zinc-300">
-      <Image
-        src={band.wideImage || band.image}
-        alt={band.name}
-        fill
-        className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-      />
-    </div>
-  </Link>
-</motion.div>
+        {/* --- KÉP BLOKK --- */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-100px' }}
+          variants={imageUnrollVariant}
+          className={`lg:col-span-6 ${
+            isEven ? 'lg:order-2' : 'lg:order-1'
+          }`}
+        >
+          <Link href={`/kpop/${band.id}`} className="block group">
+            {/* ITT A VÁLTOZTATÁS: aspect-[21/9] a szuper lapos, cinematic hatáshoz */}
+            <div className="relative w-full aspect-21/9 rounded-none border-none shadow-2xl overflow-hidden bg-zinc-300">
+              <Image
+                src={band.wideImage || band.image}
+                alt={band.name}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+              />
+            </div>
+          </Link>
+        </motion.div>
 
       </div>
     </div>
