@@ -126,13 +126,14 @@ export default function KPopHero() {
                   transition={{ duration: 0.6, ease: 'easeOut' }}
                   className="absolute inset-0"
                 >
-                  <Image
-                    src={slide.image}
-                    alt={slide.groupName}
-                    fill
-                    priority
-                    className="object-cover"
-                  />
+                <Image
+                  src={slide.image}
+                  alt={slide.groupName}
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 50vw" // <-- EZT A SORT ADD HOZZÁ!
+                  className="object-cover"
+                />
                   <div className="absolute inset-0 bg-linear-to-t from-zinc-950/80 via-transparent to-transparent" />
                   
                   <div className="absolute bottom-6 left-6 text-white font-serif text-3xl sm:text-4xl tracking-wide font-light">
