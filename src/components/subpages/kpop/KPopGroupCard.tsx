@@ -9,37 +9,66 @@ import { type KPopGroupData } from '@/data/kpopData';
 interface KPopGroupCardProps {
   band: KPopGroupData;
   index: number;
+  showRank?: boolean;
 }
 
-export default function KPopGroupCard({ band, index }: KPopGroupCardProps) {
-  const isEven = index % 2 === 0;
+const getRankBadgeStyle = (rank: number) => {
+  switch (rank) {
+    case 1:
+      return {
+        label: 'TOP 1',
+        icon: '👑',
+        bg: 'bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 text-zinc-950 border-amber-200/80 shadow-lg shadow-amber-500/10 font-black',
+      };
+    case 2:
+      return {
+        label: 'TOP 2',
+        icon: '🥈',
+        bg: 'bg-gradient-to-r from-slate-100 via-zinc-200 to-slate-300 text-zinc-950 border-white/80 shadow-lg shadow-zinc-400/10 font-black',
+      };
+    case 3:
+      return {
+        label: 'TOP 3',
+        icon: '🥉',
+        bg: 'bg-gradient-to-r from-amber-700 via-orange-800 to-amber-900 text-amber-100 border-amber-600/50 shadow-lg shadow-amber-900/10 font-bold',
+      };
+    default:
+      return {
+        label: `#${rank}`,
+        icon: null,
+        bg: 'bg-zinc-900/80 backdrop-blur-md text-zinc-200 border-zinc-700/60 font-semibold',
+      };
+  }
+};
 
-  // Szőnyeg-kigördülés maszk variációk (Explicit Variants típuskiírással)
+export default function KPopGroupCard({ band, index, showRank = true }: KPopGroupCardProps) {
+  const isEven = index % 2 === 0;
+  const rankBadge = getRankBadgeStyle(band.rank);
+
+// 100% Chrome- és Firefox-stabil beúszó animációk
   const textUnrollVariant: Variants = {
     hidden: { 
-      clipPath: isEven ? 'inset(0 100% 0 0)' : 'inset(0 0 0 100%)',
       opacity: 0,
-      x: isEven ? -40 : 40 
+      x: isEven ? -60 : 60 
     },
     visible: { 
-      clipPath: 'inset(0 0% 0 0%)',
       opacity: 1,
       x: 0,
-      transition: { duration: 1.1, ease: 'easeOut' } 
+      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } 
     },
   };
 
   const imageUnrollVariant: Variants = {
     hidden: { 
-      clipPath: isEven ? 'inset(0 0 0 100%)' : 'inset(0 100% 0 0)',
-      scale: 1.08,
-      opacity: 0
+      opacity: 0,
+      x: isEven ? 60 : -60,
+      scale: 0.95
     },
     visible: { 
-      clipPath: 'inset(0 0% 0 0%)',
-      scale: 1,
       opacity: 1,
-      transition: { duration: 1.2, ease: 'easeOut', delay: 0.15 } 
+      x: 0,
+      scale: 1,
+      transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.1 } 
     },
   };
 
@@ -52,7 +81,7 @@ export default function KPopGroupCard({ band, index }: KPopGroupCardProps) {
     }
   };
 
-  // Gomb laza, rugalmas belépése
+  // Gomb animáció
   const buttonVariant: Variants = {
     hidden: { scale: 0, opacity: 0 },
     visible: { 
@@ -68,49 +97,67 @@ export default function KPopGroupCard({ band, index }: KPopGroupCardProps) {
   };
 
   return (
-    <div className="relative overflow-hidden py-6">
+    <div className="relative py-6 transform-gpu backface-hidden">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
         
         {/* --- SZÖVEGES BLOKK --- */}
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '-80px' }}
           variants={textUnrollVariant}
-          className={`lg:col-span-6 flex flex-col justify-center ${
+          className={`relative flex flex-col justify-center lg:col-span-6 transform-gpu will-change-[clip-path,transform] ${
             isEven ? 'lg:order-1' : 'lg:order-2'
           }`}
         >
           {/* Kiadó & Tagok */}
-          <span className="text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2">
+          <span className="text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2 z-10">
             {band.agency} • {band.members}
           </span>
 
-          {/* Cím */}
-          <h2 className="text-5xl sm:text-7xl lg:text-8xl font-serif font-normal text-zinc-900 tracking-tight leading-none mb-4">
-            {band.name}
-          </h2>
+          {/* CÍM ÉS RANGSZÁM SORA */}
+          <div className="relative flex items-center justify-between w-full mb-4 min-h-20 sm:min-h-27.5 overflow-hidden">
+            
+            {/* CÍM: Dinamikus méretezés a név hossza alapján */}
+            <h2 
+              className={`font-serif font-normal text-zinc-900 tracking-tight leading-none z-10 break-normal ${
+                band.name.length > 10 
+                  ? 'text-3xl sm:text-5xl lg:text-6xl xl:text-7xl' // Hosszú neveknek (pl. BABYMONSTER)
+                  : 'text-4xl sm:text-6xl lg:text-7xl xl:text-8xl' // Normál/rövid neveknek (pl. BTS, AESPA)
+              }`}
+            >
+              {band.name}
+            </h2>
+
+            {/* A RANK SZÁM: Fix, egységes nagy méret */}
+            {showRank && (
+              <span className="pointer-events-none select-none text-6xl sm:text-8xl lg:text-[110px] font-serif font-normal text-zinc-900/8 leading-none shrink-0 ml-2 z-0">
+                {band.rank < 10 ? `0${band.rank}` : band.rank}
+              </span>
+            )}
+
+          </div>
 
           {/* VONAL ÉS A GOMB TENGELYE */}
-          <div className="relative w-full h-12 flex items-center my-2">
+          <div className="relative w-full h-12 flex items-center my-2 z-20">
             
             {/* Animált vonal */}
             <motion.div 
               variants={lineVariant}
-              className="w-full h-px bg-zinc-400" 
+              className="w-full h-px bg-zinc-400 transform-gpu" 
             />
             
             {/* Animált gomb */}
-            <div className={`absolute z-20 top-1/2 -translate-y-1/2 ${
+            <div className={`absolute top-1/2 -translate-y-1/2 z-30 ${
               isEven ? 'right-4 sm:right-8' : 'left-4 sm:left-8'
             }`}>
-              <motion.div variants={buttonVariant}>
+              <motion.div variants={buttonVariant} className="transform-gpu">
                 <Link
                   href={`/kpop/${band.id}`}
-                  className="group relative flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-white text-zinc-900 text-[10px] sm:text-[11px] font-bold tracking-widest uppercase transition-all duration-300 hover:scale-110 hover:bg-zinc-950 hover:text-white shadow-xl shrink-0"
+                  className="group relative flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-white text-zinc-900 text-[10px] sm:text-[11px] font-bold tracking-widest uppercase transition-all duration-500 ease-out hover:scale-110 border border-zinc-200/80 shadow-md hover:shadow-[0_10px_35px_rgba(0,0,0,0.18)] shrink-0"
                 >
-                  <div className="absolute inset-0 rounded-full bg-zinc-950/20 blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
-                  <span className="text-center px-2 font-semibold tracking-wider">
+                  <div className="absolute inset-0 rounded-full bg-zinc-900/15 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 scale-125" />
+                  <span className="text-center px-2 font-semibold tracking-wider transition-colors duration-300 group-hover:text-zinc-950">
                     ISMERD MEG!
                   </span>
                 </Link>
@@ -119,7 +166,7 @@ export default function KPopGroupCard({ band, index }: KPopGroupCardProps) {
           </div>
 
           {/* LEÍRÁS */}
-          <p className="text-zinc-600 text-sm sm:text-base leading-relaxed max-w-xl font-normal mt-6 sm:mt-8">
+          <p className="text-zinc-600 text-sm sm:text-base leading-relaxed max-w-xl font-normal mt-6 sm:mt-8 z-10">
             {band.description}
           </p>
         </motion.div>
@@ -128,21 +175,34 @@ export default function KPopGroupCard({ band, index }: KPopGroupCardProps) {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '-80px' }}
           variants={imageUnrollVariant}
-          className={`lg:col-span-6 ${
+          className={`lg:col-span-6 transform-gpu will-change-[clip-path,transform] ${
             isEven ? 'lg:order-2' : 'lg:order-1'
           }`}
         >
           <Link href={`/kpop/${band.id}`} className="block group">
-            {/* ITT A VÁLTOZTATÁS: aspect-[21/9] a szuper lapos, cinematic hatáshoz */}
-            <div className="relative w-full aspect-21/9 rounded-none border-none shadow-2xl overflow-hidden bg-zinc-300">
+            <div className="relative w-full aspect-21/9 rounded-none border-none shadow-2xl overflow-hidden bg-zinc-300 transform-gpu">
+              
+              {/* RANK BADGE A KÉPEN */}
+              {showRank && (
+                <div className="absolute top-4 right-4 z-20 pointer-events-none">
+                  <div 
+                    className={`px-3.5 py-1.5 rounded-full text-[10px] sm:text-[11px] tracking-widest uppercase border flex items-center gap-1.5 ${rankBadge.bg}`}
+                  >
+                    {rankBadge.icon && <span className="text-xs">{rankBadge.icon}</span>}
+                    <span>{rankBadge.label}</span>
+                  </div>
+                </div>
+              )}
+
+              {/* BORÍTÓKÉP */}
               <Image
                 src={band.wideImage || band.image}
                 alt={band.name}
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out transform-gpu"
               />
             </div>
           </Link>
