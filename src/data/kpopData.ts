@@ -582,7 +582,7 @@ export const KPOP_SOLOISTS: KPopGroupData[] = [
     ],
     agency: "THEBLACKLABEL / Atlantic",
     filterAgency: "OTHER",
-    description: "A Blackpink énekesnője, aki 'rosie' című albumával és a Bruno Marssal közös 'APT.' slágerével globális rekorder sanzonénekesnővé vált.",
+    description: "A Blackpink vezető vokalistája, aki rosie című albumával és a Bruno Marssal közös APT. slágerével globális rekorder szupersztárrá vált. Egy rendkívüli művésznő, aki dalszerzőként a saját szerzeményein és intim dalszövegein keresztül mutatja meg lenyűgöző zenei világát.",
   },
   {
     id: "jungkook",
