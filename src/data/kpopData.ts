@@ -1,7 +1,19 @@
 export type KPopMember = {
-  name: string;
-  role?: string;
-  image?: string;
+  name: string;             // Művésznév
+  fullName?: string;        // Teljes név
+  koreanName?: string;      // Koreai írásmód
+  role?: string;            // Pozíció / Szerep
+  birthDate?: string;       // Születési idő
+  zodiac?: string;          // Csillagjegy
+  height?: string;          // Magasság
+  bloodType?: string;       // Vércsoport
+  birthPlace?: string;      // Születési hely
+  signatureTrack?: string;  // Új, vagányabb mező a szóló debütálás helyett!
+  brandAmbassador?: string; // Márkanagykövetség
+  instagram?: string;       // Instagram elérhetőség
+  quote?: string;           // Új mező: Saját híres idézet
+  shortBio?: string;        // Egyedi kulisszatitok / leírás
+  image?: string;           // Kép útvonala
 };
 
 export interface KPopGroupData {
@@ -12,12 +24,12 @@ export interface KPopGroupData {
   wideImage: string;
   members: string; // pl. "7 tag" vagy "Szóló előadó"
   fandom?: string;
-  membersList?: KPopMember[]; // 👈 Opcionális, ha véletlenül nincs megadva
+  membersList?: KPopMember[]; 
   agency: string;
   description: string;
   category: 'bg' | 'gg' | 'solo';
   filterAgency: 'HYBE' | 'SM' | 'YG' | 'JYP' | 'OTHER';
-  rank: number; // 👈 Szám típus a .sort((a, b) => a.rank - b.rank) rendezéshez!
+  rank: number;
 }
 
 export const KPOP_GROUPS: KPopGroupData[] = [
@@ -32,13 +44,125 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     members: "7 tag",
     fandom: "ARMY",
     membersList: [
-      { name: "RM", role: "Leader, Main Rapper", image: "/images/kpop/members/bts-rm.webp" },
-      { name: "Jin", role: "Vocalist, Visual", image: "/images/kpop/members/bts-jin.webp" },
-      { name: "SUGA", role: "Lead Rapper", image: "/images/kpop/members/bts-suga.webp" },
-      { name: "j-hope", role: "Main Dancer, Lead Rapper", image: "/images/kpop/members/bts-jhope.webp" },
-      { name: "Jimin", role: "Main Dancer, Lead Vocalist", image: "/images/kpop/members/bts-jimin.webp" },
-      { name: "V", role: "Lead Dancer, Vocalist, Visual", image: "/images/kpop/members/bts-v.webp" },
-      { name: "Jung Kook", role: "Main Vocalist, Lead Dancer, Center", image: "/images/kpop/members/bts-jungkook.webp" }
+      { 
+        name: "RM", 
+        fullName: "Kim Nam-joon", 
+        koreanName: "김남준", 
+        role: "Leader, Main Rapper", 
+        birthDate: "1994.09.12", 
+        zodiac: "Szűz", 
+        height: "181 cm", 
+        bloodType: "A", 
+        birthPlace: "Dongjak-gu, Szöul, Dél-Korea", 
+        signatureTrack: "Wild Flower (val. Youjeen)", 
+        brandAmbassador: "Bottega Veneta", 
+        instagram: "@rkive", 
+        quote: "Legyél a saját életed sorsa, ne hagyd, hogy mások írják a forgatókönyvet.",
+        shortBio: "A banda zseniális vezetője, akinek a zenei zsenialitása és filozófiai gondolatai határozzák meg a BTS lelkét. Folyékonyan beszél angolul, amit autodidakta módon tanult a Jóbarátok nézésével.",
+        image: "/images/kpop/members/bts-rm.webp" 
+      },
+      { 
+        name: "Jin", 
+        fullName: "Kim Seok-jin", 
+        koreanName: "김석진", 
+        role: "Vocalist, Visual", 
+        birthDate: "1992.12.04", 
+        zodiac: "Nyilas", 
+        height: "179 cm", 
+        bloodType: "O", 
+        birthPlace: "Gwacheon, Dél-Korea", 
+        signatureTrack: "The Astronaut", 
+        brandAmbassador: "Gucci, Fred", 
+        instagram: "@jin", 
+        quote: "Ha mosolyogsz, mások is boldogabbak lesznek melletted.",
+        shortBio: "A banda legidősebb tagja, akit a rajongók csak 'Worldwide Handsome'-ként emlegetnek. Imád főzni, fantasztikus az énekhangja és utánozhatatlan a humora.",
+        image: "/images/kpop/members/bts-jin.webp" 
+      },
+      { 
+        name: "SUGA", 
+        fullName: "Min Yoon-gi", 
+        koreanName: "민윤기", 
+        role: "Lead Rapper", 
+        birthDate: "1993.03.09", 
+        zodiac: "Halak", 
+        height: "174 cm", 
+        bloodType: "O", 
+        birthPlace: "Daegu, Dél-Korea", 
+        signatureTrack: "Haegeum", 
+        brandAmbassador: "Valentino, NBA", 
+        instagram: "@agustd", 
+        quote: "A kudarc csak egy újabb esély arra, hogy okosabban próbálkozz.",
+        shortBio: "Dalszerző-zenei producer zseni, aki Agust D néven szólóban is tarol. Kíméletlenül őszinte dalszövegei és zongoratudása mély nyomot hagytak a zeneiparban.",
+        image: "/images/kpop/members/bts-suga.webp" 
+      },
+      { 
+        name: "j-hope", 
+        fullName: "Jung Ho-seok", 
+        koreanName: "정호석", 
+        role: "Main Dancer, Lead Rapper", 
+        birthDate: "1994.02.18", 
+        zodiac: "Vízöntő", 
+        height: "177 cm", 
+        bloodType: "A", 
+        birthPlace: "Gwangju, Dél-Korea", 
+        signatureTrack: "More", 
+        brandAmbassador: "Louis Vuitton", 
+        instagram: "@uarmyhope", 
+        quote: "Én vagyok a te reményed, ti vagytok az én reményem!",
+        shortBio: "A BTS örökmozgó napsugara és fő táncosa. Hihetetlen ritmusérzéke és pozitív energiája nemcsak a színpadon, de a stúdióban is vezérli a csapatot.",
+        image: "/images/kpop/members/bts-jhope.webp" 
+      },
+      { 
+        name: "Jimin", 
+        fullName: "Park Ji-min", 
+        koreanName: "박지민", 
+        role: "Main Dancer, Lead Vocalist", 
+        birthDate: "1995.10.13", 
+        zodiac: "Mérleg", 
+        height: "174 cm", 
+        bloodType: "A", 
+        birthPlace: "Busan, Dél-Korea", 
+        signatureTrack: "Like Crazy", 
+        brandAmbassador: "Dior, Tiffany & Co.", 
+        instagram: "@j.m", 
+        quote: "Add bele mindenbe a szíved, mert a kitartás sosem hiábavaló.",
+        shortBio: "A kortárs táncban is jártas művész, akinek az angyali hangja és színpadi kisugárzása pillanatok alatt elbűvöli a nézőközönséget. A csapat egyik legérzékenyebb tagja.",
+        image: "/images/kpop/members/bts-jimin.webp" 
+      },
+      { 
+        name: "V", 
+        fullName: "Kim Tae-hyung", 
+        koreanName: "김태형", 
+        role: "Lead Dancer, Vocalist, Visual", 
+        birthDate: "1995.12.30", 
+        zodiac: "Bak", 
+        height: "179 cm", 
+        bloodType: "AB", 
+        birthPlace: "Daegu, Dél-Korea", 
+        signatureTrack: "Slow Dancing", 
+        brandAmbassador: "Celine, Cartier", 
+        instagram: "@thv", 
+        quote: "Nem kell sietned, lépésről lépésre minden elérhető.",
+        shortBio: "Egyedi, bársonyos bariton hangú énekes és stílusikon, akinek a művészi látásmódja a fotózásban és a dzsessz/R&B zenében is visszaköszön.",
+        image: "/images/kpop/members/bts-v.webp" 
+      },
+      { 
+        name: "Jung Kook", 
+        fullName: "Jeon Jung-kook", 
+        koreanName: "전정국", 
+        role: "Main Vocalist, Lead Dancer, Center", 
+        birthDate: "1997.09.01", 
+        zodiac: "Szűz", 
+        height: "178 cm", 
+        bloodType: "A", 
+        birthPlace: "Busan, Dél-Korea", 
+        signatureTrack: "Seven (feat. Latto)", 
+        brandAmbassador: "Calvin Klein", 
+        instagram: "@jungkook", 
+        quote: "Inkább haljak meg szenvedéllyel, mint hogy valaha is unalmasan éljek.",
+        shortBio: "A BTS 'arany maknae'-ja (a legfiatalabb tag), aki szinte bármihez nyúl, abból arany lesz. Világraszóló szólósikerei mellett lenyűgöző fizikumáról és tetoválásairól is ismert.",
+        image: "/images/kpop/members/bts-jungkook.webp" 
+      }
     ],
     agency: "BIGHIT MUSIC (HYBE)",
     filterAgency: "HYBE",
@@ -55,16 +179,81 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     members: "4 tag",
     fandom: "BLINK",
     membersList: [
-      { name: "Jennie", role: "Main Rapper, Lead Vocalist", image: "/images/kpop/members/blackpink-jennie.webp" },
-      { name: "Jisoo", role: "Lead Vocalist, Visual", image: "/images/kpop/members/blackpink-jisoo.webp" },
-      { name: "Rosé", role: "Main Vocalist, Lead Dancer", image: "/images/kpop/members/blackpink-rose.webp" },
-      { name: "Lisa", role: "Main Dancer, Lead Rapper", image: "/images/kpop/members/blackpink-lisa.webp" }
+      { 
+        name: "Jennie", 
+        fullName: "Kim Jennie", 
+        koreanName: "김제니", 
+        role: "Main Rapper, Lead Vocalist", 
+        birthDate: "1996.01.16", 
+        zodiac: "Bak", 
+        height: "163 cm", 
+        bloodType: "B", 
+        birthPlace: "Anyang, Dél-Korea", 
+        signatureTrack: "Mantra", 
+        brandAmbassador: "Chanel, Calvin Klein, Jacquemus", 
+        instagram: "@jennierubyjane", 
+        quote: "Légy önmagad, a tökéletesség unalmas.",
+        shortBio: "A divat világában is otthonosan mozgó 'Human Chanel', aki magabiztos rapjével és egyedi stílusával a globális popkultúra egyik legbefolyásosabb alakja.",
+        image: "/images/kpop/members/blackpink-jennie.webp" 
+      },
+      { 
+        name: "Jisoo", 
+        fullName: "Kim Ji-soo", 
+        koreanName: "김지수", 
+        role: "Lead Vocalist, Visual", 
+        birthDate: "1995.01.03", 
+        zodiac: "Bak", 
+        height: "162 cm", 
+        bloodType: "A", 
+        birthPlace: "Gunpo, Dél-Korea", 
+        signatureTrack: "Flower", 
+        brandAmbassador: "Dior, Cartier", 
+        instagram: "@sooyaaa__", 
+        quote: "A nehézségek csak erősebbé tesznek, ha mosolyogva nézel szembe velük.",
+        shortBio: "A banda legidősebb tagja, lenyűgöző klasszikus vizuális megjelenéssel és lágy, mély énekhanggal. Kiváló színésznő is egyben.",
+        image: "/images/kpop/members/blackpink-jisoo.webp" 
+      },
+      { 
+        name: "Rosé", 
+        fullName: "Roseanne Park / Park Chae-young", 
+        koreanName: "박채영", 
+        role: "Main Vocalist, Lead Dancer", 
+        birthDate: "1997.02.11", 
+        zodiac: "Vízöntő", 
+        height: "168 cm", 
+        bloodType: "B", 
+        birthPlace: "Auckland, Új-Zéland", 
+        signatureTrack: "On The Ground", 
+        brandAmbassador: "Saint Laurent, Tiffany & Co., Rimowa", 
+        instagram: "@roses_are_rosie", 
+        quote: "A zene az a nyelv, ami összeköti a világ lelkét.",
+        shortBio: "Új-Zélandon született, ausztrál neveltetésű főénekes, akinek összetéveszthetetlen, éteri hangszíne és elképesztő színpadi energiája védjegyévé vált.",
+        image: "/images/kpop/members/blackpink-rose.webp" 
+      },
+      { 
+        name: "Lisa", 
+        fullName: "Lalisa Manobal", 
+        koreanName: "리사", 
+        role: "Main Dancer, Lead Rapper", 
+        birthDate: "1997.03.27", 
+        zodiac: "Kos", 
+        height: "167 cm", 
+        bloodType: "O", 
+        birthPlace: "Bangkok, Thaiföld", 
+        signatureTrack: "Rockstar", 
+        brandAmbassador: "Celine, Bulgari, Louis Vuitton", 
+        instagram: "@lalalalisa_m", 
+        quote: "Bízz magadban, és érd el mindazt, amiről mások azt mondják, hogy lehetetlen.",
+        shortBio: "Thaiföldi származású globális ikon, aki lenyűgöző tánctudásával és energikus rapbetéteivel hódítja meg a világot. Instagramon a legtöbb követővel rendelkező K-pop idol.",
+        image: "/images/kpop/members/blackpink-lisa.webp" 
+      }
     ],
     agency: "YG Entertainment",
     filterAgency: "YG",
     description: "A Blackpink a világ legnépszerűbb lánybandája, akik ikonikus stílusukkal, stadionos turnéikkal és divatvilági jelenlétükkel uralják a popkultúrát.",
   },
-  {
+
+{
     id: "straykids",
     name: "Stray Kids",
     rank: 8,
@@ -247,7 +436,7 @@ export const KPOP_GROUPS: KPopGroupData[] = [
     category: "gg",
     tagline: "A nyers tehetség és az új generáció pusztító energiája",
     image: "/images/kpop/babymonster-mini.webp",
-    wideImage: '/images/kpop/babymonster.webp',
+    wideImage: '/images/kpop/babymonster1.webp',
     members: "7 tag",
     fandom: "MONSTIEZ",
     membersList: [
@@ -491,30 +680,31 @@ export const KPOP_GROUPS: KPopGroupData[] = [
      filterAgency: "SM",
      description: "Az 'Emotional Pop' műfaj megteremtőiként a RIIZE a mindennapi érzelmeket önti magával ragadó zenei formába.",
    },
-  //  {
-  //    id: "zerobaseone",
-  //    name: "ZEROBASEONE",
-  //    rank: 25,
-  //    category: "bg",
-  //    image: "/images/kpop/zerobaseone-mini.webp",
-  //    wideImage: '/images/kpop/bts.webp',
-  //    members: "9 tag",
-  //    fandom: "ZEROSE",
-  //   membersList: [
-  //     { name: "Sung Han Bin", role: "Leader, Main Dancer, Lead Vocalist", image: "/images/kpop/members/zerobaseone-sunghanbin.webp" },
-  //      { name: "Kim Ji Woong", role: "Lead Rapper, Lead Dancer, Visual", image: "/images/kpop/members/zerobaseone-kimjiwoong.webp" },
-  //      { name: "Zhang Hao", role: "Main Vocalist, Center", image: "/images/kpop/members/zerobaseone-zhanghao.webp" },
-  //      { name: "Seok Matthew", role: "Lead Vocalist, Lead Dancer", image: "/images/kpop/members/zerobaseone-seokmatthew.webp" },
-  //      { name: "Kim Tae Rae", role: "Main Vocalist", image: "/images/kpop/members/zerobaseone-kimtaerae.webp" },
-  //      { name: "Ricky", role: "Sub Vocalist, Visual", image: "/images/kpop/members/zerobaseone-ricky.webp" },
-  //      { name: "Kim Gyu Vin", role: "Lead Dancer, Sub Vocalist", image: "/images/kpop/members/zerobaseone-kimgyuvin.webp" },
-  //      { name: "Park Gun Wook", role: "Main Rapper, Lead Vocalist, Lead Dancer", image: "/images/kpop/members/zerobaseone-parkgunwook.webp" },
-  //      { name: "Han Yu Jin", role: "Main Dancer, Sub Vocalist, Maknae", image: "/images/kpop/members/zerobaseone-hanyujin.webp" }
-  //    ],
-  //    agency: "WAKEONE",
-  //    filterAgency: "OTHER",
-  //    description: "A Boys Planet műsorban megalakult fiúcsapat rekorddöntő eladásokkal robbant be a globális zenei élvonalba.",
-  //  },
+   {
+     id: "zerobaseone",
+     name: "ZEROBASEONE",
+     rank: 25,
+     category: "bg",
+     tagline: "",
+     image: "/images/kpop/zerobaseone-mini.webp",
+     wideImage: '/images/kpop/bts.webp',
+     members: "9 tag",
+     fandom: "ZEROSE",
+     membersList: [
+      { name: "Sung Han Bin", role: "Leader, Main Dancer, Lead Vocalist", image: "/images/kpop/members/zerobaseone-sunghanbin.webp" },
+       { name: "Kim Ji Woong", role: "Lead Rapper, Lead Dancer, Visual", image: "/images/kpop/members/zerobaseone-kimjiwoong.webp" },
+       { name: "Zhang Hao", role: "Main Vocalist, Center", image: "/images/kpop/members/zerobaseone-zhanghao.webp" },
+       { name: "Seok Matthew", role: "Lead Vocalist, Lead Dancer", image: "/images/kpop/members/zerobaseone-seokmatthew.webp" },
+       { name: "Kim Tae Rae", role: "Main Vocalist", image: "/images/kpop/members/zerobaseone-kimtaerae.webp" },
+       { name: "Ricky", role: "Sub Vocalist, Visual", image: "/images/kpop/members/zerobaseone-ricky.webp" },
+       { name: "Kim Gyu Vin", role: "Lead Dancer, Sub Vocalist", image: "/images/kpop/members/zerobaseone-kimgyuvin.webp" },
+       { name: "Park Gun Wook", role: "Main Rapper, Lead Vocalist, Lead Dancer", image: "/images/kpop/members/zerobaseone-parkgunwook.webp" },
+       { name: "Han Yu Jin", role: "Main Dancer, Sub Vocalist, Maknae", image: "/images/kpop/members/zerobaseone-hanyujin.webp" }
+     ],
+     agency: "WAKEONE",
+     filterAgency: "OTHER",
+     description: "A Boys Planet műsorban megalakult fiúcsapat rekorddöntő eladásokkal robbant be a globális zenei élvonalba.",
+   },
    {
      id: "kissoflife",
      name: "KISS OF LIFE",

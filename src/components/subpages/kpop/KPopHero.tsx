@@ -36,7 +36,6 @@ const HERO_SLIDES = ['bts', 'blackpink', 'aespa'].map((id) => {
   return {
     id,
     groupName: group?.name || id.toUpperCase(),
-    // Itt használjuk a wideImage-t az adatbázisból, vagy tartalékként a sima image-et:
     image: group?.wideImage || group?.image || '/images/kpop/default.jpg',
     title: extra?.title || group?.name || '',
     subtitle: extra?.subtitle || group?.description || '',
@@ -58,7 +57,7 @@ export default function KPopHero() {
   const slide = HERO_SLIDES[current];
 
   return (
-    <div className="relative w-full bg-zinc-950 text-white overflow-hidden border-b border-zinc-800">
+    <div className="relative w-full bg-zinc-950 text-white overflow-hidden">
       
       {/* DINAMIKUS AMBIENT GLOW A HÁTTÉRBEN */}
       <AnimatePresence mode="wait">
@@ -73,7 +72,7 @@ export default function KPopHero() {
       </AnimatePresence>
 
       {/* TARTALOM KORLÁTOZÁSA A BELSŐ IGAZÍTÁSHOZ */}
-      <div className="max-w-[1600px] mx-auto px-6 lg:px-12 py-12 sm:py-16 lg:py-20 relative z-10">
+      <div className="max-w-[1600px] mx-auto px-6 lg:px-12 pt-12 sm:pt-16 lg:pt-20 pb-24 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
           {/* BAL OLDAL: SZÖVEG & INFÓK */}
@@ -131,7 +130,7 @@ export default function KPopHero() {
                   alt={slide.groupName}
                   fill
                   priority
-                  sizes="(max-width: 1024px) 100vw, 50vw" // <-- EZT A SORT ADD HOZZÁ!
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover"
                 />
                   <div className="absolute inset-0 bg-linear-to-t from-zinc-950/80 via-transparent to-transparent" />
@@ -161,6 +160,9 @@ export default function KPopHero() {
 
         </div>
       </div>
+
+      {/* ALSÓ ÁTMENET A FEKETÉBŐL A FEHÉR LOGÓSÁVBA */}
+      <div className="absolute bottom-0 left-0 w-full h-16 bg-linear-to-b from-transparent to-white pointer-events-none z-20" />
     </div>
   );
 }
