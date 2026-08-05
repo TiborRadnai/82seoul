@@ -4,6 +4,7 @@ import KPopHero from '@/components/subpages/kpop/KPopHero';
 import LogoMarquee from '@/components/subpages/kpop/LogoMarquee';
 import KPopGroupList from '@/components/subpages/kpop/KPopGroupList';
 import KPopGlossaryBubbles from '@/components/subpages/kpop/KPopGlossaryBubbles';
+import GraffitiItem from '@/components/subpages/kpop/GraffitiItem';
 
 export default function KPopPage() {
   return (
@@ -20,6 +21,9 @@ export default function KPopPage() {
 
       {/* 4. BANDÁK LISTÁJA */}
       <KPopGroupList />
+
+      {/* 3. Graffity SZEKCIÓ */}
+      <GraffitiItem />
 
       {/* 5. SZÓTÁR BUBORÉKOK */}
       <KPopGlossaryBubbles />

@@ -21,10 +21,10 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'bias',
     term: 'Bias',
     korean: '최애 (Choeae)',
-    definition: 'A kedvenc tagod egy adott K-Pop csapatban, akit a legjobban imádsz.',
+    definition: 'A személyes kedvenc tagod egy adott K-Pop csapatban, akit a legjobban imádsz.',
     example: '„Ki a biasod a Blackpinkből?”',
-    size: 135,
-    desktopPos: { top: '6%', left: '6%' },
+    size: 140,
+    desktopPos: { top: '8%', left: '8%' },
     animClass: 'animate-float-slow',
     glassGradient: 'from-pink-300/40 via-rose-200/30 to-white/60',
     glowColor: 'rgba(244, 114, 182, 0.35)',
@@ -33,21 +33,33 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'comeback',
     term: 'Comeback',
     korean: '컴백',
-    definition: 'Új album, videóklip vagy dal megjelenése a K-Popban.',
+    definition: 'Új album, kislemez vagy dal megjelenése – a K-Popban ez minden új zenei projektet jelent, függetlenül attól, mennyi telt el az előző óta.',
     example: '„A BTS jövő hónapban csinál comeback-et!”',
-    size: 145,
-    desktopPos: { top: '4%', left: '35%' },
+    size: 150,
+    desktopPos: { top: '4%', left: '28%' },
     animClass: 'animate-float-medium',
     glassGradient: 'from-sky-300/40 via-blue-200/30 to-white/60',
     glowColor: 'rgba(56, 189, 248, 0.35)',
   },
   {
+    id: 'lightstick',
+    term: 'Lightstick',
+    korean: '응원봉',
+    definition: 'Hivatalos, világító rajongói bot, amit minden fandom egyedivé alakít, és a koncerteken hullámzanak vele.',
+    example: '„Megérkezett a legújabb verziós lightstickem!”',
+    size: 125,
+    desktopPos: { top: '10%', left: '52%' },
+    animClass: 'animate-float-fast',
+    glassGradient: 'from-emerald-300/40 via-teal-200/30 to-white/60',
+    glowColor: 'rgba(52, 211, 153, 0.35)',
+  },
+  {
     id: 'hiatus',
     term: 'Hiatus',
     korean: '휴식기',
-    definition: 'Hivatalos szünet vagy pihenőidőszak a csapat életében.',
-    size: 130,
-    desktopPos: { top: '8%', left: '68%' },
+    definition: 'Hivatalos szünet vagy pihenőidőszak – vonatkozhat egy egész csapatra, egy adott tagra (pl. katonaság vagy egészségügy miatt), vagy szólóprojektekre.',
+    size: 135,
+    desktopPos: { top: '6%', left: '76%' },
     animClass: 'animate-float-fast',
     glassGradient: 'from-purple-300/40 via-fuchsia-200/30 to-white/60',
     glowColor: 'rgba(192, 132, 252, 0.35)',
@@ -55,11 +67,11 @@ const GLOSSARY_TERMS: KPopTerm[] = [
   {
     id: 'multistan',
     term: 'Multi-Stan',
-    korean: '멀티스탠',
-    definition: 'Olyan rajongó, egyszerre több különböző K-Pop bandát is imád és követ.',
+    korean: '멀티스팬',
+    definition: 'Olyan rajongó, aki egyszerre több különböző K-Pop bandát is aktívan követ és imád.',
     example: '„Én teljes mértékben multi-stan vagyok, nem tudnék csak egy csapatot választani.”',
-    size: 140,
-    desktopPos: { top: '24%', left: '50%' },
+    size: 145,
+    desktopPos: { top: '35%', left: '40%' },
     animClass: 'animate-float-slow',
     glassGradient: 'from-amber-300/40 via-yellow-200/30 to-white/60',
     glowColor: 'rgba(251, 191, 36, 0.35)',
@@ -68,10 +80,10 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'maknae',
     term: 'Maknae',
     korean: '막내',
-    definition: 'A legfiatalabb tag egy K-Pop csapatban.',
+    definition: 'A legfiatalabb tag egy K-Pop csapatban, akiért a rajongók (és gyakran a többi tag) rajongásig odavannak.',
     example: '„Jungkook a BTS arany maknae-ja.”',
-    size: 135,
-    desktopPos: { top: '38%', left: '8%' },
+    size: 130,
+    desktopPos: { top: '45%', left: '12%' },
     animClass: 'animate-float-medium',
     glassGradient: 'from-emerald-300/40 via-teal-200/30 to-white/60',
     glowColor: 'rgba(45, 212, 191, 0.35)',
@@ -80,20 +92,31 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'unnie',
     term: 'Unnie',
     korean: '언니',
-    definition: 'Amit egy lány mond a nálánál idősebb lány barátjára vagy női idolra.',
-    size: 130,
-    desktopPos: { top: '42%', left: '28%' },
+    definition: 'Kifejezés, amit egy nő/lány használ a nálánál idősebb női barátjára vagy női idolra.',
+    size: 125,
+    desktopPos: { top: '50%', left: '26%' },
     animClass: 'animate-float-fast',
     glassGradient: 'from-rose-300/40 via-pink-200/30 to-white/60',
     glowColor: 'rgba(251, 113, 133, 0.35)',
   },
   {
+    id: 'allkill',
+    term: 'All-Kill',
+    korean: '올킬',
+    definition: 'Amikor egy dal egyszerre vezeti az összes major koreai valós idejű slágerlistát (Melon, Genie, Bugs stb.).',
+    size: 120,
+    desktopPos: { top: '20%', left: '88%' },
+    animClass: 'animate-float-slow',
+    glassGradient: 'from-yellow-300/40 via-amber-200/30 to-white/60',
+    glowColor: 'rgba(250, 204, 21, 0.35)',
+  },
+  {
     id: 'hyung',
     term: 'Hyung',
     korean: '형',
-    definition: 'Amit egy fiú mond a nálánál idősebb fiú barátjára vagy férfi idolra.',
-    size: 130,
-    desktopPos: { top: '44%', left: '72%' },
+    definition: 'Kifejezés, amit egy fiú/férfi használ a nálánál idősebb férfi barátjára vagy férfi idolra.',
+    size: 135,
+    desktopPos: { top: '48%', left: '64%' },
     animClass: 'animate-float-slow',
     glassGradient: 'from-blue-300/40 via-indigo-200/30 to-white/60',
     glowColor: 'rgba(99, 102, 241, 0.35)',
@@ -102,9 +125,9 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'trainee',
     term: 'Trainee',
     korean: '연습생',
-    definition: 'Gyakornok, aki még nem debütált, de keményen tanul a cégénél.',
+    definition: 'Gyakornok, aki egy szórakoztatóipari ügynökségnél keményen tanul és készül a hivatalos debütálására.',
     size: 130,
-    desktopPos: { top: '34%', left: '88%' },
+    desktopPos: { top: '38%', left: '84%' },
     animClass: 'animate-float-fast',
     glassGradient: 'from-rose-300/40 via-pink-200/30 to-white/60',
     glowColor: 'rgba(251, 113, 133, 0.35)',
@@ -113,9 +136,9 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'stan',
     term: 'Stan',
     korean: '스탠',
-    definition: 'Hardcore, rendkívül elhivatott rajongó, aki minden rezdülést követ.',
-    size: 135,
-    desktopPos: { top: '68%', left: '6%' },
+    definition: 'Hardcore, rendkívül elhivatott rajongó, aki minden zenei megjelenést, hírt és rezdülést követ.',
+    size: 140,
+    desktopPos: { top: '75%', left: '10%' },
     animClass: 'animate-float-fast',
     glassGradient: 'from-amber-300/40 via-orange-200/30 to-white/60',
     glowColor: 'rgba(251, 146, 60, 0.35)',
@@ -124,9 +147,9 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'fanchant',
     term: 'Fanchant',
     korean: '응원법',
-    definition: 'A koncerteken skandált közös rigmusok és nevek a dalok ütemére.',
-    size: 140,
-    desktopPos: { top: '66%', left: '26%' },
+    definition: 'A koncerteken és zenei show-kon skandált koreografált közös rigmusok a dalok ütemére (pl. a tagok nevének kiabálása).',
+    size: 145,
+    desktopPos: { top: '70%', left: '28%' },
     animClass: 'animate-float-slow',
     glassGradient: 'from-cyan-300/40 via-sky-200/30 to-white/60',
     glowColor: 'rgba(34, 211, 238, 0.35)',
@@ -135,9 +158,9 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'killingpart',
     term: 'Killing Part',
     korean: '킬링파트',
-    definition: 'A dal leghúzósabb, legikonikusabb része, amit mindenki megjegyez.',
+    definition: 'A dal leghúzósabb, legfülbemászóbb vagy legikonikusabb része, amit a rajongók azonnal megjegyeznek.',
     size: 140,
-    desktopPos: { top: '64%', left: '55%' },
+    desktopPos: { top: '68%', left: '55%' },
     animClass: 'animate-float-medium',
     glassGradient: 'from-indigo-300/40 via-violet-200/30 to-white/60',
     glowColor: 'rgba(129, 140, 248, 0.35)',
@@ -146,9 +169,9 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'bside',
     term: 'B-Side',
     korean: '수록곡',
-    definition: 'Az albumon lévő dalok a főcímdalon (Title Track) kívül.',
+    definition: 'Az albumon lévő dalok gyűjtőneve a főcímdalon (Title Track) kívül – a rajongók gyakran ezeket szeretik a legjobban.',
     size: 135,
-    desktopPos: { top: '72%', left: '84%' },
+    desktopPos: { top: '78%', left: '80%' },
     animClass: 'animate-float-fast',
     glassGradient: 'from-teal-300/40 via-emerald-200/30 to-white/60',
     glowColor: 'rgba(45, 212, 191, 0.35)',
@@ -159,29 +182,32 @@ export default function KPopGlossaryBubbles() {
   const [selectedTerm, setSelectedTerm] = useState<KPopTerm | null>(null);
 
   return (
-    <section className="relative w-full py-16 sm:py-20 overflow-hidden bg-zinc-200/70 text-zinc-900 select-none">
+    <section className="relative w-full py-20 sm:py-24 overflow-hidden bg-linear-to-b from-zinc-950 via-zinc-100 to-zinc-200 text-zinc-900 select-none">
       
+      {/* Opcionális felső átmenetes sáv, ami a fekete graffitiből finoman bevezeti a világos alapot */}
+      <div className="absolute top-0 left-0 w-full h-24 bg-linear-to-b from-zinc-950 to-transparent pointer-events-none z-10" />
+
       {/* CÍMSOR */}
-      <div className="relative z-10 text-center max-w-3xl mx-auto px-4 mb-10 pointer-events-none">
+      <div className="relative z-20 text-center max-w-3xl mx-auto px-4 mb-10 pointer-events-none">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-600 text-xs font-bold tracking-widest uppercase mb-4 shadow-sm">
           <span className="w-2 h-2 rounded-full bg-pink-500 animate-pulse" />
-          82SEOUL • K-POP KISOKOS
+          82SEOUL • RAW K-POP DICTIONARY
         </div>
 
         <h2 className="text-4xl sm:text-6xl font-black tracking-tight text-zinc-900 mb-6 leading-tight">
-          Amit a{' '}
+          Szavak, amik nélkül{' '}
           <span className="bg-linear-to-r from-pink-500 via-rose-500 to-purple-600 bg-clip-text text-transparent">
-            K-Pop Világáról
+            nem létezik
           </span>{' '}
-          Tudni kell.
+          Fandom.
         </h2>
 
         <p className="text-zinc-600 text-base sm:text-lg font-normal max-w-2xl mx-auto leading-relaxed">
-          A rajongói szlengtől a legfontosabb fogalmakig – fedezd fel mindazt, amivel a daltól a koncertekig igazi Insider leszel!
+          Pattintsd fel a buborékokat, és tudd meg pontosan, mit dealelnek a koreai zeneipar kulisszái mögött!
         </p>
       </div>
 
-      {/* MOBIL / TABLET / KISEBB LAPTOP NÉZET (< 1280px): Színes, rádiuszos kártyák rácsban */}
+      {/* MOBIL / TABLET / KISEBB LAPTOP NÉZET (< 1280px): Változatlan, stabil rács */}
       <div className="xl:hidden w-full px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 max-w-5xl mx-auto">
         {GLOSSARY_TERMS.map((item) => (
           <div
@@ -213,8 +239,8 @@ export default function KPopGlossaryBubbles() {
         ))}
       </div>
 
-      {/* NAGY DESKTOP NÉZET (>= 1280px): Biztonságos távolságú, lebegő buborék-térkép */}
-      <div className="hidden xl:block relative w-full h-155 max-w-7xl mx-auto px-4">
+      {/* NAGY DESKTOP NÉZET (>= 1280px): Teljes képernyős szélesség (max-w-[1600px]), szellős buborék-térkép */}
+      <div className="hidden xl:block relative w-full h-155 max-w-[1600px] mx-auto px-6">
         {GLOSSARY_TERMS.map((item) => (
           <div
             key={`desk-${item.id}`}
@@ -247,7 +273,7 @@ export default function KPopGlossaryBubbles() {
         ))}
       </div>
 
-      {/* NAGY BUBORÉK MODAL (Közös mindkét nézethez) */}
+      {/* NAGY BUBORÉK MODAL */}
       <AnimatePresence>
         {selectedTerm && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/20 backdrop-blur-sm">
@@ -301,7 +327,7 @@ export default function KPopGlossaryBubbles() {
                 onClick={() => setSelectedTerm(null)}
                 className="px-6 py-2 rounded-full bg-zinc-900/90 hover:bg-zinc-900 text-white font-bold text-[10px] tracking-widest uppercase transition-all shadow-lg hover:scale-105 active:scale-95 cursor-pointer"
               >
-                Értem
+                Bezárás
               </button>
             </motion.div>
           </div>
