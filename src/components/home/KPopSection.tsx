@@ -6,11 +6,9 @@ import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
 import KPopDetailModal from "@/components/modals/KPopDetailModal";
 
-// Adatok és típus importálása
-import { KPOP_GROUPS, KPopGroupData } from "../../data/kpopData";
-
-export default function KPopSection() {
-  const [selectedGroup, setSelectedGroup] = useState<KPopGroupData | null>(null);
+// Itt fogadjuk a prop-ot (típusnak megfelelően vagy any-ként, ha nincs külön típus fájlod)
+export default function KPopSection({ groups }: { groups: any[] }) {
+  const [selectedGroup, setSelectedGroup] = useState<any | null>(null);
 
   const [emblaRef] = useEmblaCarousel(
     { 
@@ -29,32 +27,31 @@ export default function KPopSection() {
     ]
   );
 
-  const handleCardClick = (group: KPopGroupData) => {
+  const handleCardClick = (group: any) => {
     setSelectedGroup(group);
   };
 
-  const displayGroups = [...KPOP_GROUPS, ...KPOP_GROUPS];
+  // Ha még üres a Sanity, ne szálljon el a karusszel
+  if (!groups || groups.length === 0) {
+    return null; 
+  }
+
+  const displayGroups = [...groups, ...groups];
 
   return (
     <section className="w-full py-24 md:py-36 bg-linear-to-b from-neutral-950 via-slate-100 to-slate-50 text-neutral-900 relative overflow-hidden border-t border-neutral-800/40"> 
       
-      {/* 1. LÁGY ÁTMENETI KÖD: Feketéből észrevétlenül simul bele a világos háttérbe */}
       <div className="absolute top-0 inset-x-0 h-64 bg-linear-to-b from-neutral-950 via-neutral-950/60 to-transparent pointer-events-none z-0" />
 
-      {/* Finom ezüstös háttérfények */}
       <div className="absolute top-1/3 -left-32 w-125 h-125 bg-linear-to-br from-slate-300/30 via-gray-200/10 to-transparent rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-10 -right-32 w-112.5 h-112.5 bg-linear-to-tl from-slate-300/30 via-gray-200/10 to-transparent rounded-full blur-[140px] pointer-events-none" />
 
-      {/* 2. FEJLÉC: Sötét háttér előtti HÓFEHÉR/EZÜST szövegek, hogy a ködben is ragyogjanak */}
       <div className="max-w-3xl mx-auto px-6 text-center z-10 relative mb-14 md:mb-20 space-y-5 pt-6">
-        
-        {/* Pill Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-neutral-900/80 backdrop-blur-md border border-slate-700/80 text-slate-200 text-xs font-bold tracking-widest uppercase shadow-md">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-neutral-900/85 backdrop-blur-md border border-slate-700/80 text-slate-200 text-xs font-bold tracking-widest uppercase shadow-md">
           <Music2 className="w-3.5 h-3.5 stroke-[1.75] text-sky-400" />
           <span>K-POP GLOBAL HUB</span>
         </div>
 
-        {/* Főcím: Hófehérről ezüstre váltó elegáns szövés */}
         <h2 className="text-3xl sm:text-5xl md:text-6xl font-light tracking-tight text-white leading-[1.15] drop-shadow-md">
           A K-Pop{" "}
           <span className="font-semibold text-transparent bg-clip-text bg-linear-to-r from-white via-slate-200 to-slate-400">
@@ -62,18 +59,16 @@ export default function KPopSection() {
           </span>
         </h2>
 
-        {/* Leírás: Tisztán olvasható világosszürke */}
         <p className="text-slate-300 text-base md:text-lg font-normal leading-relaxed max-w-2xl mx-auto drop-shadow-sm">
           Ismerd meg a csapatokat, akik átírták a zeneipar szabályait és meghódították a világ legnagyobb színpadait. A legfrissebb hírek és a legnagyobb fandomok történetei – közvetlenül Szöulból.
         </p>
       </div>
 
-      {/* 3. FULL-WIDTH CAROUSEL */}
       <div className="w-full overflow-hidden py-8 -my-8 cursor-grab active:cursor-grabbing select-none z-10 relative" ref={emblaRef}>
         <div className="flex gap-6 md:gap-8 px-6">
           {displayGroups.map((group, index) => (
             <div
-              key={`${group.id}-${index}`}
+              key={`${group.id || group.name}-${index}`}
               onClick={() => handleCardClick(group)}
               className="w-75 sm:w-95 md:w-105 shrink-0 group relative h-120 md:h-125 rounded-3xl overflow-hidden cursor-pointer bg-neutral-900 border border-slate-200/60 shadow-xl transition-all duration-500 ease-out hover:-translate-y-2 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] hover:border-slate-300"
             >
@@ -88,7 +83,7 @@ export default function KPopSection() {
 
               <div className="absolute top-5 left-5 right-5 flex items-center justify-between z-10">
                 <span className="px-3.5 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold tracking-wider uppercase shadow-xs">
-                  {group.agency}
+                  {group.filterAgency || group.agency}
                 </span>
 
                 <div className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center transition-all duration-300 group-hover:bg-white group-hover:text-black shadow-xs">
@@ -114,7 +109,6 @@ export default function KPopSection() {
         </div>
       </div>
 
-      {/* 4. CTA GOMB */}
       <div className="mt-16 text-center z-10 relative">
         <a
           href="#kpop-hub"

@@ -25,9 +25,10 @@ interface ArtistMemberModalProps {
   member: Member | null;
   isOpen: boolean;
   onClose: () => void;
+  themeColor?: string; // <-- Új prop a dinamikus egyedi színhez
 }
 
-export default function ArtistMemberModal({ member, isOpen, onClose }: ArtistMemberModalProps) {
+export default function ArtistMemberModal({ member, isOpen, onClose, themeColor = '#ec4899' }: ArtistMemberModalProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -58,14 +59,26 @@ export default function ArtistMemberModal({ member, isOpen, onClose }: ArtistMem
         {/* Felső elegáns sáv */}
         <div className="flex items-center justify-between px-8 py-5 border-b border-white/10 bg-[#121216]">
           <div className="flex items-center gap-3">
-            <span className="w-2.5 h-2.5 rounded-full bg-pink-500 animate-pulse" />
+            <span 
+              className="w-2.5 h-2.5 rounded-full animate-pulse" 
+              style={{ backgroundColor: themeColor, boxShadow: `0 0 10px ${themeColor}` }} 
+            />
             <span className="text-xs uppercase tracking-[0.4em] text-zinc-400 font-extrabold">
               82Seoul // Exkluzív Adatbázis & Magazin
             </span>
           </div>
           <button
             onClick={onClose}
-            className="px-4 py-1.5 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-zinc-300 hover:bg-pink-600 hover:text-white hover:border-pink-500 transition-all cursor-pointer flex items-center gap-2"
+            className="px-4 py-1.5 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-zinc-300 transition-all cursor-pointer flex items-center gap-2 hover:text-white"
+            style={{ '--hover-bg': themeColor } as React.CSSProperties}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = themeColor;
+              e.currentTarget.style.borderColor = themeColor;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+            }}
           >
             <span>Bezárás</span>
             <span className="text-sm">✕</span>
@@ -95,15 +108,20 @@ export default function ArtistMemberModal({ member, isOpen, onClose }: ArtistMem
                 href={`https://instagram.com/${member.instagram.replace('@', '')}`} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="relative z-10 m-4 p-3.5 rounded-xl bg-black/80 backdrop-blur-md border border-white/15 flex items-center justify-between hover:border-pink-500/50 transition-all group/insta"
+                className="relative z-10 m-4 p-3.5 rounded-xl bg-black/80 backdrop-blur-md border border-white/15 flex items-center justify-between transition-all group/insta hover:border-white/40"
               >
                 <div className="flex items-center gap-3">
-                  <svg className="w-5 h-5 text-pink-400 group-hover/insta:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                  <svg 
+                    className="w-5 h-5 group-hover/insta:scale-110 transition-transform" 
+                    style={{ color: themeColor }} 
+                    fill="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
                     <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
                   </svg>
                   <span className="text-xs font-bold text-white tracking-wide">Hivatalos Instagram</span>
                 </div>
-                <span className="text-xs font-semibold text-pink-400 group-hover/insta:translate-x-0.5 transition-transform">
+                <span className="text-xs font-semibold group-hover/insta:translate-x-0.5 transition-transform" style={{ color: themeColor }}>
                   {member.instagram} ↗
                 </span>
               </a>
@@ -116,7 +134,7 @@ export default function ArtistMemberModal({ member, isOpen, onClose }: ArtistMem
             <div>
               {/* Pozíció & Koreai név */}
               <div className="flex items-center justify-between gap-4 mb-3">
-                <span className="text-xs uppercase tracking-[0.3em] text-pink-400 font-extrabold">
+                <span className="text-xs uppercase tracking-[0.3em] font-extrabold" style={{ color: themeColor }}>
                   {member.role || 'Tag'}
                 </span>
                 {member.koreanName && (
@@ -136,7 +154,7 @@ export default function ArtistMemberModal({ member, isOpen, onClose }: ArtistMem
                 </p>
               )}
 
-              {/* 1. Módosítás: A fő leírás (shortBio) felkerült ide a név alá! */}
+              {/* Fő leírás */}
               {member.shortBio && (
                 <div className="mb-5 p-4 rounded-2xl bg-[#141419] border border-white/10">
                   <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
@@ -145,7 +163,7 @@ export default function ArtistMemberModal({ member, isOpen, onClose }: ArtistMem
                 </div>
               )}
 
-              {/* Alap kis kártyák (Születési idő, Csillagjegy, Magasság) */}
+              {/* Alap kis kártyák */}
               <div className="grid grid-cols-3 gap-3 mb-3">
                 {member.birthDate && (
                   <div className="p-3 rounded-2xl bg-[#141419] border border-white/10">
@@ -167,15 +185,13 @@ export default function ArtistMemberModal({ member, isOpen, onClose }: ArtistMem
                 )}
               </div>
 
-              {/* 2. Módosítás: Aszimmetrikus / Párosított elrendezés */}
+              {/* Aszimmetrikus / Párosított elrendezés */}
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 mb-3">
-                
-                {/* Bal oszlop (Hosszabb mezők): Márkanagykövet & Születési hely */}
                 <div className="sm:col-span-7 flex flex-col gap-3">
                   {member.brandAmbassador && (
                     <div className="p-3.5 rounded-2xl bg-[#141419] border border-white/10 flex-1">
                       <span className="block text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-1">Márkanagykövet</span>
-                      <span className="text-sm font-bold text-purple-400">{member.brandAmbassador}</span>
+                      <span className="text-sm font-bold" style={{ color: themeColor }}>{member.brandAmbassador}</span>
                     </div>
                   )}
                   {member.birthPlace && (
@@ -186,7 +202,6 @@ export default function ArtistMemberModal({ member, isOpen, onClose }: ArtistMem
                   )}
                 </div>
 
-                {/* Jobb oszlop (Rövidebb mezők): Vércsoport & Signature Track */}
                 <div className="sm:col-span-5 flex flex-col gap-3">
                   {member.bloodType && (
                     <div className="p-3.5 rounded-2xl bg-[#141419] border border-white/10">
@@ -197,18 +212,23 @@ export default function ArtistMemberModal({ member, isOpen, onClose }: ArtistMem
                   {member.signatureTrack && (
                     <div className="p-3.5 rounded-2xl bg-[#141419] border border-white/10">
                       <span className="block text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-1">Signature Track</span>
-                      <span className="text-sm font-bold text-pink-400">{member.signatureTrack}</span>
+                      <span className="text-sm font-bold" style={{ color: themeColor }}>{member.signatureTrack}</span>
                     </div>
                   )}
                 </div>
-
               </div>
 
-              {/* Híres idézet (Ha van) */}
+              {/* Híres idézet */}
               {member.quote && (
-                <div className="p-4 rounded-2xl bg-linear-to-r from-purple-500/15 to-pink-500/15 border border-purple-500/30 relative overflow-hidden">
-                  <div className="absolute top-2 right-4 text-4xl text-purple-500/20 font-serif select-none">“</div>
-                  <span className="block text-[10px] uppercase tracking-wider text-purple-400 font-bold mb-1">Híres idézet</span>
+                <div 
+                  className="p-4 rounded-2xl border relative overflow-hidden"
+                  style={{ 
+                    background: `linear-gradient(to right, ${themeColor}15, rgba(168,85,247,0.15))`,
+                    borderColor: `${themeColor}40`
+                  }}
+                >
+                  <div className="absolute top-2 right-4 text-4xl font-serif select-none opacity-20" style={{ color: themeColor }}>“</div>
+                  <span className="block text-[10px] uppercase tracking-wider font-bold mb-1" style={{ color: themeColor }}>Híres idézet</span>
                   <p className="text-xs sm:text-sm text-white font-medium italic relative z-10">
                     &ldquo;{member.quote}&rdquo;
                   </p>

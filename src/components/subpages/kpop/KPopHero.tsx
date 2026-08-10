@@ -4,9 +4,9 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { KPOP_GROUPS } from '@/data/kpopData';
+import { client } from '../../../../sanity/lib/client';
 
-// Kiegészítő infók a Hero-hoz (címek, tag-ek, gow színek)
+// Kiegészítő infók a Hero-hoz (címek, tag-ek, glow színek)
 const HERO_EXTRA_DATA: Record<string, { title: string; subtitle: string; tag: string; glowColor: string }> = {
   bts: {
     title: 'A K-Pop Globális Forradalma.',
@@ -28,33 +28,59 @@ const HERO_EXTRA_DATA: Record<string, { title: string; subtitle: string; tag: st
   },
 };
 
-// Összefésüljük a kpopData-ban lévő bandákat a Hero speciális szövegeivel
-const HERO_SLIDES = ['bts', 'blackpink', 'aespa'].map((id) => {
-  const group = KPOP_GROUPS.find((g) => g.id === id);
-  const extra = HERO_EXTRA_DATA[id];
-
-  return {
-    id,
-    groupName: group?.name || id.toUpperCase(),
-    image: group?.wideImage || group?.image || '/images/kpop/default.jpg',
-    title: extra?.title || group?.name || '',
-    subtitle: extra?.subtitle || group?.description || '',
-    tag: extra?.tag || '⭐ FEATURED',
-    glowColor: extra?.glowColor || 'from-purple-600/30 via-indigo-500/10 to-transparent',
-  };
-});
-
 export default function KPopHero() {
   const [current, setCurrent] = useState(0);
+  const [slides, setSlides] = useState<any[]>([]);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, 6000);
-    return () => clearInterval(timer);
+    async function fetchHeroData() {
+      try {
+        // Lekérjük a 3 kiemelt bandát a Sanity-ből
+        const query = `*[_type == "artist" && id in ["bts", "blackpink", "aespa"]]{
+          id,
+          name,
+          "image": image.asset->url,
+          "wideImage": wideImage.asset->url,
+          description
+        }`;
+        const data = await client.fetch(query);
+
+        // Összefésüljük a Sanity adatait a Hero speciális szövegeivel
+        const formattedSlides = ['bts', 'blackpink', 'aespa'].map((id) => {
+          const group = data.find((g: any) => g.id === id);
+          const extra = HERO_EXTRA_DATA[id];
+
+          return {
+            id,
+            groupName: group?.name || id.toUpperCase(),
+            image: group?.wideImage || group?.image || '/images/kpop/default.jpg',
+            title: extra?.title || group?.name || '',
+            subtitle: extra?.subtitle || group?.description || '',
+            tag: extra?.tag || '⭐ FEATURED',
+            glowColor: extra?.glowColor || 'from-purple-600/30 via-indigo-500/10 to-transparent',
+          };
+        });
+
+        setSlides(formattedSlides);
+      } catch (error) {
+        console.error('Hiba a Hero adatok lekérdezésekor:', error);
+      }
+    }
+
+    fetchHeroData();
   }, []);
 
-  const slide = HERO_SLIDES[current];
+  useEffect(() => {
+    if (slides.length === 0) return;
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % slides.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [slides]);
+
+  if (slides.length === 0) return null; // Amíg töltődik, nem dob hibát
+
+  const slide = slides[current];
 
   return (
     <div className="relative w-full bg-zinc-950 text-white overflow-hidden">
@@ -144,7 +170,7 @@ export default function KPopHero() {
 
             {/* PONT (SLIDER) NAVIGÁCIÓ */}
             <div className="flex items-center justify-end gap-3 mt-4">
-              {HERO_SLIDES.map((s, idx) => (
+              {slides.map((s, idx) => (
                 <button
                   key={s.id}
                   onClick={() => setCurrent(idx)}

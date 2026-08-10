@@ -8,8 +8,14 @@ import KFoodSection from "@/components/home/KFoodSection";
 import KoreaSection from "@/components/home/KoreaSection";
 import Footer from "@/components/core/Footer";
 
+// Sanity importok
+import { client } from "../../sanity/lib/client";
+import { getArtistsQuery } from "../../sanity/queries";
 
-export default function Home() {
+export default async function Home() {
+  // Lekérjük a bandákat a Sanityből
+  const artists = await client.fetch(getArtistsQuery);
+
   return (
     <main className="min-h-screen bg-white text-slate-900 font-sans antialiased">
       {/* 1. Képernyő: Navigáció + Hero */}
@@ -22,7 +28,10 @@ export default function Home() {
         <KBeautySection />
         <KDramaSection />
       </div>
-      <KPopSection />
+
+      {/* Átadjuk a Sanityből kapott adatokat a KPop szekciónak */}
+      <KPopSection groups={artists} />
+
       <KFoodSection />
       <KoreaSection />
       <Footer />

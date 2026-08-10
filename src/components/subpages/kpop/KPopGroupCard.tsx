@@ -4,10 +4,9 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, Variants } from 'framer-motion';
-import { type KPopGroupData } from '@/data/kpopData';
 
 interface KPopGroupCardProps {
-  band: KPopGroupData;
+  band: any; // Sanity dinamikus adatséma
   index: number;
   showRank?: boolean;
 }
@@ -34,7 +33,7 @@ const getRankBadgeStyle = (rank: number) => {
       };
     default:
       return {
-        label: `#${rank}`,
+        label: `#${rank || 1}`,
         icon: null,
         bg: 'bg-zinc-900/80 backdrop-blur-md text-zinc-200 border-zinc-700/60 font-semibold',
       };
@@ -45,7 +44,6 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
   const isEven = index % 2 === 0;
   const rankBadge = getRankBadgeStyle(band.rank);
 
-// 100% Chrome- és Firefox-stabil beúszó animációk
   const textUnrollVariant: Variants = {
     hidden: { 
       opacity: 0,
@@ -72,7 +70,6 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
     },
   };
 
-  // Vonal kinyúlási animáció
   const lineVariant: Variants = {
     hidden: { scaleX: 0, originX: isEven ? 0 : 1 },
     visible: { 
@@ -81,7 +78,6 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
     }
   };
 
-  // Gomb animáció
   const buttonVariant: Variants = {
     hidden: { scale: 0, opacity: 0 },
     visible: { 
@@ -110,44 +106,34 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
             isEven ? 'lg:order-1' : 'lg:order-2'
           }`}
         >
-          {/* Kiadó & Tagok */}
           <span className="text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2 z-10">
-            {band.agency} • {band.members}
+            {band.filterAgency || band.agency} • {band.members}
           </span>
 
-          {/* CÍM ÉS RANGSZÁM SORA */}
           <div className="relative flex items-center justify-between w-full mb-4 min-h-20 sm:min-h-27.5 overflow-hidden">
-            
-            {/* CÍM: Dinamikus méretezés a név hossza alapján */}
             <h2 
               className={`font-serif font-normal text-zinc-900 tracking-tight leading-none z-10 break-normal ${
-                band.name.length > 10 
-                  ? 'text-3xl sm:text-5xl lg:text-6xl xl:text-7xl' // Hosszú neveknek (pl. BABYMONSTER)
-                  : 'text-4xl sm:text-6xl lg:text-7xl xl:text-8xl' // Normál/rövid neveknek (pl. BTS, AESPA)
+                band.name?.length > 10 
+                  ? 'text-3xl sm:text-5xl lg:text-6xl xl:text-7xl' 
+                  : 'text-4xl sm:text-6xl lg:text-7xl xl:text-8xl' 
               }`}
             >
               {band.name}
             </h2>
 
-            {/* A RANK SZÁM: Fix, egységes nagy méret */}
             {showRank && (
               <span className="pointer-events-none select-none text-6xl sm:text-8xl lg:text-[110px] font-serif font-normal text-zinc-900/8 leading-none shrink-0 ml-2 z-0">
-                {band.rank < 10 ? `0${band.rank}` : band.rank}
+                {band.rank && band.rank < 10 ? `0${band.rank}` : band.rank || '01'}
               </span>
             )}
-
           </div>
 
-          {/* VONAL ÉS A GOMB TENGELYE */}
           <div className="relative w-full h-12 flex items-center my-2 z-20">
-            
-            {/* Animált vonal */}
             <motion.div 
               variants={lineVariant}
               className="w-full h-px bg-zinc-400 transform-gpu" 
             />
             
-            {/* Animált gomb */}
             <div className={`absolute top-1/2 -translate-y-1/2 z-30 ${
               isEven ? 'right-4 sm:right-8' : 'left-4 sm:left-8'
             }`}>
@@ -165,9 +151,8 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
             </div>
           </div>
 
-          {/* LEÍRÁS */}
           <p className="text-zinc-600 text-sm sm:text-base leading-relaxed max-w-xl font-normal mt-6 sm:mt-8 z-10">
-            {band.description}
+            {band.description || band.tagline}
           </p>
         </motion.div>
 
@@ -184,7 +169,6 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
           <Link href={`/kpop/${band.id}`} className="block group">
             <div className="relative w-full aspect-21/9 rounded-none border-none shadow-2xl overflow-hidden bg-zinc-300 transform-gpu">
               
-              {/* RANK BADGE A KÉPEN */}
               {showRank && (
                 <div className="absolute top-4 right-4 z-20 pointer-events-none">
                   <div 
@@ -196,10 +180,9 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
                 </div>
               )}
 
-              {/* BORÍTÓKÉP */}
               <Image
                 src={band.wideImage || band.image}
-                alt={band.name}
+                alt={band.name || 'K-Pop Group'}
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out transform-gpu"
