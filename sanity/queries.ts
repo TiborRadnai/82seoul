@@ -1,0 +1,86 @@
+export const getArtistsQuery = `*[_type == "artist"]{
+  name,
+  id,
+  rank,
+  category,
+  filterAgency,
+  agency,
+  themeColor,
+  tagline,
+  "image": image.asset->url,
+  "wideImage": wideImage.asset->url,
+  members,
+  fandom,
+  description,
+  extendedHistory,
+  membersList[]{
+    name,
+    fullName,
+    koreanName,
+    role,
+    birthDate,
+    zodiac,
+    height,
+    bloodType,
+    birthPlace,
+    signatureTrack,
+    brandAmbassador,
+    instagram,
+    quote,
+    shortBio,
+    "image": image.asset->url
+  },
+  albums[]{
+    id,
+    title,
+    type,
+    releaseDate,
+    "coverImage": coverImage.asset->url,
+    spotifyUrl,
+    tracks
+  }
+}`;
+
+// Lekérdez egyetlen előadót az 'id' mezője alapján (beágyazott tagokkal és albumokkal)
+export const getArtistByIdQuery = `*[_type == "artist" && id == $id][0]{
+  name,
+  id,
+  rank,
+  category,
+  filterAgency,
+  agency,
+  themeColor,
+  tagline,
+  "image": image.asset->url,
+  "wideImage": wideImage.asset->url,
+  members,
+  fandom,
+  description,
+  extendedHistory,
+  membersList[]{
+    name,
+    fullName,
+    koreanName,
+    role,
+    birthDate,
+    zodiac,
+    height,
+    bloodType,
+    birthPlace,
+    signatureTrack,
+    brandAmbassador,
+    instagram,
+    quote,
+    shortBio,
+    "image": image.asset->url
+  },
+  albums[]{
+    id,
+    title,
+    type,
+    releaseDate,
+    "coverImage": coverImage.asset->url,
+    spotifyUrl,
+    tracks
+  }
+}`;

@@ -2,46 +2,66 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ALL_KPOP_DATA } from '@/data/kpopData';
 import KPopGroupCard from './KPopGroupCard';
 import KPopFilter, { GenderCategory, AgencyCategory } from './KPopFilter';
 
-export default function KPopGroupList() {
-  // Szűrő állapotok (alapból Top 10 kiemelt)
+interface KPopGroupListProps {
+  initialArtists: any[]; // A Sanityből érkező adatok
+}
+
+export default function KPopGroupList({ initialArtists }: KPopGroupListProps) {
   const [selectedGender, setSelectedGender] = useState<GenderCategory>('top10');
   const [selectedAgency, setSelectedAgency] = useState<AgencyCategory>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  // Kombinált Szűrési Logika (useMemo-val a jobb teljesítményért)
+  const artistIndexData = useMemo(() => {
+    return initialArtists.map((item) => ({
+      id: item.id,
+      name: item.name,
+      category: item.category,
+      themeColor: item.themeColor,
+    }));
+  }, [initialArtists]);
+
+  const handleSelectArtist = (id: string) => {
+    const element = document.getElementById(`artist-${id}`);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+      setSelectedGender('all');
+      setTimeout(() => {
+        const el = document.getElementById(`artist-${id}`);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }
+  };
+
   const filteredGroups = useMemo(() => {
-    // 1. Először sorba rendezzük az adatokat rank szerint
-    const sortedData = [...ALL_KPOP_DATA].sort((a, b) => a.rank - b.rank);
+    // Biztosítjuk, hogy rank szerint legyenek rendezve, ha van rank
+    const sortedData = [...initialArtists].sort((a, b) => (a.rank || 99) - (b.rank || 99));
 
     return sortedData.filter((item) => {
-      // Nem / Kategória szűrés
       const matchesGender =
         selectedGender === 'top10' ||
         selectedGender === 'all' ||
         item.category === selectedGender;
 
-      // Kiadó szűrés
       const matchesAgency =
         selectedAgency === 'all' || item.filterAgency === selectedAgency;
 
-      // Globális Kereső szűrés (Név, Kiadó, Leírás, Fandom, Tagok)
       let matchesSearch = true;
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
-        const matchesName = item.name.toLowerCase().includes(q);
-        const matchesAgencyName = item.agency.toLowerCase().includes(q);
-        const matchesDescription = item.description.toLowerCase().includes(q) ||
+        const matchesName = item.name?.toLowerCase().includes(q) || false;
+        const matchesAgencyName = (item.agency || item.filterAgency || '').toLowerCase().includes(q);
+        const matchesDescription = (item.description || '').toLowerCase().includes(q) ||
           (item.tagline ? item.tagline.toLowerCase().includes(q) : false);
         const matchesFandom = item.fandom ? item.fandom.toLowerCase().includes(q) : false;
         
-        const matchesMembers = item.membersList?.some((m) => {
-          if (typeof m === 'string') return (m as string).toLowerCase().includes(q);
+        const matchesMembers = item.membersList?.some((m: any) => {
+          if (typeof m === 'string') return m.toLowerCase().includes(q);
           return (
-            m.name.toLowerCase().includes(q) ||
+            m.name?.toLowerCase().includes(q) ||
             (m.role ? m.role.toLowerCase().includes(q) : false)
           );
         }) ?? false;
@@ -51,9 +71,8 @@ export default function KPopGroupList() {
 
       return matchesGender && matchesAgency && matchesSearch;
     });
-  }, [selectedGender, selectedAgency, searchQuery]);
+  }, [initialArtists, selectedGender, selectedAgency, searchQuery]);
 
-  // Ha 'top10' van kiválasztva ÉS nincs aktív keresés, levágjuk a legnépszerűbb 10-re!
   const displayedGroups = useMemo(() => {
     if (selectedGender === 'top10' && !searchQuery.trim()) {
       return filteredGroups.slice(0, 10);
@@ -61,7 +80,6 @@ export default function KPopGroupList() {
     return filteredGroups;
   }, [filteredGroups, selectedGender, searchQuery]);
 
-  // Szűrők visszaállítása alaphelyzetbe
   const handleResetFilters = () => {
     setSelectedGender('top10');
     setSelectedAgency('all');
@@ -71,7 +89,6 @@ export default function KPopGroupList() {
   return (
     <section className="max-w-[1800px] mx-auto px-4 sm:px-8 py-12 sm:py-20">
       
-      {/* SZŰRŐ ÉS KERESŐ KOMPONENS */}
       <KPopFilter
         selectedGender={selectedGender}
         onSelectGender={setSelectedGender}
@@ -80,9 +97,10 @@ export default function KPopGroupList() {
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         totalCount={displayedGroups.length}
+        artists={artistIndexData}
+        onSelectArtist={handleSelectArtist}
       />
 
-      {/* HA NINCS TALÁLAT */}
       {displayedGroups.length === 0 ? (
         <div className="text-center py-20 bg-zinc-900/40 rounded-3xl border border-zinc-800 my-12">
           <p className="text-zinc-400 text-lg">
@@ -96,12 +114,12 @@ export default function KPopGroupList() {
           </button>
         </div>
       ) : (
-        /* ANIMÁLT KÁRTYA LISTA */
         <motion.div layout className="space-y-28 sm:space-y-40 mt-12">
           <AnimatePresence mode="popLayout">
             {displayedGroups.map((group, index) => (
               <motion.div
-                key={group.id}
+                key={group.id || group._id}
+                id={`artist-${group.id}`}
                 layout
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

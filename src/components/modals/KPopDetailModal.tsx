@@ -2,19 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { X, Users, Sparkles, ExternalLink, Check, Heart } from "lucide-react";
-import { KPopGroupData, KPopMember } from "../../data/kpopData";
 
 interface KPopDetailModalProps {
-  group: KPopGroupData | null;
+  group: any | null;
   onClose: () => void;
-}
-
-// Segédfüggvény a tagok adatainak kinyerésére
-function parseMember(member: KPopMember): { name: string; role?: string; image?: string } {
-  if (typeof member === "string") {
-    return { name: member };
-  }
-  return member;
 }
 
 export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps) {
@@ -98,7 +89,7 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
           <div className="space-y-5">
             <div>
               <span className="text-xs font-bold tracking-widest text-pink-400 uppercase">
-                {group.agency}
+                {group.filterAgency || group.agency}
               </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mt-0.5">
                 {group.name}
@@ -125,7 +116,7 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
                   Ügynökség
                 </div>
                 <div className="text-xs font-semibold text-white mt-0.5 line-clamp-1">
-                  {group.agency}
+                  {group.filterAgency || group.agency}
                 </div>
               </div>
 
@@ -150,8 +141,7 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
                 
                 {/* 2 Oszlopos rács */}
                 <div className="grid grid-cols-2 gap-2">
-                  {group.membersList.map((rawMember, idx) => {
-                    const member = parseMember(rawMember);
+                  {group.membersList.map((member: any, idx: number) => {
                     const isLeftColumn = idx % 2 === 0;
 
                     // Csak az elsődleges fő szerepkört vesszük ki (pl. "Leader, Main Dancer" -> "Leader")
@@ -159,15 +149,13 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
 
                     return (
                       <div key={idx} className="relative group/member">
-                        {/* Tag gomb / pill - A NÉV a fontosabb, a SZEREPKÖR rövidül, ha nem fér el */}
+                        {/* Tag gomb / pill */}
                         <div className="w-full px-3 py-2.5 rounded-xl bg-white/10 border border-white/10 hover:bg-white/20 hover:border-white/30 transition-all cursor-pointer flex items-center justify-between text-xs gap-2 min-w-0">
                           
-                          {/* NÉV: Teljesen kiírva, nem nyomódik össze (shrink-0) */}
                           <span className="font-semibold text-white/90 shrink-0">
                             {member.name}
                           </span>
                           
-                          {/* SZEREPKÖR: Ha a név túl hosszú, a szerepkör kap 3 pontot a végére (truncate min-w-0) */}
                           {primaryRole && (
                             <span 
                               className="text-[10px] text-pink-300 font-medium bg-pink-500/15 border border-pink-500/20 px-2 py-0.5 rounded-md truncate min-w-0 max-w-27.5"
@@ -187,17 +175,14 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
                           >
                             <div className="w-52 h-64 sm:w-56 sm:h-72 rounded-2xl overflow-hidden border border-white/20 shadow-[0_25px_60px_-10px_rgba(0,0,0,0.9)] bg-neutral-900 relative flex flex-col justify-end group/card">
                               
-                              {/* 1. Teljes kártyás kép */}
                               <img
                                 src={member.image}
                                 alt={member.name}
                                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
                               />
                               
-                              {/* 2. FINOM, LÁGY SZÍNÁTMENETES SÖTÉTÍTÉS (Gradiens a kép alján) */}
                               <div className="absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-black/90 via-black/50 to-transparent pointer-events-none" />
 
-                              {/* 3. Szöveges tartalom lágyan a gradiensre ültetve */}
                               <div className="relative z-10 p-4 space-y-0.5">
                                 <div className="text-sm font-extrabold text-white tracking-wide drop-shadow-md">
                                   {member.name}
@@ -211,7 +196,6 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
                               </div>
                             </div>
                             
-                            {/* Nyíl a kártya alján */}
                             <div className={`w-3 h-3 bg-neutral-900 rotate-45 -mt-1.5 border-r border-b border-white/20 ${
                               isLeftColumn ? "ml-6" : "ml-auto mr-6"
                             }`} />
@@ -228,7 +212,7 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
           {/* Alsó Akció gombok */}
           <div className="pt-4 border-t border-white/10 flex items-center gap-3">
             <a
-              href={`#${group.id}`}
+              href={`/kpop/${group.id}`}
               onClick={onClose}
               className="flex-1 py-3.5 px-6 rounded-full bg-white hover:bg-neutral-200 text-black font-bold text-xs tracking-wider uppercase transition-all duration-300 flex items-center justify-center gap-2 shadow-lg cursor-pointer"
             >
