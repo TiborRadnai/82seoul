@@ -6,8 +6,8 @@ export default defineConfig({
   name: 'default',
   title: '82Seoul Admin',
 
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '8bjbqa5wg',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '8jbqa5wg', // Javítva!
+dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
 
   // Itt kérjük meg, hogy a 'studio' útvonalat kösse össze a struktúrával
   plugins: [
