@@ -57,6 +57,7 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
     if (filter === 'all') return true;
     return album.type === filter;
   });
+  
 
   const handleSelectAlbum = (albumId: string) => {
     if (hasMoved) return;
@@ -64,17 +65,18 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
     featuredRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  // Egér és érintéskezelő logika egységesítve mobilos reszponzivitáshoz
+  const handleDragStart = (pageX: number) => {
     if (!scrollContainerRef.current) return;
     setIsDragging(true);
     setHasMoved(false);
-    setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
+    setStartX(pageX - scrollContainerRef.current.offsetLeft);
     setScrollLeft(scrollContainerRef.current.scrollLeft);
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
+  const handleDragMove = (pageX: number) => {
     if (!isDragging || !scrollContainerRef.current) return;
-    const x = e.pageX - scrollContainerRef.current.offsetLeft;
+    const x = pageX - scrollContainerRef.current.offsetLeft;
     const walk = (x - startX) * 1.5;
     if (Math.abs(walk) > 5) {
       setHasMoved(true);
@@ -82,18 +84,14 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
     scrollContainerRef.current.scrollLeft = scrollLeft - walk;
   };
 
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
   return (
-    <section className="w-full py-28 px-4 sm:px-8 lg:px-16 text-left relative overflow-hidden bg-[#07070a]">
+    <section id="discography" className="w-full py-16 sm:py-28 px-4 sm:px-8 lg:px-16 text-left relative overflow-hidden bg-[#07070a]">
       
       {/* Témaszínű egyedi scrollbar stílus */}
       <style jsx global>{`
         .custom-dynamic-scrollbar::-webkit-scrollbar {
-          height: 8px;
-          width: 8px;
+          height: 6px;
+          width: 6px;
         }
         .custom-dynamic-scrollbar::-webkit-scrollbar-track {
           background: rgba(255, 255, 255, 0.02);
@@ -132,20 +130,20 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
       <div className="w-full max-w-[1600px] mx-auto relative z-10">
         
         {/* Szekció cím */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-12 sm:mb-20">
           <div className="flex items-center justify-center gap-3 mb-3">
             <span 
               className="w-3 h-3 rounded-full shadow-[0_0_12px]" 
               style={{ backgroundColor: themeColor, boxShadow: `0 0 12px ${themeColor}` }}
             />
             <span 
-              className="text-xs uppercase tracking-[0.4em] font-extrabold"
+              className="text-[11px] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.4em] font-extrabold"
               style={{ color: themeColor }}
             >
               Diszkográfia & Hanganyagok
             </span>
           </div>
-          <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white drop-shadow-[0_2px_20px_rgba(255,255,255,0.1)]">
+          <h2 className="text-3xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white drop-shadow-[0_2px_20px_rgba(255,255,255,0.1)]">
             Albumok & <span className="text-transparent bg-clip-text" style={{ backgroundImage: `linear-gradient(to right, ${themeColor}, #a855f7)` }}>Megjelenések</span>
           </h2>
         </div>
@@ -153,7 +151,7 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
         {/* --- 1. KIEMELT KÁRTYA --- */}
         <div 
           ref={featuredRef} 
-          className="relative w-full rounded-2xl overflow-hidden backdrop-blur-3xl border grid grid-cols-1 lg:grid-cols-12 mb-24 scroll-mt-24 transition-all duration-500 items-center"
+          className="relative w-full rounded-2xl overflow-hidden backdrop-blur-3xl border grid grid-cols-1 lg:grid-cols-12 mb-16 sm:mb-24 scroll-mt-24 transition-all duration-500 items-center"
           style={{ 
             backgroundColor: 'rgba(15, 15, 22, 0.8)',
             borderColor: `${themeColor}50`, 
@@ -163,13 +161,14 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
           
           {/* Bal oldal: Borítókép konténer */}
           <div className="relative lg:col-span-6 p-6 sm:p-10 flex items-center justify-center bg-linear-to-br from-white/5 to-transparent">
-            <div className="relative w-full max-w-120 aspect-square rounded-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-white/10 group">
+            <div className="relative w-full max-w-70 sm:max-w-100 lg:max-w-120 aspect-square rounded-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-white/10 group">
               {currentFeatured.coverImage ? (
                 <Image
                   key={currentFeatured.id}
                   src={currentFeatured.coverImage}
                   alt={currentFeatured.title}
                   fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
               ) : (
@@ -178,7 +177,7 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
               
               {isLatestSelected && (
                 <div 
-                  className="absolute top-4 left-4 px-4 py-2 rounded-lg border backdrop-blur-md text-xs font-bold tracking-wider uppercase shadow-xl flex items-center gap-2 z-10"
+                  className="absolute top-4 left-4 px-3.5 py-1.5 rounded-lg border backdrop-blur-md text-[11px] sm:text-xs font-bold tracking-wider uppercase shadow-xl flex items-center gap-2 z-10"
                   style={{ backgroundColor: 'rgba(0,0,0,0.85)', borderColor: `${themeColor}80`, color: themeColor }}
                 >
                   <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: themeColor }} />
@@ -189,16 +188,16 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
           </div>
 
           {/* Jobb oldal: Album infók és tracklist */}
-          <div className="lg:col-span-6 p-8 sm:p-14 flex flex-col justify-between">
+          <div className="lg:col-span-6 p-6 sm:p-14 flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between gap-4 mb-4">
                 <span 
-                  className="text-xs uppercase tracking-[0.3em] font-extrabold px-3 py-1.5 rounded-lg border backdrop-blur-md"
+                  className="text-[11px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] font-extrabold px-3 py-1.5 rounded-lg border backdrop-blur-md"
                   style={{ backgroundColor: `${themeColor}20`, borderColor: `${themeColor}50`, color: themeColor }}
                 >
                   {currentFeatured.type === 'full' ? 'Stúdióalbum' : currentFeatured.type === 'mini' ? 'Minialbum (EP)' : 'Kislemez'}
                 </span>
-                <span className="text-sm font-bold text-zinc-400">
+                <span className="text-xs sm:text-sm font-bold text-zinc-400">
                   {currentFeatured.releaseDate}
                 </span>
               </div>
@@ -212,9 +211,9 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
                   <span className="block text-[11px] uppercase tracking-widest text-zinc-400 font-extrabold mb-3">
                     Dallista / Tracklist ({currentFeatured.tracks.length} dal)
                   </span>
-                  <ul className="max-h-95 overflow-y-auto space-y-2 pr-2 custom-dynamic-scrollbar border border-white/10 rounded-xl p-3 bg-black/40 shadow-inner backdrop-blur-md">
+                  <ul className="max-h-60 sm:max-h-95 overflow-y-auto space-y-2 pr-2 custom-dynamic-scrollbar border border-white/10 rounded-xl p-3 bg-black/40 shadow-inner backdrop-blur-md">
                     {currentFeatured.tracks.map((track, idx) => (
-                      <li key={idx} className="flex items-center gap-3 text-sm text-zinc-200 bg-white/5 px-4 py-3 rounded-lg border border-white/5 hover:bg-white/10 transition-colors">
+                      <li key={idx} className="flex items-center gap-3 text-xs sm:text-sm text-zinc-200 bg-white/5 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-lg border border-white/5 hover:bg-white/10 transition-colors">
                         <span className="text-xs font-mono font-bold text-zinc-400 shrink-0" style={{ color: themeColor }}>
                           {idx + 1 < 10 ? `0${idx + 1}` : idx + 1}
                         </span>
@@ -232,7 +231,7 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
                 href={currentFeatured.spotifyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-6 w-full py-4 rounded-xl font-bold text-xs uppercase tracking-widest text-[#1DB954] text-center transition-all flex items-center justify-center gap-3 border border-[#1DB954]/60 hover:bg-[#1DB954]/10 hover:scale-[1.01] active:scale-[0.99] backdrop-blur-md"
+                className="mt-6 w-full py-3.5 sm:py-4 rounded-xl font-bold text-xs uppercase tracking-widest text-[#1DB954] text-center transition-all flex items-center justify-center gap-3 border border-[#1DB954]/60 hover:bg-[#1DB954]/10 hover:scale-[1.01] active:scale-[0.99] backdrop-blur-md"
                 style={{ boxShadow: '0 0 25px rgba(29, 185, 84, 0.25)', backgroundColor: 'rgba(29, 185, 84, 0.05)' }}
               >
                 <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -246,15 +245,15 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
         </div>
 
         {/* --- 2. SZŰRŐK SÁV --- */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-10 pb-6 border-b border-white/10">
-          <h3 className="text-2xl font-black text-white tracking-tight">Összes Kiadvány</h3>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 sm:mb-10 pb-6 border-b border-white/10">
+          <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">Összes Kiadvány</h3>
           
           <div className="flex flex-wrap gap-2">
             {(['all', 'full', 'mini', 'single'] as AlbumFilter[]).map((type) => (
               <button
                 key={type}
                 onClick={() => setFilter(type)}
-                className={`px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer border backdrop-blur-md ${
+                className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer border backdrop-blur-md ${
                   filter === type
                     ? 'text-white border-transparent shadow-lg'
                     : 'bg-white/3 text-zinc-400 border-white/10 hover:bg-white/8 hover:text-white'
@@ -270,15 +269,18 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
           </div>
         </div>
 
-        {/* --- 3. VÍZSZINTESEN LAPOZHATÓ SÁV ALUL (Prémium füstös üveghatású kártyák mindenkinél, dinamikus hoverrel) --- */}
+        {/* --- 3. VÍZSZINTESEN LAPOZHATÓ SÁV ALUL (Egérrel és Érintéssel is húzható) --- */}
         <div className="relative w-full">
           <div 
             ref={scrollContainerRef}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
-            className={`flex items-center gap-6 overflow-x-auto pb-8 pt-4 px-3 custom-dynamic-scrollbar select-none ${
+            onMouseDown={(e) => handleDragStart(e.pageX)}
+            onMouseMove={(e) => handleDragMove(e.pageX)}
+            onMouseUp={() => setIsDragging(false)}
+            onMouseLeave={() => setIsDragging(false)}
+            onTouchStart={(e) => handleDragStart(e.touches[0].pageX)}
+            onTouchMove={(e) => handleDragMove(e.touches[0].pageX)}
+            onTouchEnd={() => setIsDragging(false)}
+            className={`flex items-center gap-4 sm:gap-6 overflow-x-auto pb-8 pt-4 px-3 custom-dynamic-scrollbar select-none ${
               isDragging ? 'cursor-grabbing' : 'cursor-grab'
             }`}
           >
@@ -288,19 +290,17 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
                 <div 
                   key={album.id}
                   onClick={() => handleSelectAlbum(album.id)}
-                  className={`group shrink-0 w-72 sm:w-83 rounded-2xl p-4 transition-all duration-300 relative flex flex-col justify-between backdrop-blur-xl border cursor-pointer hover:scale-[1.02] hover:shadow-[0_20px_50px_rgba(0,0,0,0.8)] ${
+                  className={`group shrink-0 w-64 sm:w-83 rounded-2xl p-3.5 sm:p-4 transition-all duration-300 relative flex flex-col justify-between backdrop-blur-xl border cursor-pointer hover:scale-[1.02] hover:shadow-[0_20px_50px_rgba(0,0,0,0.8)] ${
                     isSelected ? 'scale-[1.02]' : ''
                   }`}
                   style={
                     isSelected 
                       ? { 
-                          // Kiválasztott / Aktív kártya: intenzív témaszínű világító üveg
                           backgroundColor: `${themeColor}35`,
                           borderColor: themeColor,
                           boxShadow: `0 15px 40px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.3), 0 0 30px ${themeColor}60`
                         }
                       : { 
-                          // Normál kártya: állandó prémium füstös-üveg háttér a témaszínből keverve, látható kerettel
                           backgroundColor: 'rgba(18, 18, 26, 0.85)',
                           backgroundImage: `linear-gradient(to bottom right, ${themeColor}12, rgba(12, 12, 18, 0.9))`,
                           borderColor: `${themeColor}40`,
@@ -309,12 +309,13 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
                   }
                 >
                   {/* Album Borító Kép */}
-                  <div className="relative aspect-square rounded-xl overflow-hidden bg-black/60 shadow-inner mb-4 border border-white/10">
+                  <div className="relative aspect-square rounded-xl overflow-hidden bg-black/60 shadow-inner mb-3 sm:mb-4 border border-white/10">
                     {album.coverImage ? (
                       <Image
                         src={album.coverImage}
                         alt={album.title}
                         fill
+                        sizes="(max-width: 640px) 250px, 320px"
                         className="object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out pointer-events-none"
                       />
                     ) : (
@@ -322,14 +323,14 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
                     )}
                     
                     {/* Típus Badge */}
-                    <div className="absolute top-3 left-3 px-3 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/15 text-[10px] font-bold text-white uppercase tracking-wider">
+                    <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/15 text-[9px] sm:text-[10px] font-bold text-white uppercase tracking-wider">
                       {album.type === 'full' ? 'Stúdió' : album.type === 'mini' ? 'Mini EP' : 'Single'}
                     </div>
 
                     {/* Kiválasztva Jelvény */}
                     {isSelected && (
                       <div 
-                        className="absolute bottom-3 right-3 px-3.5 py-1.5 rounded-lg text-[10px] font-bold text-white uppercase tracking-wider shadow-lg backdrop-blur-md"
+                        className="absolute bottom-2.5 right-2.5 sm:bottom-3 sm:right-3 px-3.5 py-1.5 rounded-lg text-[10px] font-bold text-white uppercase tracking-wider shadow-lg backdrop-blur-md"
                         style={{ backgroundColor: themeColor }}
                       >
                         Kiválasztva
@@ -338,17 +339,17 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
                   </div>
 
                   {/* Kártya alsó info rész */}
-                  <div className="px-2 pb-2">
-                    <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-widest block mb-1">
+                  <div className="px-1 sm:px-2 pb-1 sm:pb-2">
+                    <span className="text-[10px] sm:text-[11px] font-bold text-zinc-400 uppercase tracking-widest block mb-1">
                       {album.releaseDate}
                     </span>
-                    <h4 className="text-lg font-black text-white tracking-tight mb-2 truncate group-hover:text-zinc-200 transition-colors">
+                    <h4 className="text-base sm:text-lg font-black text-white tracking-tight mb-1.5 sm:mb-2 truncate group-hover:text-zinc-200 transition-colors">
                       {album.title}
                     </h4>
 
                     {album.tracks && album.tracks.length > 0 && (
-                      <p className="text-xs text-zinc-300 flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: themeColor }} />
+                      <p className="text-[11px] sm:text-xs text-zinc-300 flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: themeColor }} />
                         <span className="font-semibold text-zinc-200">{album.tracks.length} dal</span> a dallistán
                       </p>
                     )}

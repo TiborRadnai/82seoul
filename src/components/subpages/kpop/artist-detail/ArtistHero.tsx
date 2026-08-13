@@ -1,73 +1,115 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
+
+interface Member {
+  name: string;
+}
 
 interface ArtistHeroProps {
   artist: {
     name: string;
     tagline: string;
     description: string;
+    image: string;
     wideImage: string;
+    agency?: string;
     fandom?: string;
-    themeColor?: string; // <-- Új mező a dinamikus színhez
+    generation?: string;
+    membersList?: Member[];
+    themeColor?: string;
   };
 }
 
 export default function ArtistHero({ artist }: ArtistHeroProps) {
-  // Alapértelmezett szín, ha esetleg hiányozna
   const themeColor = artist.themeColor || '#ec4899';
+  const namesList = artist.membersList && artist.membersList.length > 0 
+    ? artist.membersList.map(m => m.name)
+    : [artist.name];
+
+  const marqueeRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let animationFrameId: number;
+    let currentX = 0;
+    const speed = 1.8;
+
+    const step = () => {
+      if (marqueeRef.current) {
+        currentX -= speed;
+        const halfWidth = marqueeRef.current.scrollWidth / 2;
+        if (Math.abs(currentX) >= halfWidth) {
+          currentX = 0;
+        }
+        marqueeRef.current.style.transform = `translate3d(${currentX}px, 0, 0)`;
+      }
+      animationFrameId = requestAnimationFrame(step);
+    };
+
+    animationFrameId = requestAnimationFrame(step);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
 
   return (
-    <section className="relative w-full min-h-137.5 py-36 sm:py-48 px-6 sm:px-12 flex flex-col items-center justify-center text-center overflow-hidden border-b border-white/10">
+    <section className="relative w-full min-h-[75vh] sm:min-h-[90vh] flex flex-col items-center justify-center text-center overflow-hidden border-b border-white/10 rounded-none sm:rounded-b-[40px]">
       
-      {/* Háttérkép */}
+      {/* Háttérképek - Finomabb sötétítéssel, hogy ne vesszenek el a részletek */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
-        <Image
-          src={artist.wideImage}
-          alt={artist.name}
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center filter brightness-[0.75] contrast-105 scale-100"
-        />
+        <Image src={artist.image} alt={artist.name} fill priority sizes="100vw" className="object-cover object-center filter brightness-[0.75] sm:hidden" />
+        <Image src={artist.wideImage} alt={artist.name} fill priority sizes="100vw" className="hidden sm:block object-cover object-[center_20%] filter brightness-[0.8] contrast-105" />
       </div>
 
-      {/* Sötétítő átmenet */}
-      <div className="absolute inset-0 bg-linear-to-b from-black/40 via-black/20 to-[#07070a] z-10" />
+      <div className="absolute inset-0 bg-linear-to-b from-black/60 via-black/30 to-[#07070a] z-10" />
 
-      {/* Dinamikus színes háttérfény */}
-      <div 
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-75 blur-[140px] rounded-full pointer-events-none z-10 opacity-30" 
-        style={{ backgroundColor: themeColor }}
-      />
+      {/* Diszkrét, nem tolakodó futószöveg a háttérben */}
+      <div className="absolute inset-0 flex items-center overflow-hidden pointer-events-none z-15 select-none">
+        <div ref={marqueeRef} className="flex whitespace-nowrap font-black uppercase font-sans leading-none opacity-[0.07] text-white will-change-transform"
+             style={{ fontSize: '65vh' }}
+        >
+          {[...namesList, ...namesList, ...namesList, ...namesList].map((name, idx) => (
+            <span key={idx} className="inline-block px-16">
+              {name}
+            </span>
+          ))}
+        </div>
+      </div>
       
-      {/* Szöveges tartalom */}
-      <div className="relative z-20 max-w-4xl mx-auto">
-        {artist.fandom && (
-          <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-white/10 border border-white/20 text-xs font-bold tracking-widest uppercase mb-8 backdrop-blur-xl shadow-[0_0_20px_rgba(255,255,255,0.1)]">
-            <span 
-              className="w-2.5 h-2.5 rounded-full animate-pulse" 
-              style={{ backgroundColor: themeColor, boxShadow: `0 0 10px ${themeColor}` }}
-            />
-            FANDOM: {artist.fandom}
+      {/* CÍM, ÜGYNÖKSÉG, SZLOGEN ÉS GENERÁCIÓ */}
+      <div className="relative z-20 max-w-4xl mx-auto px-6">
+        {artist.agency && (
+          <div 
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border backdrop-blur-md text-xs font-extrabold uppercase tracking-widest mb-6 shadow-lg"
+            style={{ 
+              backgroundColor: `${themeColor}15`, 
+              borderColor: `${themeColor}40`, 
+              color: themeColor 
+            }}
+          >
+            <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: themeColor }} />
+            {artist.agency}
           </div>
         )}
 
-        <h1 className="text-6xl sm:text-8xl font-black tracking-tighter mb-6 text-white drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]">
+        <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight mb-4 text-white uppercase leading-[0.95] drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
           {artist.name}
         </h1>
 
-        <p 
-          className="text-2xl sm:text-3xl font-extrabold tracking-wider mb-8 drop-shadow-[0_5px_15px_rgba(0,0,0,0.5)]"
-          style={{ color: themeColor }}
-        >
+        <p className="text-xl sm:text-2xl font-extrabold tracking-wider drop-shadow-md mb-4" style={{ color: themeColor }}>
           {artist.tagline}
         </p>
 
-        <p className="text-zinc-300 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto font-normal bg-black/50 p-6 rounded-2xl border border-white/10 backdrop-blur-md shadow-xl">
-          {artist.description}
-        </p>
+        {/* Generáció a szlogen alatt */}
+        {artist.generation && (
+          <div className="flex justify-center">
+            <span className="inline-block text-xs font-bold uppercase tracking-[0.25em] text-zinc-400 bg-white/5 border border-white/10 px-3.5 py-1 rounded-full backdrop-blur-md shadow-md">
+              {artist.generation} Generation
+            </span>
+          </div>
+        )}
       </div>
     </section>
   );

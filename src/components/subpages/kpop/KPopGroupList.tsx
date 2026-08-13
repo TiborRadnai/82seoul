@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import KPopGroupCard from './KPopGroupCard';
-import KPopFilter, { GenderCategory, AgencyCategory } from './KPopFilter';
+import KPopFilter, { GenderCategory, AgencyCategory, GenerationCategory } from './KPopFilter';
 
 interface KPopGroupListProps {
   initialArtists: any[]; // A Sanityből érkező adatok
@@ -12,14 +12,18 @@ interface KPopGroupListProps {
 export default function KPopGroupList({ initialArtists }: KPopGroupListProps) {
   const [selectedGender, setSelectedGender] = useState<GenderCategory>('top10');
   const [selectedAgency, setSelectedAgency] = useState<AgencyCategory>('all');
+  const [selectedGeneration, setSelectedGeneration] = useState<GenerationCategory>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
+  // Átadjuk az indexnek a generációt és a filterAgency-t is, hogy a szűrő látja őket
   const artistIndexData = useMemo(() => {
     return initialArtists.map((item) => ({
       id: item.id,
       name: item.name,
       category: item.category,
       themeColor: item.themeColor,
+      filterAgency: item.filterAgency,
+      generation: item.generation,
     }));
   }, [initialArtists]);
 
@@ -29,6 +33,7 @@ export default function KPopGroupList({ initialArtists }: KPopGroupListProps) {
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else {
       setSelectedGender('all');
+      setSelectedGeneration('all');
       setTimeout(() => {
         const el = document.getElementById(`artist-${id}`);
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -49,6 +54,10 @@ export default function KPopGroupList({ initialArtists }: KPopGroupListProps) {
       const matchesAgency =
         selectedAgency === 'all' || item.filterAgency === selectedAgency;
 
+      // Generáció szűrés hozzáadása
+      const matchesGeneration =
+        selectedGeneration === 'all' || item.generation === selectedGeneration;
+
       let matchesSearch = true;
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
@@ -57,6 +66,7 @@ export default function KPopGroupList({ initialArtists }: KPopGroupListProps) {
         const matchesDescription = (item.description || '').toLowerCase().includes(q) ||
           (item.tagline ? item.tagline.toLowerCase().includes(q) : false);
         const matchesFandom = item.fandom ? item.fandom.toLowerCase().includes(q) : false;
+        const matchesGenQuery = item.generation ? item.generation.toLowerCase().includes(q) : false;
         
         const matchesMembers = item.membersList?.some((m: any) => {
           if (typeof m === 'string') return m.toLowerCase().includes(q);
@@ -66,23 +76,24 @@ export default function KPopGroupList({ initialArtists }: KPopGroupListProps) {
           );
         }) ?? false;
 
-        matchesSearch = matchesName || matchesAgencyName || matchesDescription || matchesFandom || matchesMembers;
+        matchesSearch = matchesName || matchesAgencyName || matchesDescription || matchesFandom || matchesGenQuery || matchesMembers;
       }
 
-      return matchesGender && matchesAgency && matchesSearch;
+      return matchesGender && matchesAgency && matchesGeneration && matchesSearch;
     });
-  }, [initialArtists, selectedGender, selectedAgency, searchQuery]);
+  }, [initialArtists, selectedGender, selectedAgency, selectedGeneration, searchQuery]);
 
   const displayedGroups = useMemo(() => {
-    if (selectedGender === 'top10' && !searchQuery.trim()) {
+    if (selectedGender === 'top10' && selectedGeneration === 'all' && selectedAgency === 'all' && !searchQuery.trim()) {
       return filteredGroups.slice(0, 10);
     }
     return filteredGroups;
-  }, [filteredGroups, selectedGender, searchQuery]);
+  }, [filteredGroups, selectedGender, selectedGeneration, selectedAgency, searchQuery]);
 
   const handleResetFilters = () => {
     setSelectedGender('top10');
     setSelectedAgency('all');
+    setSelectedGeneration('all');
     setSearchQuery('');
   };
 
@@ -94,6 +105,8 @@ export default function KPopGroupList({ initialArtists }: KPopGroupListProps) {
         onSelectGender={setSelectedGender}
         selectedAgency={selectedAgency}
         onSelectAgency={setSelectedAgency}
+        selectedGeneration={selectedGeneration}
+        onSelectGeneration={setSelectedGeneration}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         totalCount={displayedGroups.length}

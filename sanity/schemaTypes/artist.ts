@@ -62,6 +62,12 @@ export const artist = {
       type: 'string',
     },
     {
+      name: 'generation',
+      title: 'Generáció (pl. 3rd, 4th)',
+      type: 'string',
+      description: 'Add meg a generációt szövegesen, pl: 3rd',
+    },
+    {
       name: 'image',
       title: 'Kis Kép (Lista nézethez)',
       type: 'image',
