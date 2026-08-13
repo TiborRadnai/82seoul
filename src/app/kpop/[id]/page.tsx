@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation';
 import Navbar from '@/components/core/Navbar';
 import Footer from '@/components/core/Footer';
 
+export const dynamic = 'force-dynamic';
+
 // Sanity importok
 import { client } from '../../../../sanity/lib/client';
 import { getArtistByIdQuery } from '../../../../sanity/queries';
