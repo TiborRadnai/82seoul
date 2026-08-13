@@ -6,6 +6,9 @@ import KPopGroupList from '@/components/subpages/kpop/KPopGroupList';
 import KPopGlossaryBubbles from '@/components/subpages/kpop/KPopGlossaryBubbles';
 import GraffitiItem from '@/components/subpages/kpop/GraffitiItem';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 // Sanity importok (figyelj a visszalépések számára a gyökérben lévő sanity mappáig!)
 import { client } from '../../../sanity/lib/client';
 import { getArtistsQuery } from '../../../sanity/queries';
