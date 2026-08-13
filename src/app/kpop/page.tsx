@@ -23,6 +23,8 @@ export default async function KPopPage() {
     <main className="min-h-screen w-full overflow-x-hidden bg-white text-zinc-900">
       {/* 1. NAVBAR */}
       <Navbar />
+  
+  
 
       {/* 2. HERO SZEKCIÓ */}
       <KPopHero />
