@@ -25,7 +25,7 @@ interface ArtistMemberModalProps {
   member: Member | null;
   isOpen: boolean;
   onClose: () => void;
-  themeColor?: string; // <-- Új prop a dinamikus egyedi színhez
+  themeColor?: string;
 }
 
 export default function ArtistMemberModal({ member, isOpen, onClose, themeColor = '#ec4899' }: ArtistMemberModalProps) {
@@ -50,27 +50,32 @@ export default function ArtistMemberModal({ member, isOpen, onClose, themeColor 
       {/* Sötétített háttér */}
       <div 
         onClick={onClose}
-        className="absolute inset-0 bg-black/90 transition-opacity duration-300"
+        className="absolute inset-0 bg-black/90 backdrop-blur-md transition-opacity duration-300"
       />
 
-      {/* Hatalmas, prémium magazin modal konténer */}
-      <div className="relative w-full max-w-6xl max-h-[92vh] overflow-y-auto rounded-3xl bg-[#0b0b0e] border border-white/10 shadow-[0_25px_100px_rgba(0,0,0,0.9)] z-10 flex flex-col no-scrollbar">
+      {/* Hatalmas, prémium magazin modal konténer extravékony kerettel és "smoke" témaszínű árnyékkal */}
+      <div 
+        className="relative w-full max-w-6xl max-h-[92vh] overflow-y-auto rounded-3xl bg-[#0b0b0e] z-10 flex flex-col no-scrollbar"
+        style={{
+          border: `1px solid ${themeColor}40`,
+          boxShadow: `0 25px 100px rgba(0,0,0,0.9), 0 0 40px ${themeColor}20`
+        }}
+      >
         
         {/* Felső elegáns sáv */}
-        <div className="flex items-center justify-between px-8 py-5 border-b border-white/10 bg-[#121216]">
+        <div className="flex items-center justify-between px-6 sm:px-8 py-5 border-b border-white/10 bg-[#121216]/90 sticky top-0 z-20 backdrop-blur-md">
           <div className="flex items-center gap-3">
             <span 
               className="w-2.5 h-2.5 rounded-full animate-pulse" 
               style={{ backgroundColor: themeColor, boxShadow: `0 0 10px ${themeColor}` }} 
             />
-            <span className="text-xs uppercase tracking-[0.4em] text-zinc-400 font-extrabold">
+            <span className="text-[10px] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.4em] text-zinc-400 font-extrabold">
               82Seoul // Exkluzív Adatbázis & Magazin
             </span>
           </div>
           <button
             onClick={onClose}
             className="px-4 py-1.5 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-zinc-300 transition-all cursor-pointer flex items-center gap-2 hover:text-white"
-            style={{ '--hover-bg': themeColor } as React.CSSProperties}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = themeColor;
               e.currentTarget.style.borderColor = themeColor;
@@ -85,22 +90,26 @@ export default function ArtistMemberModal({ member, isOpen, onClose, themeColor 
           </button>
         </div>
 
-        {/* Tartalom grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 p-6 sm:p-10 gap-8 items-start">
+        {/* Tartalom grid - items-stretch, hogy a bal oldal pontosan lekövesse a jobb oldal magasságát */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 p-6 sm:p-10 gap-8 items-stretch">
           
-          {/* Bal oldal: Kép és Instagram logós sáv */}
-          <div className="relative lg:col-span-6 h-100 sm:h-125 lg:h-150 rounded-2xl overflow-hidden border border-white/10 shadow-2xl group flex flex-col justify-end">
+          {/* Bal oldal: Kép és Instagram logós sáv (h-full-lal igazodik a tartalomhoz) */}
+          <div 
+            className="relative lg:col-span-6 min-h-95 sm:min-h-125 lg:min-h-full rounded-2xl overflow-hidden border shadow-xl group flex flex-col justify-end"
+            style={{ borderColor: `${themeColor}30`, boxShadow: `0 0 30px ${themeColor}15` }}
+          >
             {member.image ? (
               <Image
                 src={member.image}
                 alt={member.name}
                 fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover object-top filter contrast-105 group-hover:scale-105 transition-transform duration-700 ease-out"
               />
             ) : (
               <div className="w-full h-full bg-zinc-900 flex items-center justify-center text-zinc-600">Nincs kép</div>
             )}
-            <div className="absolute inset-0 bg-linear-to-t from-[#0b0b0e] via-transparent to-transparent opacity-60" />
+            <div className="absolute inset-0 bg-linear-to-t from-[#0b0b0e] via-transparent to-transparent opacity-70" />
             
             {/* Instagram gomb SVG logóval */}
             {member.instagram && (
@@ -129,7 +138,7 @@ export default function ArtistMemberModal({ member, isOpen, onClose, themeColor 
           </div>
 
           {/* Jobb oldal: Részletes infók */}
-          <div className="lg:col-span-6 flex flex-col justify-between text-left space-y-5">
+          <div className="lg:col-span-6 flex flex-col justify-between text-left space-y-4">
             
             <div>
               {/* Pozíció & Koreai név */}
@@ -138,7 +147,7 @@ export default function ArtistMemberModal({ member, isOpen, onClose, themeColor 
                   {member.role || 'Tag'}
                 </span>
                 {member.koreanName && (
-                  <span className="text-lg font-bold text-zinc-400 tracking-widest bg-white/5 px-3 py-1 rounded-lg border border-white/10">
+                  <span className="text-base sm:text-lg font-bold text-zinc-300 tracking-widest bg-white/5 px-3 py-1 rounded-lg border border-white/10">
                     {member.koreanName}
                   </span>
                 )}
@@ -154,9 +163,12 @@ export default function ArtistMemberModal({ member, isOpen, onClose, themeColor 
                 </p>
               )}
 
-              {/* Fő leírás */}
+              {/* Fő leírás - Finom témaszínű belső árnyékkal */}
               {member.shortBio && (
-                <div className="mb-5 p-4 rounded-2xl bg-[#141419] border border-white/10">
+                <div 
+                  className="mb-4 p-4 rounded-2xl bg-[#141419]"
+                  style={{ border: `1px solid ${themeColor}30`, boxShadow: `inset 0 0 15px ${themeColor}10` }}
+                >
                   <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
                     {member.shortBio}
                   </p>
@@ -166,19 +178,19 @@ export default function ArtistMemberModal({ member, isOpen, onClose, themeColor 
               {/* Alap kis kártyák */}
               <div className="grid grid-cols-3 gap-3 mb-3">
                 {member.birthDate && (
-                  <div className="p-3 rounded-2xl bg-[#141419] border border-white/10">
+                  <div className="p-3 rounded-2xl bg-[#141419] border border-white/10 hover:border-white/20 transition-colors">
                     <span className="block text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-1">Születési idő</span>
                     <span className="text-xs sm:text-sm font-bold text-white">{member.birthDate}</span>
                   </div>
                 )}
                 {member.zodiac && (
-                  <div className="p-3 rounded-2xl bg-[#141419] border border-white/10">
+                  <div className="p-3 rounded-2xl bg-[#141419] border border-white/10 hover:border-white/20 transition-colors">
                     <span className="block text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-1">Csillagjegy</span>
                     <span className="text-xs sm:text-sm font-bold text-white">{member.zodiac}</span>
                   </div>
                 )}
                 {member.height && (
-                  <div className="p-3 rounded-2xl bg-[#141419] border border-white/10">
+                  <div className="p-3 rounded-2xl bg-[#141419] border border-white/10 hover:border-white/20 transition-colors">
                     <span className="block text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-1">Magasság</span>
                     <span className="text-xs sm:text-sm font-bold text-white">{member.height}</span>
                   </div>
@@ -189,7 +201,10 @@ export default function ArtistMemberModal({ member, isOpen, onClose, themeColor 
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 mb-3">
                 <div className="sm:col-span-7 flex flex-col gap-3">
                   {member.brandAmbassador && (
-                    <div className="p-3.5 rounded-2xl bg-[#141419] border border-white/10 flex-1">
+                    <div 
+                      className="p-3.5 rounded-2xl bg-[#141419] flex-1"
+                      style={{ border: `1px solid ${themeColor}40`, boxShadow: `0 0 15px ${themeColor}10` }}
+                    >
                       <span className="block text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-1">Márkanagykövet</span>
                       <span className="text-sm font-bold" style={{ color: themeColor }}>{member.brandAmbassador}</span>
                     </div>
@@ -210,7 +225,10 @@ export default function ArtistMemberModal({ member, isOpen, onClose, themeColor 
                     </div>
                   )}
                   {member.signatureTrack && (
-                    <div className="p-3.5 rounded-2xl bg-[#141419] border border-white/10">
+                    <div 
+                      className="p-3.5 rounded-2xl bg-[#141419]"
+                      style={{ border: `1px solid ${themeColor}40`, boxShadow: `0 0 15px ${themeColor}10` }}
+                    >
                       <span className="block text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-1">Signature Track</span>
                       <span className="text-sm font-bold" style={{ color: themeColor }}>{member.signatureTrack}</span>
                     </div>
@@ -224,7 +242,8 @@ export default function ArtistMemberModal({ member, isOpen, onClose, themeColor 
                   className="p-4 rounded-2xl border relative overflow-hidden"
                   style={{ 
                     background: `linear-gradient(to right, ${themeColor}15, rgba(168,85,247,0.15))`,
-                    borderColor: `${themeColor}40`
+                    borderColor: `${themeColor}40`,
+                    boxShadow: `0 0 20px ${themeColor}10`
                   }}
                 >
                   <div className="absolute top-2 right-4 text-4xl font-serif select-none opacity-20" style={{ color: themeColor }}>“</div>

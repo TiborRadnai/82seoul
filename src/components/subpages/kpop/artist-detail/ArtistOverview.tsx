@@ -37,7 +37,7 @@ export default function ArtistOverview({
   };
 
   return (
-    <section className="w-full py-28 px-4 sm:px-8 lg:px-16 text-left relative overflow-hidden bg-[#07070a]">
+    <section className="w-full py-16 sm:py-28 px-4 sm:px-8 lg:px-16 text-left relative overflow-hidden bg-[#07070a]">
       
       {/* 1. Finom, világító elválasztó fénycsík a szekció tetején (Dinamikus színnel) */}
       <div 
@@ -58,24 +58,24 @@ export default function ArtistOverview({
       <div className="w-full max-w-[1600px] mx-auto relative z-10">
         
         {/* Felső információs sáv */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-10 pb-6 border-b border-white/10">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 sm:mb-10 pb-6 border-b border-white/10">
           <div className="flex items-center gap-3">
             <span 
               className="w-3 h-3 rounded-full shadow-[0_0_12px]" 
               style={{ backgroundColor: themeColor, boxShadow: `0 0 12px ${themeColor}` }}
             />
-            <span className="text-xs uppercase tracking-[0.3em] font-bold" style={{ color: themeColor }}>
+            <span className="text-[11px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] font-bold" style={{ color: themeColor }}>
               Portré & Háttértörténet // {artistName}
             </span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             {fandom && (
-              <span className="px-4 py-1.5 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-zinc-300 tracking-wider uppercase">
+              <span className="px-3 sm:px-4 py-1.5 rounded-xl bg-white/5 border border-white/10 text-[11px] sm:text-xs font-bold text-zinc-300 tracking-wider uppercase">
                 Fandom: <span style={{ color: themeColor }}>{fandom}</span>
               </span>
             )}
             <span 
-              className="px-4 py-1.5 rounded-xl border text-xs font-bold tracking-wider uppercase"
+              className="px-3 sm:px-4 py-1.5 rounded-xl border text-[11px] sm:text-xs font-bold tracking-wider uppercase"
               style={{ 
                 backgroundColor: `${themeColor}15`, 
                 borderColor: `${themeColor}40`, 
@@ -88,21 +88,21 @@ export default function ArtistOverview({
         </div>
 
         {/* Fő szlogen */}
-        <div className="mb-14">
-          <h3 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight drop-shadow-[0_2px_20px_rgba(255,255,255,0.1)]">
+        <div className="mb-10 sm:mb-14">
+          <h3 className="text-2xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight drop-shadow-[0_2px_20px_rgba(255,255,255,0.1)]">
             &ldquo;{tagline}&rdquo;
           </h3>
         </div>
 
         {/* Fő elrendezés */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
           
           {/* Bal oldal: Folytonos szöveg + Állapotjelzős görgető */}
-          <div className="lg:col-span-7 flex flex-col">
+          <div className="lg:col-span-7 flex flex-col order-2 lg:order-1">
             
             <div className="mb-6">
               <p 
-                className="text-white text-lg sm:text-xl font-medium leading-relaxed pl-4 py-1 border-l-4"
+                className="text-white text-base sm:text-xl font-medium leading-relaxed pl-4 py-1 border-l-4"
                 style={{ 
                   borderColor: themeColor,
                   backgroundImage: `linear-gradient(to right, ${themeColor}15, transparent)`
@@ -115,7 +115,7 @@ export default function ArtistOverview({
             {/* Görgethető tartalom konténer */}
             <div className="relative">
               
-              {/* Dinamikus állapotjelző sáv */}
+              {/* Dinamikus állapotjelző sáv (csak desktopon) */}
               <div className="absolute -left-4 top-0 bottom-0 w-1 bg-white/10 rounded-full overflow-hidden hidden sm:block">
                 <div 
                   className="w-full transition-all duration-150"
@@ -131,7 +131,7 @@ export default function ArtistOverview({
               <div 
                 ref={scrollRef}
                 onScroll={handleScroll}
-                className="max-h-130 overflow-y-auto pr-4 space-y-6 text-zinc-300 text-base sm:text-lg leading-relaxed font-light custom-scrollbar rounded-2xl p-4 bg-[#111116]/80 border border-white/10 backdrop-blur-md shadow-2xl"
+                className="max-h-96 sm:max-h-130 overflow-y-auto pr-4 space-y-6 text-zinc-300 text-sm sm:text-lg leading-relaxed font-light custom-scrollbar rounded-xl sm:rounded-2xl p-4 bg-[#111116]/80 border border-white/10 backdrop-blur-md shadow-2xl"
               >
                 {extendedHistory ? (
                   <div className="space-y-6 text-zinc-300 font-normal leading-relaxed whitespace-pre-line">
@@ -146,10 +146,10 @@ export default function ArtistOverview({
 
           </div>
 
-          {/* Jobb oldal: Kép */}
-          <div className="lg:col-span-5 relative top-8">
+          {/* Jobb oldal: Kép (Mobilon korrigált magasság és lekerekítés) */}
+          <div className="lg:col-span-5 lg:top-8 order-1 lg:order-2">
             <div 
-              className="relative h-112.5 sm:h-137.5 lg:h-155 w-full rounded-3xl overflow-hidden border border-white/20 shadow-2xl group"
+              className="relative h-80 sm:h-137.5 lg:h-155 w-full rounded-2xl sm:rounded-3xl overflow-hidden border border-white/20 shadow-2xl group"
               style={{ boxShadow: `0 0 50px rgba(0,0,0,0.8), 0 0 25px ${themeColor}25` }}
             >
               {imageUrl ? (
@@ -157,6 +157,7 @@ export default function ArtistOverview({
                   src={imageUrl} 
                   alt={`${artistName} portrait`} 
                   fill 
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover object-top group-hover:scale-105 transition-transform duration-700"
                 />
               ) : (
