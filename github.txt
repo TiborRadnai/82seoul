@@ -1,0 +1,48 @@
+Commitolás Terminálból
+git add .
+git commit -m "Add generation field and filters"
+git push origin main
+
+Klasszikus terminálos git parancssorozat:
+
+    git add .: Összegyűjti és "staged" állapotba helyezi az összes módosított, új vagy törölt fájlt a helyi mappádban, vagyis előkészíti őket a mentésre.
+    git commit -m "...": Véglegesíti (rögzíti) a változtatásokat a helyi git-történetedben. A -m után az idézőjelben lévő szöveg egy rövid leírás arról, hogy mit módosítottál, ami segít később visszakeresni a fejlesztéseket.
+    git push origin main: Feltölti a helyben rögzített változtatásaidat a távoli szerverre (a GitHubra), a main nevű fő ágra (branch-re), hogy ott is élesedjenek.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+A lokális fejlesztői szerver (dev) indítása:
+npm run dev    
+
+Behívása böngészőben:
+http://localhost:3000
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+1. Gyors komponens vagy oldal létrehozás (Build & Run)
+
+    npm run build / npx next build
+        Mire jó? Ellenőrzi, hogy a kód hibátlan-e, és elkészíti a produkciós (éles) verziót. Érdemes futtatni GitHubra küldés előtt, hogy látssuk, nincs-e build hiba (pl. TypeScript vagy szintaktikai hiba).
+
+    npx next lint
+        Mire jó? Átfuttatja a Next.js beépített linterét a kódon, ami azonnal megmutatja a helytelen szintaxist, a nem használt importokat vagy a potenciális hibákat.
+
+2. Csomagkezelés (NPM parancsok egyszerűsítése)
+
+    npm install <csomag_név> (vagy rövidítve: npm i <csomag_név>)
+        Mire jó? Egy új külső könyvtár (pl. ikoncsomag, animációs eszköz) telepítése a projektbe.
+
+    npm update
+        Mire jó? Frissíti a projektedben lévő csomagokat a megengedett legújabb verziókra.
+
+3. Git gyorsító parancsok (A mentés és visszavonás egyszerűsítése)
+
+Ha nem akarunk külön add-olni és commit-olni, vagy hiba esetén:
+
+    git status
+        Mire jó? Megmutatja, hogy melyik fájlokat módosítottuk eddig. Ez a "navigációs lámpa", mielőtt elküldjük a kódokat.
+
+    git diff
+        Mire jó? Megmutatja sorról sorra, hogy pontosan mit változtattunk az előző mentés óta (milyen kódot adtunk hozzá vagy vettünk el).
+
+    git checkout . vagy git restore .
+        Mire jó? Vigyázat, ez egy mentőöv! Ha elrontottunk valamit egy fájlban, és vissza akarunk térni az utolsó működő GitHub/mentett állapothoz, ezzel egy mozdulattal elvethetjük a nem mentett helyi módosításokat.
