@@ -11,7 +11,7 @@ interface ArtistOverviewProps {
   fandom?: string;
   agency: string;
   imageUrl?: string;
-  themeColor?: string; // <-- Új prop a dinamikus egyedi színhez (pl. "#991b1b")
+  themeColor?: string;
 }
 
 export default function ArtistOverview({ 
@@ -22,7 +22,7 @@ export default function ArtistOverview({
   fandom, 
   agency,
   imageUrl,
-  themeColor = '#ec4899' // Alapértelmezett szín, ha esetleg hiányozna
+  themeColor = '#ec4899' 
 }: ArtistOverviewProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -39,7 +39,7 @@ export default function ArtistOverview({
   return (
     <section className="w-full py-16 sm:py-28 px-4 sm:px-8 lg:px-16 text-left relative overflow-hidden bg-[#07070a]">
       
-      {/* 1. Finom, világító elválasztó fénycsík a szekció tetején (Dinamikus színnel) */}
+      {/* 1. Finom, világító elválasztó fénycsík a szekció tetején */}
       <div 
         className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px"
         style={{
@@ -146,7 +146,7 @@ export default function ArtistOverview({
 
           </div>
 
-          {/* Jobb oldal: Kép (Mobilon korrigált magasság és lekerekítés) */}
+          {/* Jobb oldal: Kép (JAVÍTVA: Nagyobb sizes beállítás a felbontásvesztés elkerülésére) */}
           <div className="lg:col-span-5 lg:top-8 order-1 lg:order-2">
             <div 
               className="relative h-80 sm:h-137.5 lg:h-155 w-full rounded-2xl sm:rounded-3xl overflow-hidden border border-white/20 shadow-2xl group"
@@ -157,7 +157,8 @@ export default function ArtistOverview({
                   src={imageUrl} 
                   alt={`${artistName} portrait`} 
                   fill 
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  // JAVÍTÁS: Nem 50vw, hanem desktopon fixen nagyobb felbontást kérünk, hogy éles maradjon
+                  sizes="(max-width: 1024px) 100vw, 750px"
                   className="object-cover object-top group-hover:scale-105 transition-transform duration-700"
                 />
               ) : (

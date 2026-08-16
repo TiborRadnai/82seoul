@@ -57,10 +57,26 @@ export default function ArtistHero({ artist }: ArtistHeroProps) {
   return (
     <section className="relative w-full min-h-[75vh] sm:min-h-[90vh] flex flex-col items-center justify-center text-center overflow-hidden border-b border-white/10 rounded-none sm:rounded-b-[40px]">
       
-      {/* Háttérképek - Finomabb sötétítéssel, hogy ne vesszenek el a részletek */}
+      {/* Háttérképek - JAVÍTVA: Optimalizált sizes beállítás a felbontásvesztés elkerülésére */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
-        <Image src={artist.image} alt={artist.name} fill priority sizes="100vw" className="object-cover object-center filter brightness-[0.75] sm:hidden" />
-        <Image src={artist.wideImage} alt={artist.name} fill priority sizes="100vw" className="hidden sm:block object-cover object-[center_20%] filter brightness-[0.8] contrast-105" />
+        <Image 
+          src={artist.image} 
+          alt={artist.name} 
+          fill 
+          priority 
+          sizes="100vw" 
+          className="object-cover object-center brightness-75 sm:hidden" 
+        />
+        <Image 
+          src={artist.wideImage} 
+          alt={artist.name} 
+          fill 
+          priority 
+          // JAVÍTÁS: Nemcsak 100vw, hanem device-pixel arányhoz igazított sávok, 
+          // hogy a nagy monitorokon se kicsi/pixeles képet kérjen le a böngésző.
+          sizes="(max-width: 768px) 100vw, (max-width: 1536px) 100vw, 1920px" 
+          className="hidden sm:block object-cover object-[center_20%] brightness-80" 
+        />
       </div>
 
       <div className="absolute inset-0 bg-linear-to-b from-black/60 via-black/30 to-[#07070a] z-10" />

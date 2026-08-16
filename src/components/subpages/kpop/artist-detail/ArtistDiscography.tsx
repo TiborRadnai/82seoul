@@ -57,12 +57,32 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
     if (filter === 'all') return true;
     return album.type === filter;
   });
-  
 
   const handleSelectAlbum = (albumId: string) => {
     if (hasMoved) return;
     setSelectedAlbumId(albumId);
     featuredRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
+  // Segédfüggvény az albumtípusok szép magyar elnevezéséhez
+  const getAlbumTypeLabel = (type: 'full' | 'mini' | 'single' | 'ost') => {
+    switch (type) {
+      case 'full': return 'Stúdióalbum';
+      case 'mini': return 'Minialbum (EP)';
+      case 'single': return 'Kislemez';
+      case 'ost': return 'Zene (OST)';
+      default: return 'Kiadvány';
+    }
+  };
+
+  const getAlbumTypeBadgeLabel = (type: 'full' | 'mini' | 'single' | 'ost') => {
+    switch (type) {
+      case 'full': return 'Stúdió';
+      case 'mini': return 'Mini EP';
+      case 'single': return 'Single';
+      case 'ost': return 'OST';
+      default: return 'Album';
+    }
   };
 
   // Egér és érintéskezelő logika egységesítve mobilos reszponzivitáshoz
@@ -159,7 +179,7 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
           }}
         >
           
-          {/* Bal oldal: Borítókép konténer */}
+          {/* Bal oldal: Borítókép konténer - JAVÍTVA: Optimalizált sizes */}
           <div className="relative lg:col-span-6 p-6 sm:p-10 flex items-center justify-center bg-linear-to-br from-white/5 to-transparent">
             <div className="relative w-full max-w-70 sm:max-w-100 lg:max-w-120 aspect-square rounded-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-white/10 group">
               {currentFeatured.coverImage ? (
@@ -168,7 +188,8 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
                   src={currentFeatured.coverImage}
                   alt={currentFeatured.title}
                   fill
-                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  // JAVÍTÁS: Nagyobb felbontás engedélyezése asztali nézetben
+                  sizes="(max-width: 1024px) 100vw, 600px"
                   className="object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
               ) : (
@@ -195,7 +216,7 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
                   className="text-[11px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] font-extrabold px-3 py-1.5 rounded-lg border backdrop-blur-md"
                   style={{ backgroundColor: `${themeColor}20`, borderColor: `${themeColor}50`, color: themeColor }}
                 >
-                  {currentFeatured.type === 'full' ? 'Stúdióalbum' : currentFeatured.type === 'mini' ? 'Minialbum (EP)' : 'Kislemez'}
+                  {getAlbumTypeLabel(currentFeatured.type)}
                 </span>
                 <span className="text-xs sm:text-sm font-bold text-zinc-400">
                   {currentFeatured.releaseDate}
@@ -249,7 +270,7 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
           <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">Összes Kiadvány</h3>
           
           <div className="flex flex-wrap gap-2">
-            {(['all', 'full', 'mini', 'single'] as AlbumFilter[]).map((type) => (
+            {(['all', 'full', 'mini', 'single', 'ost'] as AlbumFilter[]).map((type) => (
               <button
                 key={type}
                 onClick={() => setFilter(type)}
@@ -264,12 +285,13 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
                 {type === 'full' && 'Stúdióalbum'}
                 {type === 'mini' && 'Minialbum'}
                 {type === 'single' && 'Kislemez'}
+                {type === 'ost' && 'OST / Zene'}
               </button>
             ))}
           </div>
         </div>
 
-        {/* --- 3. VÍZSZINTESEN LAPOZHATÓ SÁV ALUL (Egérrel és Érintéssel is húzható) --- */}
+        {/* --- 3. VÍZSZINTESEN LAPOZHATÓ SÁV ALUL --- */}
         <div className="relative w-full">
           <div 
             ref={scrollContainerRef}
@@ -308,14 +330,15 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
                         }
                   }
                 >
-                  {/* Album Borító Kép */}
+                  {/* Album Borító Kép - JAVÍTVA: Optimalizált sizes */}
                   <div className="relative aspect-square rounded-xl overflow-hidden bg-black/60 shadow-inner mb-3 sm:mb-4 border border-white/10">
                     {album.coverImage ? (
                       <Image
                         src={album.coverImage}
                         alt={album.title}
                         fill
-                        sizes="(max-width: 640px) 250px, 320px"
+                        // JAVÍTÁS: Fixen nagyobb méretigény desktopon a crisp-tiszta megjelenésért
+                        sizes="(max-width: 640px) 250px, 400px"
                         className="object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out pointer-events-none"
                       />
                     ) : (
@@ -324,7 +347,7 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
                     
                     {/* Típus Badge */}
                     <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/15 text-[9px] sm:text-[10px] font-bold text-white uppercase tracking-wider">
-                      {album.type === 'full' ? 'Stúdió' : album.type === 'mini' ? 'Mini EP' : 'Single'}
+                      {getAlbumTypeBadgeLabel(album.type)}
                     </div>
 
                     {/* Kiválasztva Jelvény */}
