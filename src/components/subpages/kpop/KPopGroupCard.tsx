@@ -180,13 +180,19 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
                 </div>
               )}
 
-              <Image
-                src={band.wideImage || band.image}
-                alt={band.name || 'K-Pop Group'}
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out transform-gpu"
-              />
+              {(band.wideImage || band.image) ? (
+                <Image
+                  src={band.wideImage || band.image}
+                  alt={band.name || 'K-Pop Group'}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out transform-gpu"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-zinc-500 text-xs font-medium">
+                  Nincs elérhető kép
+                </div>
+              )}
             </div>
           </Link>
         </motion.div>
