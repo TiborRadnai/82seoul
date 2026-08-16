@@ -91,36 +91,98 @@ SugarHoneyIceTea     SUGAR HONEY ICE TEA
 //ATEEZ//
 
 --Stúdióalbumok--
-TreasureFin          TREASURE EP.FIN: All To Action
-TreasureExtra        TREASURE EP.EXTRA: Shift The Map
-ZeroFever1           ZERO: FEVER Part.1
-ZeroFever2           ZERO: FEVER Part.2
-IntoTheAToZ          Into the A to Z
-ZeroFeverEpilogue    ZERO: FEVER EPILOGUE
-BeyondZero           BEYOND: ZERO
-TheWorld1            THE WORLD EP.1: MOVEMENT
-TheWorldParadigm     THE WORLD EP.PARADIGM
-TheWorldFin          THE WORLD EP.FIN: WILL
-GoldenHourFantasy    GOLDEN HOUR: Part.3'In Your Fantasy Edition'
-AshesToLight         Ashes to Light
+TreasureFin          TREASURE EP.FIN: All To Action /
+TreasureExtra        TREASURE EP.EXTRA: Shift The Map /
+ZeroFever1           ZERO: FEVER Part.1 /
+ZeroFever2           ZERO: FEVER Part.2 /
+IntoTheAToZ          Into the A to Z /
+ZeroFeverEpilogue    ZERO: FEVER EPILOGUE /
+BeyondZero           BEYOND: ZERO /
+TheWorld1            THE WORLD EP.1: MOVEMENT /
+TheWorldParadigm     THE WORLD EP.PARADIGM /
+TheWorldFin          THE WORLD EP.FIN: WILL /
+GoldenHourFantasy    GOLDEN HOUR: Part.3'In Your Fantasy Edition' /
+AshesToLight         Ashes to Light /
 
 --Minialbumok--
-Treasure1            TREASURE EP.1: All To Zero
-Treasure2            TREASURE EP.2: Zero To One
-Treasure3            TREASURE EP.3: One To All
-TreasureMap          TREASURE EP. Map To Answer
-ZeroFever3           ZERO: FEVER Part.3
-TheWorld2            THE WORLD EP.2: OUTLAW
-NotOkay              NOT OKAY
-GoldenHour1          GOLDEN HOUR: Part.1
-Birthday             Birthday
-GoldenHour2          GOLDEN HOUR: Part.2
-GoldenHour3          GOLDEN HOUR: Part.3
-GoldenHour4          GOLDEN HOUR: Part.4
-GoldenHour5          GOLDEN HOUR: Part.5
-BadJapanese          BAD (Japanese Ver.)
+Treasure1            TREASURE EP.1: All To Zero /
+Treasure2            TREASURE EP.2: Zero To One /
+Treasure3            TREASURE EP.3: One To All /
+TreasureMap          TREASURE EP. Map To Answer /
+ZeroFever3           ZERO: FEVER Part.3 /
+TheWorld2            THE WORLD EP.2: OUTLAW /
+NotOkay              NOT OKAY /
+GoldenHour1          GOLDEN HOUR: Part.1 /
+Birthday             Birthday /
+GoldenHour2          GOLDEN HOUR: Part.2 /
+GoldenHour3          GOLDEN HOUR: Part.3 /
+GoldenHour4          GOLDEN HOUR: Part.4 /
+GoldenHour5          GOLDEN HOUR: Part.5 /
+BadJapanese          BAD (Japanese Ver.) /
 
 --Kislemezek--
-TreasureEpilogue      TREASURE EPILOGUE: Action To Answer
-SpinoffFromTheWitness SPIN OFF: FROM THE WITNESS
-Limitless             Limitless
+TreasureEpilogue      TREASURE EPILOGUE: Action To Answer /
+SpinoffFromTheWitness SPIN OFF: FROM THE WITNESS /
+Limitless             Limitless /
+
+
+//ILLIT//
+--Stúdióalbumok--
+
+--Minialbumok--
+SuperRealMe           SUPER REAL ME /
+IllLikeYou            I'LL LIKE YOU /
+Bomb                  bomb /
+Mamihlapinatapai      MAMIHLAPINATAPAI /
+
+--Kislemezek--
+BabyItsBoth           Baby It's Both (Tick-Tack English Ver.) (Feat.Ava Max) /
+AlmondChocolate       Almond Chocolate /
+NotCuteAnymore        NOT CUTE ANYMORE /
+SundayMorning         Sunday Morning /
+Bubee                 Bubee /
+IconicByMistake       ICONIC BY MISTAKE /
+IGotYourBack          I Got Your Back /
+
+
+//TREASURE//
+
+--Stúdióalbumok--
+TheFirstStepTreasureEffect        THE FIRST STEP: TREASURE EFFECT
+2ndFullAlbum                      2ND FULL ALBUM 'REBOOT'
+
+--Minialbumok--
+TheSecondStepChapter1      THE SECOND STEP: CHAPTER ONE
+TheSecondStepChapter2      THE SECOND STEP: CHAPTER TWO
+Pleasure                   SPECIAL MINI ALBUM [PLEASURE]
+LovePulse                  3rd MINI ALBUM [LOVE PULSE]
+NewWav                     4th MINI ALBUM [NEW WAV]
+
+--Kislemezek--
+TheFirstStepChapter1        THE FIRST STEP: CHAPTER ONE
+TheFirstStepChapter2        THE FIRST STEP: CHAPTER TWO
+TheFirstStepChapter3        THE FIRST STEP: CHAPTER THREE
+KingKong                    KING KONG 
+Reverse                     REVERSE
+
+
+//BOYNEXTDOOR//
+
+--Stúdióalbumok--
+How                  HOW?
+1999                 19.99
+NoGenre              No Genre
+Home                 HOME
+
+--Minialbumok--
+Why                  WHY..
+TheAction            The Action
+
+--Kislemezek--
+Who                  WHO!
+And                  AND,
+Boylife              BOYLIFE
+
+
+
+
