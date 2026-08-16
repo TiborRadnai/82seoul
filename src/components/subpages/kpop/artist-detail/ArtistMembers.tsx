@@ -42,10 +42,10 @@ export default function ArtistMembers({ membersList, onMemberClick, themeColor =
         </h2>
       </div>
 
-      {/* Fő magazin-stílusú kiemelt kártya (Mobilon rounded-2xl, desktopon rounded-3xl) */}
+      {/* Fő magazin-stílusú kiemelt kártya */}
       <div className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-linear-to-b from-white/8 to-white/2 border border-white/10 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] sm:shadow-[0_30px_100px_rgba(0,0,0,0.8)] grid grid-cols-1 lg:grid-cols-12 mb-8 sm:mb-10">
         
-        {/* Bal oldal: Fókusz kép (Mobilon kisebb magasság, hogy ne lógjon szét) */}
+        {/* Bal oldal: Fókusz kép */}
         <div 
           onClick={() => onMemberClick && onMemberClick(activeMember)}
           className="relative lg:col-span-7 h-80 sm:h-125 lg:h-150 overflow-hidden group cursor-pointer"
@@ -57,8 +57,9 @@ export default function ArtistMembers({ membersList, onMemberClick, themeColor =
               alt={activeMember.name}
               fill
               priority
-              sizes="(max-width: 1024px) 100vw, 60vw"
-              className="object-cover object-top sm:object-center filter contrast-110 group-hover:scale-105 transition-transform duration-700 ease-out"
+              // JAVÍTÁS: Pontosabb és nagyobb méret-deklaráció a retina kijelzők miatt
+              sizes="(max-width: 1024px) 100vw, 750px"
+              className="object-cover object-top sm:object-center group-hover:scale-105 transition-transform duration-700 ease-out"
             />
           )}
           <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0c] via-transparent to-transparent opacity-80 lg:opacity-40" />
@@ -126,7 +127,7 @@ export default function ArtistMembers({ membersList, onMemberClick, themeColor =
         </div>
       </div>
 
-      {/* Alatta lévő minimál váltó sáv (Mobilon kompaktabb gombok) */}
+      {/* Alatta lévő minimál váltó sáv */}
       <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
         {membersList.map((member, index) => {
           const isActive = index === selectedIndex;
