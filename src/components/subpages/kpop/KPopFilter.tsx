@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 export type GenderCategory = 'top10' | 'all' | 'bg' | 'gg' | 'solo';
 export type AgencyCategory = 'all' | 'HYBE' | 'SM' | 'YG' | 'JYP' | 'OTHER';
@@ -13,6 +14,7 @@ export interface ArtistIndexItem {
   themeColor?: string;
   filterAgency: AgencyCategory;
   generation?: string;
+  imageUrl?: string; // <--- Helyesen opcionális stringként definiálva
 }
 
 interface KPopFilterProps {
@@ -62,7 +64,6 @@ export default function KPopFilter({
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [drawerSearch, setDrawerSearch] = useState('');
 
-  // Itt, a komponensen belül már látja az `artists` propot!
   const uniqueGenerations = Array.from(new Set(artists.map(a => a.generation).filter(Boolean)))
     .sort() as string[];
 
@@ -128,7 +129,7 @@ export default function KPopFilter({
               </select>
             </div>
 
-            {/* Generáció Dropdown (Automatikus) */}
+            {/* Generáció Dropdown */}
             <div className="relative shrink-0">
               <select
                 value={selectedGeneration}
@@ -170,11 +171,12 @@ export default function KPopFilter({
       </div>
 
       {isDrawerOpen && (
-        <div onClick={() => setIsDrawerOpen(false)} className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 transition-opacity" />
+        <div onClick={() => setIsDrawerOpen(false)} className="fixed inset-0 bg-black/70 backdrop-blur-xs z-50 transition-opacity" />
       )}
 
-      <div className={`fixed top-0 right-0 h-full w-full max-w-md bg-[#0a0a0e] border-l border-white/10 shadow-[-20px_0_50px_rgba(0,0,0,0.9)] z-50 transform transition-transform duration-300 ease-out flex flex-col ${isDrawerOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-        <div className="p-6 border-b border-white/10 flex items-center justify-between bg-[#111116]">
+      {/* Finomabb, kevésbé nyomasztó háttér (#0c0c10) */}
+      <div className={`fixed top-0 right-0 h-full w-full max-w-md bg-[#0c0c10] border-l border-white/10 shadow-[-20px_0_50px_rgba(0,0,0,0.8)] z-50 transform transition-transform duration-300 ease-out flex flex-col ${isDrawerOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className="p-6 border-b border-white/10 flex items-center justify-between bg-[#121218]/50 backdrop-blur-md">
           <div>
             <span className="text-[10px] uppercase tracking-[0.4em] text-pink-500 font-extrabold block">Gyorsnavigáció</span>
             <h3 className="text-xl font-black text-white">Teljes Előadói Lista</h3>
@@ -182,7 +184,7 @@ export default function KPopFilter({
           <button onClick={() => setIsDrawerOpen(false)} className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-all cursor-pointer">✕</button>
         </div>
 
-        <div className="p-4 border-b border-white/5 bg-[#0d0d12]">
+        <div className="p-4 border-b border-white/5 bg-[#0e0e14]">
           <input
             type="text"
             placeholder="Keresés név vagy generáció (pl. 4th) alapján..."
@@ -194,26 +196,54 @@ export default function KPopFilter({
 
         <div className="flex-1 overflow-y-auto p-4 space-y-2">
           {filteredArtists.length > 0 ? (
-            filteredArtists.map((artist) => (
-              <button
-                key={artist.id}
-                onClick={() => { onSelectArtist(artist.id); setIsDrawerOpen(false); }}
-                className="w-full text-left px-4 py-3 rounded-xl bg-white/2 hover:bg-white/5 border border-white/5 hover:border-white/15 transition-all flex items-center justify-between group cursor-pointer"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="w-2 h-2 rounded-full transition-transform group-hover:scale-150" style={{ backgroundColor: artist.themeColor || '#ec4899' }} />
-                  <div className="flex flex-col items-start">
-                    <span className="text-sm font-bold text-zinc-200 group-hover:text-white tracking-wide">{artist.name}</span>
-                    {artist.generation && (
-                      <span className="text-[9px] font-bold text-pink-500/80 uppercase">{artist.generation} Gen</span>
-                    )}
+            filteredArtists.map((artist) => {
+              const themeColor = artist.themeColor || '#ec4899';
+              return (
+                <button
+                  key={artist.id}
+                  onClick={() => { onSelectArtist(artist.id); setIsDrawerOpen(false); }}
+                  style={
+                    {
+                      '--hover-bg': `${themeColor}0d`,
+                      '--hover-border': `${themeColor}40`,
+                    } as React.CSSProperties
+                  }
+                  className="w-full text-left px-3 py-2.5 rounded-xl bg-white/2 hover:bg-(--hover-bg) border border-white/5 hover:border-(--hover-border) transition-all flex items-center justify-between group cursor-pointer"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="relative w-9 h-9 rounded-full overflow-hidden bg-zinc-800 border border-white/10 shrink-0">
+                      {artist.imageUrl ? (
+                        <Image
+                          src={artist.imageUrl}
+                          alt={artist.name}
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-300"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-zinc-400">
+                          {artist.name.substring(0, 2).toUpperCase()}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col items-start">
+                      <span className="text-sm font-bold text-zinc-200 group-hover:text-white tracking-wide transition-colors">
+                        {artist.name}
+                      </span>
+                      {artist.generation && (
+                        <span className="text-[9px] font-bold text-zinc-500 group-hover:text-pink-400 transition-colors uppercase">
+                          {artist.generation} Gen
+                        </span>
+                      )}
+                    </div>
                   </div>
-                </div>
-                <span className="text-[10px] uppercase tracking-widest text-zinc-500 group-hover:text-zinc-400">
-                  {artist.category === 'gg' ? 'GG' : artist.category === 'bg' ? 'BG' : 'Solo'}
-                </span>
-              </button>
-            ))
+
+                  <span className="text-[10px] uppercase tracking-widest text-zinc-500 group-hover:text-zinc-300">
+                    {artist.category === 'gg' ? 'GG' : artist.category === 'bg' ? 'BG' : 'Solo'}
+                  </span>
+                </button>
+              );
+            })
           ) : (
             <div className="text-center py-10 text-zinc-500 text-sm">Nincs találat.</div>
           )}

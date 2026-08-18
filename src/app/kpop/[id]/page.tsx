@@ -36,6 +36,7 @@ export default async function ArtistDetailPage({ params }: ArtistPageProps) {
 
       <ArtistHero artist={artist} />
       <ArtistStats 
+        artistId={artist.id}
         agency={artist.agency} 
         members={artist.members} 
         category={artist.category} 
