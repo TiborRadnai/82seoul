@@ -5,28 +5,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { client } from '../../../../sanity/lib/client';
+import { getArtistsQuery } from '../../../../sanity/queries';
 
-// Kiegészítő infók a Hero-hoz (címek, tag-ek, glow színek)
-const HERO_EXTRA_DATA: Record<string, { title: string; subtitle: string; tag: string; glowColor: string }> = {
-  bts: {
-    title: 'A K-Pop Globális Forradalma.',
-    subtitle: 'Ismerd meg a csapatokat, akik átírták a zeneipar szabályait és meghódították a világot.',
-    tag: '🎵 FEATURED GROUP',
-    glowColor: 'from-purple-600/30 via-indigo-500/10 to-transparent',
-  },
-  blackpink: {
-    title: 'A Rekordok Új Királynői.',
-    subtitle: 'Stílus, erő és ikonikus slágerek, amik feldúlták a globális toplistákat.',
-    tag: '🔥 TRENDING NOW',
-    glowColor: 'from-pink-600/30 via-rose-500/10 to-transparent',
-  },
-  aespa: {
-    title: 'A Jövő Zenei Dimenziója.',
-    subtitle: 'Ahol a virtuális valóság és a kőkemény K-Pop ritmusok találkoznak.',
-    tag: '⚡ NEXT-GEN ICON',
-    glowColor: 'from-cyan-600/30 via-blue-500/10 to-transparent',
-  },
-};
+const FALLBACK_GLOW_COLORS = [
+  'from-purple-600/30 via-indigo-500/10 to-transparent',
+  'from-pink-600/30 via-rose-500/10 to-transparent',
+  'from-cyan-600/30 via-blue-500/10 to-transparent',
+];
+
+const FALLBACK_TAGS = ['🎵 FEATURED GROUP', '🔥 TRENDING NOW', '⚡ NEXT-GEN ICON'];
 
 export default function KPopHero() {
   const [current, setCurrent] = useState(0);
@@ -35,29 +22,26 @@ export default function KPopHero() {
   useEffect(() => {
     async function fetchHeroData() {
       try {
-        // Lekérjük a 3 kiemelt bandát a Sanity-ből
-        const query = `*[_type == "artist" && id in ["bts", "blackpink", "aespa"]]{
-          id,
-          name,
-          "image": image.asset->url,
-          "wideImage": wideImage.asset->url,
-          description
-        }`;
-        const data = await client.fetch(query);
+        const data = await client.fetch(getArtistsQuery);
 
-        // Összefésüljük a Sanity adatait a Hero speciális szövegeivel
-        const formattedSlides = ['bts', 'blackpink', 'aespa'].map((id) => {
-          const group = data.find((g: any) => g.id === id);
-          const extra = HERO_EXTRA_DATA[id];
+        if (!data || data.length === 0) return;
 
+        const topThree = data
+          .filter((artist: any) => typeof artist.rank === 'number')
+          .sort((a: any, b: any) => a.rank - b.rank)
+          .slice(0, 3);
+
+        const formattedSlides = topThree.map((group: any, index: number) => {
           return {
-            id,
-            groupName: group?.name || id.toUpperCase(),
-            image: group?.wideImage || group?.image || '/images/kpop/default.jpg',
-            title: extra?.title || group?.name || '',
-            subtitle: extra?.subtitle || group?.description || '',
-            tag: extra?.tag || '⭐ FEATURED',
-            glowColor: extra?.glowColor || 'from-purple-600/30 via-indigo-500/10 to-transparent',
+            id: group.id,
+            groupName: group.name,
+            image: group.wideImage || group.image || '/images/kpop/default.jpg',
+            title: group.tagline || `${group.name} - A K-Pop élvonalában`,
+            subtitle: group.description || 'Ismerd meg ezt a lenyűgöző csapatot és slágereiket.',
+            tag: FALLBACK_TAGS[index] || '⭐ FEATURED',
+            glowColor: group.themeColor 
+              ? `from-[${group.themeColor}]/30 via-zinc-500/10 to-transparent` 
+              : FALLBACK_GLOW_COLORS[index % FALLBACK_GLOW_COLORS.length],
           };
         });
 
@@ -78,7 +62,7 @@ export default function KPopHero() {
     return () => clearInterval(timer);
   }, [slides]);
 
-  if (slides.length === 0) return null; // Amíg töltődik, nem dob hibát
+  if (slides.length === 0) return null;
 
   const slide = slides[current];
 
@@ -97,12 +81,12 @@ export default function KPopHero() {
         />
       </AnimatePresence>
 
-      {/* TARTALOM KORLÁTOZÁSA A BELSŐ IGAZÍTÁSHOZ */}
-      <div className="max-w-[1600px] mx-auto px-6 lg:px-12 pt-12 sm:pt-16 lg:pt-20 pb-24 relative z-10">
+{/* TARTALOM KORLÁTOZÁSA A BELSŐ IGAZÍTÁSHOZ (megnövelt paddinggel) */}
+      <div className="max-w-[1600px] mx-auto px-6 lg:px-12 pt-16 sm:pt-20 lg:pt-28 pb-32 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
-          {/* BAL OLDAL: SZÖVEG & INFÓK */}
-          <div className="lg:col-span-6 flex flex-col justify-center">
+          {/* BAL OLDAL: SZÖVEG & INFÓK (Fix magasság beállítása, hogy elkerüld a méretugrást) */}
+          <div className="lg:col-span-6 flex flex-col justify-center h-95 sm:h-105 overflow-hidden">
             <AnimatePresence mode="wait">
               <motion.div
                 key={slide.id}
@@ -110,19 +94,20 @@ export default function KPopHero() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -15 }}
                 transition={{ duration: 0.4 }}
+                className="flex flex-col justify-center h-full"
               >
                 {/* TAG BADGE */}
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 text-[11px] font-semibold tracking-widest uppercase mb-6 text-zinc-300 shadow-inner">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 text-[11px] font-semibold tracking-widest uppercase mb-6 text-zinc-300 shadow-inner w-fit">
                   {slide.tag}
                 </div>
 
                 {/* CÍM */}
-                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-light tracking-tight text-white mb-6 leading-[1.1]">
+                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight text-white mb-4 leading-[1.1] line-clamp-2">
                   {slide.title.split(' ')[0]} <span className="font-extrabold text-zinc-100">{slide.title.split(' ').slice(1).join(' ')}</span>
                 </h1>
 
-                {/* ALCÍM */}
-                <p className="text-zinc-400 text-base sm:text-lg leading-relaxed max-w-xl font-normal mb-8">
+                {/* ALCÍM (sorok korlátozása, hogy ne nőjön túl a kereten) */}
+                <p className="text-zinc-400 text-base sm:text-lg leading-relaxed max-w-xl font-normal mb-8 line-clamp-3">
                   {slide.subtitle}
                 </p>
 

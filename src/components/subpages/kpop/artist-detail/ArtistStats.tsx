@@ -17,7 +17,6 @@ export default function ArtistStats({ artistId, agency, members, category, theme
   const searchParams = useSearchParams();
   const queryStr = searchParams.toString();
   
-  // Ugyanaz a tökéletes URL horgonnyal, mint a ClientWrapperben!
   const backUrl = `/kpop${queryStr ? `?${queryStr}` : ''}#artist-${artistId}`;
 
   const scrollToDiscography = () => {
@@ -27,10 +26,12 @@ export default function ArtistStats({ artistId, agency, members, category, theme
     }
   };
 
+  const isSolo = category === 'solo';
+
   return (
     <section className="relative w-full bg-[#121216]/80 border-b border-white/10 py-6 px-6 backdrop-blur-xl shadow-2xl">
       
-      {/* 1. BAL SZÉLEN: Vissza gomb Link-kel, pontosan mint fent */}
+      {/* 1. BAL SZÉLEN: Vissza gomb Link-kel */}
       <div className="absolute left-6 sm:left-12 top-1/2 -translate-y-1/2 hidden md:block">
         <Link
           href={backUrl}
@@ -58,19 +59,21 @@ export default function ArtistStats({ artistId, agency, members, category, theme
         </button>
       </div>
 
-      {/* KÖZÉPEN: A statisztikai kártyák */}
-      <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+      {/* KÖZÉPEN: A statisztikai kártyák (ha solo, csak 2 oszlop, egyébként 3) */}
+      <div className={`max-w-4xl mx-auto grid grid-cols-1 ${isSolo ? 'sm:grid-cols-2' : 'sm:grid-cols-3'} gap-6 text-center`}>
         <div className="p-4 rounded-xl bg-white/2 border border-white/5">
           <span className="block text-xs uppercase tracking-widest text-zinc-500 mb-1 font-semibold">Ügynökség</span>
           <span className="text-base sm:text-lg font-black text-zinc-100">{agency || 'N/A'}</span>
         </div>
         
-        <div className="p-4 rounded-xl bg-white/2 border border-white/5">
-          <span className="block text-xs uppercase tracking-widest text-zinc-500 mb-1 font-semibold">Tagok Száma</span>
-          <span className="text-base sm:text-lg font-black text-zinc-100">
-            {typeof members === 'number' ? `${members} fő` : members}
-          </span>
-        </div>
+        {!isSolo && (
+          <div className="p-4 rounded-xl bg-white/2 border border-white/5">
+            <span className="block text-xs uppercase tracking-widest text-zinc-500 mb-1 font-semibold">Tagok Száma</span>
+            <span className="text-base sm:text-lg font-black text-zinc-100">
+              {typeof members === 'number' ? `${members} fő` : members}
+            </span>
+          </div>
+        )}
 
         <div className="p-4 rounded-xl bg-white/2 border border-white/5">
           <span className="block text-xs uppercase tracking-widest text-zinc-500 mb-1 font-semibold">Kategória</span>
