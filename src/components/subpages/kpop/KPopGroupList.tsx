@@ -21,14 +21,17 @@ export default function KPopGroupList({ initialArtists }: KPopGroupListProps) {
   const selectedGeneration = (searchParams.get('generation') as GenerationCategory) || 'all';
   const searchQuery = searchParams.get('q') || '';
 
-  // Segédfüggvény az URL paraméterek frissítésére anélkül, hogy újra töltené az oldalt (router.replace)
+// Segédfüggvény az URL paraméterek frissítésére anélkül, hogy újra töltené az oldalt (router.replace)
   const updateQueryParam = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (value && value !== 'all' && (key !== 'gender' || value !== 'top10')) {
+    
+    // Itt a változtatás: Ha van érték és nem üres, akkor állítsuk be, egyébként töröljük
+    if (value) {
       params.set(key, value);
     } else {
       params.delete(key);
     }
+    
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
