@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export default function Navbar() {
   const [isVisible, setIsVisible] = useState(true);
@@ -53,18 +54,19 @@ export default function Navbar() {
 
           {/* ASZTALI MENÜ */}
           <div className="hidden md:flex items-center space-x-10 text-xs font-semibold tracking-widest uppercase text-slate-300">
-            <a href="#k-beauty" className="hover:text-white transition-colors duration-300 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all">
+            {/* Külső horgonyokhoz (ha egy oldalon belül vannak) maradhat #, de a K-pop-ot átirányítjuk */}
+            <Link href="/#k-beauty" className="hover:text-white transition-colors duration-300 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all">
               K-Beauty
-            </a>
-            <a href="#k-pop" className="hover:text-white transition-colors duration-300 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all">
+            </Link>
+            <Link href="/kpop" className="hover:text-white transition-colors duration-300 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all">
               K-Pop
-            </a>
-            <a href="#k-movies" className="hover:text-white transition-colors duration-300 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all">
+            </Link>
+            <Link href="/#k-movies" className="hover:text-white transition-colors duration-300 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all">
               K-Movies
-            </a>
-            <a href="#shop" className="hover:text-white transition-colors duration-300 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all">
+            </Link>
+            <Link href="/#shop" className="hover:text-white transition-colors duration-300 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all">
               Webshop
-            </a>
+            </Link>
           </div>
 
           {/* MOBIL HAMBURGER GOMB */}
@@ -87,34 +89,18 @@ export default function Navbar() {
       {/* MOBIL MENÜ OVERLAY (Teljes képernyős, csodás blur-üveg felület) */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-40 bg-slate-950/85 backdrop-blur-2xl md:hidden flex flex-col justify-center items-center space-y-8 animate-fadeIn px-6">
-          <a
-            href="#k-beauty"
-            onClick={() => setMobileMenuOpen(false)}
-            className="text-lg font-semibold tracking-[0.25em] uppercase text-slate-200 hover:text-white transition-all"
-          >
+          <Link href="/#k-beauty" onClick={() => setMobileMenuOpen(false)} className="text-lg font-semibold tracking-[0.25em] uppercase text-slate-200 hover:text-white transition-all">
             K-Beauty
-          </a>
-          <a
-            href="#k-pop"
-            onClick={() => setMobileMenuOpen(false)}
-            className="text-lg font-semibold tracking-[0.25em] uppercase text-slate-200 hover:text-white transition-all"
-          >
+          </Link>
+          <Link href="/kpop" onClick={() => setMobileMenuOpen(false)} className="text-lg font-semibold tracking-[0.25em] uppercase text-slate-200 hover:text-white transition-all">
             K-Pop
-          </a>
-          <a
-            href="#k-movies"
-            onClick={() => setMobileMenuOpen(false)}
-            className="text-lg font-semibold tracking-[0.25em] uppercase text-slate-200 hover:text-white transition-all"
-          >
+          </Link>
+          <Link href="/#k-movies" onClick={() => setMobileMenuOpen(false)} className="text-lg font-semibold tracking-[0.25em] uppercase text-slate-200 hover:text-white transition-all">
             K-Movies
-          </a>
-          <a
-            href="#shop"
-            onClick={() => setMobileMenuOpen(false)}
-            className="text-lg font-semibold tracking-[0.25em] uppercase text-slate-200 hover:text-white transition-all"
-          >
+          </Link>
+          <Link href="/#shop" onClick={() => setMobileMenuOpen(false)} className="text-lg font-semibold tracking-[0.25em] uppercase text-slate-200 hover:text-white transition-all">
             Webshop
-          </a>
+          </Link>
         </div>
       )}
     </>

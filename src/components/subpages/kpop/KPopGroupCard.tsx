@@ -3,10 +3,11 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
 import { motion, Variants } from 'framer-motion';
 
 interface KPopGroupCardProps {
-  band: any; // Sanity dinamikus adatséma
+  band: any;
   index: number;
   showRank?: boolean;
 }
@@ -41,6 +42,10 @@ const getRankBadgeStyle = (rank: number) => {
 };
 
 export default function KPopGroupCard({ band, index, showRank = true }: KPopGroupCardProps) {
+  const searchParams = useSearchParams();
+  const queryStr = searchParams.toString();
+  const detailHref = `/kpop/${band.id}${queryStr ? `?${queryStr}` : ''}`;
+
   const isEven = index % 2 === 0;
   const rankBadge = getRankBadgeStyle(band.rank);
 
@@ -139,7 +144,7 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
             }`}>
               <motion.div variants={buttonVariant} className="transform-gpu">
                 <Link
-                  href={`/kpop/${band.id}`}
+                  href={detailHref}
                   className="group relative flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-white text-zinc-900 text-[10px] sm:text-[11px] font-bold tracking-widest uppercase transition-all duration-500 ease-out hover:scale-110 border border-zinc-200/80 shadow-md hover:shadow-[0_10px_35px_rgba(0,0,0,0.18)] shrink-0"
                 >
                   <div className="absolute inset-0 rounded-full bg-zinc-900/15 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 scale-125" />
@@ -166,7 +171,7 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
             isEven ? 'lg:order-2' : 'lg:order-1'
           }`}
         >
-          <Link href={`/kpop/${band.id}`} className="block group">
+          <Link href={detailHref} className="block group">
             <div className="relative w-full aspect-21/9 rounded-none border-none shadow-2xl overflow-hidden bg-zinc-300 transform-gpu">
               
               {showRank && (
