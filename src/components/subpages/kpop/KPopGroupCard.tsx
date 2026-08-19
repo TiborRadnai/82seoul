@@ -111,9 +111,16 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
             isEven ? 'lg:order-1' : 'lg:order-2'
           }`}
         >
-          <span className="text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2 z-10">
-            {band.filterAgency || band.agency} • {band.members}
-          </span>
+          <div className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2 z-10">
+            <span>{band.filterAgency || band.agency}</span>
+            <span className="text-zinc-700">•</span>
+            <span className="inline-flex items-center gap-1.5 text-zinc-400 font-medium">
+              <svg className="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+              </svg>
+              <span>{band.members} Mitglieder</span>
+            </span>
+          </div>
 
           <div className="relative flex items-center justify-between w-full mb-4 min-h-20 sm:min-h-27.5 overflow-hidden">
             <h2 
@@ -149,7 +156,7 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
                 >
                   <div className="absolute inset-0 rounded-full bg-zinc-900/15 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 scale-125" />
                   <span className="text-center px-2 font-semibold tracking-wider transition-colors duration-300 group-hover:text-zinc-950">
-                    ISMERD MEG!
+                    ENTDECKEN!
                   </span>
                 </Link>
               </motion.div>
@@ -195,7 +202,7 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-zinc-500 text-xs font-medium">
-                  Nincs elérhető kép
+                  Kein Bild verfügbar
                 </div>
               )}
             </div>

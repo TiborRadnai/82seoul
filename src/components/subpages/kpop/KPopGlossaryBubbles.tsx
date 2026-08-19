@@ -21,8 +21,8 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'bias',
     term: 'Bias',
     korean: '최애 (Choeae)',
-    definition: 'A személyes kedvenc tagod egy adott K-Pop csapatban, akit a legjobban imádsz.',
-    example: '„Ki a biasod a Blackpinkből?”',
+    definition: 'Dein persönlicher Lieblingsmitglied in einer K-Pop-Gruppe, den du am meisten unterstützt.',
+    example: '„Wer ist dein Bias bei Blackpink?“',
     size: 140,
     desktopPos: { top: '8%', left: '8%' },
     animClass: 'animate-float-slow',
@@ -33,8 +33,8 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'comeback',
     term: 'Comeback',
     korean: '컴백',
-    definition: 'Új album, kislemez vagy dal megjelenése – a K-Popban ez minden új zenei projektet jelent, függetlenül attól, mennyi telt el az előző óta.',
-    example: '„A BTS jövő hónapban csinál comeback-et!”',
+    definition: 'Die Veröffentlichung eines neuen Albums, einer Single oder eines Songs – im K-Pop bedeutet dies jedes neue Musikprojekt, unabhängig davon, wie viel Zeit vergangen ist.',
+    example: '„BTS macht nächsten Monat ein Comeback!“',
     size: 150,
     desktopPos: { top: '4%', left: '28%' },
     animClass: 'animate-float-medium',
@@ -45,8 +45,8 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'lightstick',
     term: 'Lightstick',
     korean: '응원봉',
-    definition: 'Hivatalos, világító rajongói bot, amit minden fandom egyedivé alakít, és a koncerteken hullámzanak vele.',
-    example: '„Megérkezett a legújabb verziós lightstickem!”',
+    definition: 'Der offizielle leuchtende Fan-Stick, den jedes Fandom individuell gestaltet und mit dem bei Konzerten gewunken wird.',
+    example: '„Mein Lightstick der neuesten Version ist angekommen!“',
     size: 125,
     desktopPos: { top: '10%', left: '52%' },
     animClass: 'animate-float-fast',
@@ -57,7 +57,7 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'hiatus',
     term: 'Hiatus',
     korean: '휴식기',
-    definition: 'Hivatalos szünet vagy pihenőidőszak – vonatkozhat egy egész csapatra, egy adott tagra (pl. katonaság vagy egészségügy miatt), vagy szólóprojektekre.',
+    definition: 'Eine offizielle Pause oder Ruhephase – betrifft eine ganze Gruppe, ein einzelnes Mitglied (z. B. wegen Militärdienst oder Gesundheit) oder Soloprojekte.',
     size: 135,
     desktopPos: { top: '6%', left: '76%' },
     animClass: 'animate-float-fast',
@@ -68,8 +68,8 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'multistan',
     term: 'Multi-Stan',
     korean: '멀티스팬',
-    definition: 'Olyan rajongó, aki egyszerre több különböző K-Pop bandát is aktívan követ és imád.',
-    example: '„Én teljes mértékben multi-stan vagyok, nem tudnék csak egy csapatot választani.”',
+    definition: 'Ein Fan, der gleichzeitig mehrere verschiedene K-Pop-Bands aktiv verfolgt und liebt.',
+    example: '„Ich bin absolut Multi-Stan, ich könnte mich nie nur für eine Gruppe entscheiden.“',
     size: 145,
     desktopPos: { top: '35%', left: '40%' },
     animClass: 'animate-float-slow',
@@ -80,8 +80,8 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'maknae',
     term: 'Maknae',
     korean: '막내',
-    definition: 'A legfiatalabb tag egy K-Pop csapatban, akiért a rajongók (és gyakran a többi tag) rajongásig odavannak.',
-    example: '„Jungkook a BTS arany maknae-ja.”',
+    definition: 'Das jüngste Mitglied einer K-Pop-Gruppe, das von den Fans (und oft auch den anderen Mitgliedern) vergöttert wird.',
+    example: '„Jungkook ist der goldene Maknae von BTS.“',
     size: 130,
     desktopPos: { top: '45%', left: '12%' },
     animClass: 'animate-float-medium',
@@ -92,7 +92,7 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'unnie',
     term: 'Unnie',
     korean: '언니',
-    definition: 'Kifejezés, amit egy nő/lány használ a nálánál idősebb női barátjára vagy női idolra.',
+    definition: 'Ein Ausdruck, den ein Mädchen/eine Frau verwendet, um eine ältere Freundin oder ein älteres weibliches Idol anzusprechen.',
     size: 125,
     desktopPos: { top: '50%', left: '26%' },
     animClass: 'animate-float-fast',
@@ -103,7 +103,7 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'allkill',
     term: 'All-Kill',
     korean: '올킬',
-    definition: 'Amikor egy dal egyszerre vezeti az összes major koreai valós idejű slágerlistát (Melon, Genie, Bugs stb.).',
+    definition: 'Wenn ein Song gleichzeitig alle großen koreanischen Echtzeit-Charts (Melon, Genie, Bugs usw.) anführt.',
     size: 120,
     desktopPos: { top: '20%', left: '88%' },
     animClass: 'animate-float-slow',
@@ -114,7 +114,7 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'hyung',
     term: 'Hyung',
     korean: '형',
-    definition: 'Kifejezés, amit egy fiú/férfi használ a nálánál idősebb férfi barátjára vagy férfi idolra.',
+    definition: 'Ein Ausdruck, den ein Junge/Mann verwendet, um einen älteren männlichen Freund oder ein älteres männliches Idol anzusprechen.',
     size: 135,
     desktopPos: { top: '48%', left: '64%' },
     animClass: 'animate-float-slow',
@@ -125,7 +125,7 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'trainee',
     term: 'Trainee',
     korean: '연습생',
-    definition: 'Gyakornok, aki egy szórakoztatóipari ügynökségnél keményen tanul és készül a hivatalos debütálására.',
+    definition: 'Ein Auszubildender, der bei einer Unterhaltungsagentur hart lernt und sich auf sein offizielles Debüt vorbereitet.',
     size: 130,
     desktopPos: { top: '38%', left: '84%' },
     animClass: 'animate-float-fast',
@@ -136,7 +136,7 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'stan',
     term: 'Stan',
     korean: '스탠',
-    definition: 'Hardcore, rendkívül elhivatott rajongó, aki minden zenei megjelenést, hírt és rezdülést követ.',
+    definition: 'Ein Hardcore- und extrem engagierter Fan, der jede Veröffentlichung, News und Regung verfolgt.',
     size: 140,
     desktopPos: { top: '75%', left: '10%' },
     animClass: 'animate-float-fast',
@@ -147,7 +147,7 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'fanchant',
     term: 'Fanchant',
     korean: '응원법',
-    definition: 'A koncerteken és zenei show-kon skandált koreografált közös rigmusok a dalok ütemére (pl. a tagok nevének kiabálása).',
+    definition: 'Gemeinsame, choreografierte Rufe der Fans bei Konzerten und Musikshows im Takt der Lieder (z. B. das Rufen der Namen der Mitglieder).',
     size: 145,
     desktopPos: { top: '70%', left: '28%' },
     animClass: 'animate-float-slow',
@@ -158,7 +158,7 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'killingpart',
     term: 'Killing Part',
     korean: '킬링파트',
-    definition: 'A dal leghúzósabb, legfülbemászóbb vagy legikonikusabb része, amit a rajongók azonnal megjegyeznek.',
+    definition: 'Der packendste, einprägsamste oder ikonischste Teil eines Songs, den sich die Fans sofort merken.',
     size: 140,
     desktopPos: { top: '68%', left: '55%' },
     animClass: 'animate-float-medium',
@@ -169,7 +169,7 @@ const GLOSSARY_TERMS: KPopTerm[] = [
     id: 'bside',
     term: 'B-Side',
     korean: '수록곡',
-    definition: 'Az albumon lévő dalok gyűjtőneve a főcímdalon (Title Track) kívül – a rajongók gyakran ezeket szeretik a legjobban.',
+    definition: 'Der Sammelbegriff für alle Songs auf einem Album außer dem Haupttitel (Title Track) – Fans mögen diese oft am liebsten.',
     size: 135,
     desktopPos: { top: '78%', left: '80%' },
     animClass: 'animate-float-fast',
@@ -184,30 +184,30 @@ export default function KPopGlossaryBubbles() {
   return (
     <section className="relative w-full py-20 sm:py-24 overflow-hidden bg-linear-to-b from-zinc-950 via-zinc-100 to-zinc-200 text-zinc-900 select-none">
       
-      {/* Opcionális felső átmenetes sáv, ami a fekete graffitiből finoman bevezeti a világos alapot */}
+      {/* Opcionális felső átmenetes sáv */}
       <div className="absolute top-0 left-0 w-full h-24 bg-linear-to-b from-zinc-950 to-transparent pointer-events-none z-10" />
 
       {/* CÍMSOR */}
       <div className="relative z-20 text-center max-w-3xl mx-auto px-4 mb-10 pointer-events-none">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-600 text-xs font-bold tracking-widest uppercase mb-4 shadow-sm">
           <span className="w-2 h-2 rounded-full bg-pink-500 animate-pulse" />
-          82SEOUL • RAW K-POP DICTIONARY
+          82SEOUL • RAW K-POP WÖRTERBUCH
         </div>
 
         <h2 className="text-4xl sm:text-6xl font-black tracking-tight text-zinc-900 mb-6 leading-tight">
-          Szavak, amik nélkül{' '}
+          Begriffe, ohne die ein{' '}
           <span className="bg-linear-to-r from-pink-500 via-rose-500 to-purple-600 bg-clip-text text-transparent">
-            nem létezik
+            Fandom
           </span>{' '}
-          Fandom.
+          nicht existiert.
         </h2>
 
         <p className="text-zinc-600 text-base sm:text-lg font-normal max-w-2xl mx-auto leading-relaxed">
-          Pattintsd fel a buborékokat, és tudd meg pontosan, mit dealelnek a koreai zeneipar kulisszái mögött!
+          Platze die Blasen und finde heraus, was hinter den Kulissen der koreanischen Musikindustrie wirklich los ist!
         </p>
       </div>
 
-      {/* MOBIL / TABLET / KISEBB LAPTOP NÉZET (< 1280px): Változatlan, stabil rács */}
+      {/* MOBIL / TABLET / KISEBB LAPTOP NÉZET (< 1280px) */}
       <div className="xl:hidden w-full px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 max-w-5xl mx-auto">
         {GLOSSARY_TERMS.map((item) => (
           <div
@@ -239,7 +239,7 @@ export default function KPopGlossaryBubbles() {
         ))}
       </div>
 
-      {/* NAGY DESKTOP NÉZET (>= 1280px): Teljes képernyős szélesség (max-w-[1600px]), szellős buborék-térkép */}
+      {/* NAGY DESKTOP NÉZET (>= 1280px) */}
       <div className="hidden xl:block relative w-full h-155 max-w-[1600px] mx-auto px-6">
         {GLOSSARY_TERMS.map((item) => (
           <div
@@ -269,6 +269,7 @@ export default function KPopGlossaryBubbles() {
             <span className="relative z-10 text-xs font-bold tracking-wider text-zinc-800 uppercase text-center px-2">
               {item.term}
             </span>
+
           </div>
         ))}
       </div>
@@ -327,7 +328,7 @@ export default function KPopGlossaryBubbles() {
                 onClick={() => setSelectedTerm(null)}
                 className="px-6 py-2 rounded-full bg-zinc-900/90 hover:bg-zinc-900 text-white font-bold text-[10px] tracking-widest uppercase transition-all shadow-lg hover:scale-105 active:scale-95 cursor-pointer"
               >
-                Bezárás
+                Schließen
               </button>
             </motion.div>
           </div>

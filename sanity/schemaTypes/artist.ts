@@ -81,7 +81,7 @@ export const artist = {
     },
     {
       name: 'members',
-      title: 'Tagok száma szövegesen (pl. 7 tag)',
+      title: 'Tagok száma csak számmal (pl. 7)',
       type: 'string',
     },
     {

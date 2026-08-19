@@ -64,20 +64,20 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
     featuredRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
 
-  // Segédfüggvény az albumtípusok szép magyar elnevezéséhez
+  // Segédfüggvény az albumtípusok német elnevezéséhez
   const getAlbumTypeLabel = (type: 'full' | 'mini' | 'single' | 'ost') => {
     switch (type) {
-      case 'full': return 'Stúdióalbum';
-      case 'mini': return 'Minialbum (EP)';
-      case 'single': return 'Kislemez';
-      case 'ost': return 'Zene (OST)';
-      default: return 'Kiadvány';
+      case 'full': return 'Studioalbum';
+      case 'mini': return 'Mini-Album (EP)';
+      case 'single': return 'Single';
+      case 'ost': return 'Soundtrack (OST)';
+      default: return 'Veröffentlichung';
     }
   };
 
   const getAlbumTypeBadgeLabel = (type: 'full' | 'mini' | 'single' | 'ost') => {
     switch (type) {
-      case 'full': return 'Stúdió';
+      case 'full': return 'Studio';
       case 'mini': return 'Mini EP';
       case 'single': return 'Single';
       case 'ost': return 'OST';
@@ -160,11 +160,11 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
               className="text-[11px] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.4em] font-extrabold"
               style={{ color: themeColor }}
             >
-              Diszkográfia & Hanganyagok
+              Diskographie & Audios
             </span>
           </div>
           <h2 className="text-3xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white drop-shadow-[0_2px_20px_rgba(255,255,255,0.1)]">
-            Albumok & <span className="text-transparent bg-clip-text" style={{ backgroundImage: `linear-gradient(to right, ${themeColor}, #a855f7)` }}>Megjelenések</span>
+            Alben & <span className="text-transparent bg-clip-text" style={{ backgroundImage: `linear-gradient(to right, ${themeColor}, #a855f7)` }}>Veröffentlichungen</span>
           </h2>
         </div>
 
@@ -179,7 +179,7 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
           }}
         >
           
-          {/* Bal oldal: Borítókép konténer - JAVÍTVA: Optimalizált sizes */}
+          {/* Bal oldal: Borítókép konténer */}
           <div className="relative lg:col-span-6 p-6 sm:p-10 flex items-center justify-center bg-linear-to-br from-white/5 to-transparent">
             <div className="relative w-full max-w-70 sm:max-w-100 lg:max-w-120 aspect-square rounded-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-white/10 group">
               {currentFeatured.coverImage ? (
@@ -188,12 +188,11 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
                   src={currentFeatured.coverImage}
                   alt={currentFeatured.title}
                   fill
-                  // JAVÍTÁS: Nagyobb felbontás engedélyezése asztali nézetben
                   sizes="(max-width: 1024px) 100vw, 600px"
                   className="object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
               ) : (
-                <div className="w-full h-full bg-zinc-900 flex items-center justify-center text-zinc-600">Nincs borítókép</div>
+                <div className="w-full h-full bg-zinc-900 flex items-center justify-center text-zinc-600">Kein Cover</div>
               )}
               
               {isLatestSelected && (
@@ -202,7 +201,7 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
                   style={{ backgroundColor: 'rgba(0,0,0,0.85)', borderColor: `${themeColor}80`, color: themeColor }}
                 >
                   <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: themeColor }} />
-                  Legfrissebb Megjelenés
+                  Neueste Veröffentlichung
                 </div>
               )}
             </div>
@@ -230,7 +229,7 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
               {currentFeatured.tracks && currentFeatured.tracks.length > 0 && (
                 <div className="mb-6">
                   <span className="block text-[11px] uppercase tracking-widest text-zinc-400 font-extrabold mb-3">
-                    Dallista / Tracklist ({currentFeatured.tracks.length} dal)
+                    Titelliste / Tracklist ({currentFeatured.tracks.length} Titel)
                   </span>
                   <ul className="max-h-60 sm:max-h-95 overflow-y-auto space-y-2 pr-2 custom-dynamic-scrollbar border border-white/10 rounded-xl p-3 bg-black/40 shadow-inner backdrop-blur-md">
                     {currentFeatured.tracks.map((track, idx) => (
@@ -258,7 +257,7 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
                 <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
                   <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.599-.12-.42.18-.78.6-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.54.66.24 1.08zm1.44-3.3c-.301.42-.84.6-1.26.3-3.24-1.98-8.16-2.58-11.94-1.41-.48.18-1.02-.06-1.2-.54-.18-.48.06-1.02.54-1.2 4.2-1.26 9.6-.6 13.56 1.8.42.24.6.84.3 1.26zm.12-3.48C15.24 8.4 8.82 8.16 5.16 9.3c-.6.18-1.2-.18-1.38-.78-.18-.6.18-1.2.78-1.38 4.2-1.26 11.4-.96 15.66 1.56.54.3.72 1.02.42 1.56-.3.54-1.02.72-1.56.42z"/>
                 </svg>
-                <span>Hallgasd meg Spotify-on</span>
+                <span>Auf Spotify anhören</span>
               </a>
             )}
           </div>
@@ -267,7 +266,7 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
 
         {/* --- 2. SZŰRŐK SÁV --- */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 sm:mb-10 pb-6 border-b border-white/10">
-          <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">Összes Kiadvány</h3>
+          <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">Alle Veröffentlichungen</h3>
           
           <div className="flex flex-wrap gap-2">
             {(['all', 'full', 'mini', 'single', 'ost'] as AlbumFilter[]).map((type) => (
@@ -281,11 +280,11 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
                 }`}
                 style={filter === type ? { backgroundColor: themeColor, boxShadow: `0 0 20px ${themeColor}70` } : {}}
               >
-                {type === 'all' && 'Minden'}
-                {type === 'full' && 'Stúdióalbum'}
-                {type === 'mini' && 'Minialbum'}
-                {type === 'single' && 'Kislemez'}
-                {type === 'ost' && 'OST / Zene'}
+                {type === 'all' && 'Alle'}
+                {type === 'full' && 'Studioalbum'}
+                {type === 'mini' && 'Mini-Album'}
+                {type === 'single' && 'Single'}
+                {type === 'ost' && 'OST / Musik'}
               </button>
             ))}
           </div>
@@ -330,19 +329,18 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
                         }
                   }
                 >
-                  {/* Album Borító Kép - JAVÍTVA: Optimalizált sizes */}
+                  {/* Album Borító Kép */}
                   <div className="relative aspect-square rounded-xl overflow-hidden bg-black/60 shadow-inner mb-3 sm:mb-4 border border-white/10">
                     {album.coverImage ? (
                       <Image
                         src={album.coverImage}
                         alt={album.title}
                         fill
-                        // JAVÍTÁS: Fixen nagyobb méretigény desktopon a crisp-tiszta megjelenésért
                         sizes="(max-width: 640px) 250px, 400px"
                         className="object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out pointer-events-none"
                       />
                     ) : (
-                      <div className="w-full h-full bg-zinc-900 flex items-center justify-center text-zinc-600 text-xs">Nincs kép</div>
+                      <div className="w-full h-full bg-zinc-900 flex items-center justify-center text-zinc-600 text-xs">Kein Cover</div>
                     )}
                     
                     {/* Típus Badge */}
@@ -356,7 +354,7 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
                         className="absolute bottom-2.5 right-2.5 sm:bottom-3 sm:right-3 px-3.5 py-1.5 rounded-lg text-[10px] font-bold text-white uppercase tracking-wider shadow-lg backdrop-blur-md"
                         style={{ backgroundColor: themeColor }}
                       >
-                        Kiválasztva
+                        Ausgewählt
                       </div>
                     )}
                   </div>
@@ -373,7 +371,7 @@ export default function ArtistDiscography({ albums, themeColor = '#ec4899' }: Ar
                     {album.tracks && album.tracks.length > 0 && (
                       <p className="text-[11px] sm:text-xs text-zinc-300 flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: themeColor }} />
-                        <span className="font-semibold text-zinc-200">{album.tracks.length} dal</span> a dallistán
+                        <span className="font-semibold text-zinc-200">{album.tracks.length} Titel</span> in der Liste
                       </p>
                     )}
                   </div>
