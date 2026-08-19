@@ -28,22 +28,15 @@ export default function ArtistDetailClientWrapper({ artist }: ArtistDetailClient
   return (
     <>
       {/* Elegáns lebegő / fix Vissza gomb a részletes oldal tetején */}
-      <div className="max-w-[1800px] mx-auto px-4 sm:px-8 pt-8">
+      <div className="max-w-[1800px] mx-auto px-4 sm:px-8 pt-6 mb-16 sm:mb-24">
         <Link
           href={backUrl}
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-zinc-900/80 hover:bg-zinc-900 text-white text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-zinc-800 transition-all shadow-lg hover:scale-105"
         >
           <ArrowLeft className="w-4 h-4" />
-          Vissza a listához
+          Zurück zur Liste
         </Link>
       </div>
-
-      <ArtistMembers 
-        membersList={artist.membersList} 
-        onMemberClick={handleMemberClick} 
-        themeColor={artist.themeColor}
-        category={artist.category}
-      />
 
       <ArtistMemberModal 
         member={selectedMember} 

@@ -65,7 +65,7 @@ export default function ArtistOverview({
               style={{ backgroundColor: themeColor, boxShadow: `0 0 12px ${themeColor}` }}
             />
             <span className="text-[11px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] font-bold" style={{ color: themeColor }}>
-              Portré & Háttértörténet // {artistName}
+              Porträt & Biografie // {artistName}
             </span>
           </div>
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
@@ -138,7 +138,7 @@ export default function ArtistOverview({
                     {extendedHistory}
                   </div>
                 ) : (
-                  <p className="text-zinc-500 italic">A részletes történet hamarosan feltöltésre kerül...</p>
+                  <p className="text-zinc-500 italic">Die ausführliche Biografie wird bald hinzugefügt...</p>
                 )}
               </div>
 
@@ -146,7 +146,7 @@ export default function ArtistOverview({
 
           </div>
 
-          {/* Jobb oldal: Kép (JAVÍTVA: Nagyobb sizes beállítás a felbontásvesztés elkerülésére) */}
+          {/* Jobb oldal: Kép */}
           <div className="lg:col-span-5 lg:top-8 order-1 lg:order-2">
             <div 
               className="relative h-80 sm:h-137.5 lg:h-155 w-full rounded-2xl sm:rounded-3xl overflow-hidden border border-white/20 shadow-2xl group"
@@ -157,13 +157,12 @@ export default function ArtistOverview({
                   src={imageUrl} 
                   alt={`${artistName} portrait`} 
                   fill 
-                  // JAVÍTÁS: Nem 50vw, hanem desktopon fixen nagyobb felbontást kérünk, hogy éles maradjon
                   sizes="(max-width: 1024px) 100vw, 750px"
                   className="object-cover object-top group-hover:scale-105 transition-transform duration-700"
                 />
               ) : (
                 <div className="w-full h-full bg-linear-to-br from-zinc-800 to-zinc-900 flex items-center justify-center text-zinc-500 text-sm tracking-widest uppercase">
-                  [ Kép Helye ]
+                  [ Kein Bild vorhanden ]
                 </div>
               )}
               <div className="absolute inset-0 bg-linear-to-t from-[#07070a] via-transparent to-transparent opacity-60 pointer-events-none" />

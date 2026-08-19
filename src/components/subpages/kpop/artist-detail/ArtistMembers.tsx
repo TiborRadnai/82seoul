@@ -35,10 +35,10 @@ export default function ArtistMembers({ membersList, onMemberClick, themeColor =
           className="text-[11px] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.4em] font-extrabold block mb-2 sm:mb-3"
           style={{ color: themeColor }}
         >
-          Interaktív Magazin
+          Interaktives Magazin
         </span>
         <h2 className="text-3xl sm:text-6xl font-black tracking-tight text-white">
-          A Csapat <span className="text-transparent bg-clip-text" style={{ backgroundImage: `linear-gradient(to right, ${themeColor}, #a855f7)` }}>Arcai</span>
+          Die Gesichter <span className="text-transparent bg-clip-text" style={{ backgroundImage: `linear-gradient(to right, ${themeColor}, #a855f7)` }}>der Gruppe</span>
         </h2>
       </div>
 
@@ -57,7 +57,6 @@ export default function ArtistMembers({ membersList, onMemberClick, themeColor =
               alt={activeMember.name}
               fill
               priority
-              // JAVÍTÁS: Pontosabb és nagyobb méret-deklaráció a retina kijelzők miatt
               sizes="(max-width: 1024px) 100vw, 750px"
               className="object-cover object-top sm:object-center group-hover:scale-105 transition-transform duration-700 ease-out"
             />
@@ -70,7 +69,7 @@ export default function ArtistMembers({ membersList, onMemberClick, themeColor =
             style={{ color: themeColor }}
           >
             <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: themeColor }} />
-            Részletek
+            Details
           </div>
 
           {/* Tag index a bal alsó sarokban */}
@@ -87,7 +86,7 @@ export default function ArtistMembers({ membersList, onMemberClick, themeColor =
               className="text-[11px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] font-bold"
               style={{ color: themeColor }}
             >
-              {activeMember.role || 'Tag'}
+              {activeMember.role || 'Mitglied'}
             </span>
             {activeMember.koreanName && (
               <span className="text-sm sm:text-base font-bold text-zinc-400 tracking-wider">
@@ -122,7 +121,7 @@ export default function ArtistMembers({ membersList, onMemberClick, themeColor =
           )}
 
           <p className="text-zinc-300 text-sm sm:text-base leading-relaxed border-t border-white/10 pt-3 sm:pt-4">
-            {activeMember.shortBio || 'Kattints a képre a részletes profil megnyitásához!'}
+            {activeMember.shortBio || 'Klicke auf das Bild für das Detailprofil!'}
           </p>
         </div>
       </div>

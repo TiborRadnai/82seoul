@@ -36,11 +36,11 @@ export default function ArtistStats({ artistId, agency, members, category, theme
         <Link
           href={backUrl}
           className="group inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-300 hover:scale-105 no-underline"
-          title="Vissza a listához"
+          title="Zurück zur Liste"
         >
           <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" style={{ color: themeColor }} />
           <span className="text-xs font-bold uppercase tracking-wider text-zinc-200">
-            Vissza
+            Zurück
           </span>
         </Link>
       </div>
@@ -50,10 +50,10 @@ export default function ArtistStats({ artistId, agency, members, category, theme
         <button
           onClick={scrollToDiscography}
           className="group inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-300 hover:scale-105 cursor-pointer"
-          title="Ugrás a diszkográfiához"
+          title="Zur Diskographie"
         >
           <span className="text-xs font-bold uppercase tracking-wider text-zinc-200">
-            Diszkográfia
+            Diskographie
           </span>
           <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-1 animate-bounce" style={{ color: themeColor }} />
         </button>
@@ -62,28 +62,28 @@ export default function ArtistStats({ artistId, agency, members, category, theme
       {/* KÖZÉPEN: A statisztikai kártyák (ha solo, csak 2 oszlop, egyébként 3) */}
       <div className={`max-w-4xl mx-auto grid grid-cols-1 ${isSolo ? 'sm:grid-cols-2' : 'sm:grid-cols-3'} gap-6 text-center`}>
         <div className="p-4 rounded-xl bg-white/2 border border-white/5">
-          <span className="block text-xs uppercase tracking-widest text-zinc-500 mb-1 font-semibold">Ügynökség</span>
+          <span className="block text-xs uppercase tracking-widest text-zinc-500 mb-1 font-semibold">Agentur</span>
           <span className="text-base sm:text-lg font-black text-zinc-100">{agency || 'N/A'}</span>
         </div>
         
         {!isSolo && (
           <div className="p-4 rounded-xl bg-white/2 border border-white/5">
-            <span className="block text-xs uppercase tracking-widest text-zinc-500 mb-1 font-semibold">Tagok Száma</span>
+            <span className="block text-xs uppercase tracking-widest text-zinc-500 mb-1 font-semibold">Mitglieder</span>
             <span className="text-base sm:text-lg font-black text-zinc-100">
-              {typeof members === 'number' ? `${members} fő` : members}
+              {typeof members === 'number' ? `${members}` : members}
             </span>
           </div>
         )}
 
         <div className="p-4 rounded-xl bg-white/2 border border-white/5">
-          <span className="block text-xs uppercase tracking-widest text-zinc-500 mb-1 font-semibold">Kategória</span>
+          <span className="block text-xs uppercase tracking-widest text-zinc-500 mb-1 font-semibold">Kategorie</span>
           <span 
             className="text-base sm:text-lg font-black uppercase tracking-wide"
             style={{ color: themeColor }}
           >
-            {category === 'gg' && 'Lánycsapat'}
-            {category === 'bg' && 'Fiúcsapat'}
-            {category === 'solo' && 'Szóló előadó'}
+            {category === 'gg' && 'Girlgroup'}
+            {category === 'bg' && 'Boygroup'}
+            {category === 'solo' && 'Solokünstler'}
           </span>
         </div>
       </div>

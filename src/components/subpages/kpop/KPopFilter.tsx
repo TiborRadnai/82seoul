@@ -32,20 +32,20 @@ interface KPopFilterProps {
 }
 
 const GENDER_OPTIONS: { id: GenderCategory; label: string }[] = [
-  { id: 'top10', label: 'Top 10 kiemelt' },
-  { id: 'all', label: 'Összes előadó' },
-  { id: 'gg', label: 'Lánycsapatok' },
-  { id: 'bg', label: 'Fiúcsapatok' },
-  { id: 'solo', label: 'Szóló előadók' },
+  { id: 'top10', label: 'Top 10 Highlights' },
+  { id: 'all', label: 'Alle Künstler' },
+  { id: 'gg', label: 'Girlgroups' },
+  { id: 'bg', label: 'Boygroups' },
+  { id: 'solo', label: 'Solokünstler' },
 ];
 
 const AGENCIES: { id: AgencyCategory; label: string }[] = [
-  { id: 'all', label: 'Minden kiadó' },
+  { id: 'all', label: 'Alle Agenturen' },
   { id: 'HYBE', label: 'HYBE' },
   { id: 'SM', label: 'SM Entertainment' },
   { id: 'YG', label: 'YG Entertainment' },
   { id: 'JYP', label: 'JYP Entertainment' },
-  { id: 'OTHER', label: 'Egyéb kiadók' },
+  { id: 'OTHER', label: 'Andere Agenturen' },
 ];
 
 export default function KPopFilter({
@@ -68,8 +68,8 @@ export default function KPopFilter({
     .sort() as string[];
 
   const generationOptions = [
-    { id: 'all', label: 'Minden Gen' },
-    ...uniqueGenerations.map(gen => ({ id: gen, label: `${gen}. Generáció` }))
+    { id: 'all', label: 'Alle Generationen' },
+    ...uniqueGenerations.map(gen => ({ id: gen, label: `${gen}. Gen` }))
   ];
 
   useEffect(() => {
@@ -151,7 +151,7 @@ export default function KPopFilter({
               className="px-4 py-2 rounded-full bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 text-zinc-700 text-xs font-medium transition-all flex items-center gap-2 cursor-pointer shrink-0 shadow-sm"
             >
               <span className="w-2 h-2 rounded-full bg-pink-500 animate-pulse" />
-              <span>Gyorsindex ({artists.length})</span>
+              <span>Schnellindex ({artists.length})</span>
             </button>
 
             <div className="relative w-full sm:w-56">
@@ -159,12 +159,12 @@ export default function KPopFilter({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
-                placeholder="Keresés..."
+                placeholder="Suche..."
                 className="w-full bg-zinc-100 text-zinc-800 text-xs font-normal rounded-full pl-9 pr-8 py-2 border border-zinc-200 focus:border-zinc-400 focus:bg-white focus:outline-none transition-all"
               />
             </div>
             <span className="text-[11px] font-medium text-zinc-500 whitespace-nowrap px-3 py-1.5 rounded-full bg-zinc-100 border border-zinc-200/60 shrink-0">
-              {totalCount} találat
+              {totalCount} Treffer
             </span>
           </div>
         </div>
@@ -178,8 +178,8 @@ export default function KPopFilter({
       <div className={`fixed top-0 right-0 h-full w-full max-w-md bg-[#0c0c10] border-l border-white/10 shadow-[-20px_0_50px_rgba(0,0,0,0.8)] z-50 transform transition-transform duration-300 ease-out flex flex-col ${isDrawerOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="p-6 border-b border-white/10 flex items-center justify-between bg-[#121218]/50 backdrop-blur-md">
           <div>
-            <span className="text-[10px] uppercase tracking-[0.4em] text-pink-500 font-extrabold block">Gyorsnavigáció</span>
-            <h3 className="text-xl font-black text-white">Teljes Előadói Lista</h3>
+            <span className="text-[10px] uppercase tracking-[0.4em] text-pink-500 font-extrabold block">Schnellnavigation</span>
+            <h3 className="text-xl font-black text-white">Komplette Künstlerliste</h3>
           </div>
           <button onClick={() => setIsDrawerOpen(false)} className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-all cursor-pointer">✕</button>
         </div>
@@ -187,7 +187,7 @@ export default function KPopFilter({
         <div className="p-4 border-b border-white/5 bg-[#0e0e14]">
           <input
             type="text"
-            placeholder="Keresés név vagy generáció (pl. 4th) alapján..."
+            placeholder="Suche nach Name oder Generation (z.B. 4th)..."
             value={drawerSearch}
             onChange={(e) => setDrawerSearch(e.target.value)}
             className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-pink-500/50 transition-all"
@@ -245,7 +245,7 @@ export default function KPopFilter({
               );
             })
           ) : (
-            <div className="text-center py-10 text-zinc-500 text-sm">Nincs találat.</div>
+            <div className="text-center py-10 text-zinc-500 text-sm">Keine Ergebnisse gefunden.</div>
           )}
         </div>
       </div>

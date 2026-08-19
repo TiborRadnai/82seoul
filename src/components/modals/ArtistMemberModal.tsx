@@ -70,7 +70,7 @@ export default function ArtistMemberModal({ member, isOpen, onClose, themeColor 
               style={{ backgroundColor: themeColor, boxShadow: `0 0 10px ${themeColor}` }} 
             />
             <span className="text-[10px] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.4em] text-zinc-400 font-extrabold">
-              82Seoul // Exkluzív Adatbázis & Magazin
+              82Seoul // K-Pop Archive & Magazin
             </span>
           </div>
           <button
@@ -85,7 +85,7 @@ export default function ArtistMemberModal({ member, isOpen, onClose, themeColor 
               e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
             }}
           >
-            <span>Bezárás</span>
+            <span>Schließen</span>
             <span className="text-sm">✕</span>
           </button>
         </div>
@@ -93,7 +93,7 @@ export default function ArtistMemberModal({ member, isOpen, onClose, themeColor 
         {/* Tartalom grid - items-stretch, hogy a bal oldal pontosan lekövesse a jobb oldal magasságát */}
         <div className="grid grid-cols-1 lg:grid-cols-12 p-6 sm:p-10 gap-8 items-stretch">
           
-          {/* Bal oldal: Kép és Instagram logós sáv (h-full-lal igazodik a tartalomhoz) */}
+          {/* Bal oldal: Kép és Instagram logós sáv */}
           <div 
             className="relative lg:col-span-6 min-h-95 sm:min-h-125 lg:min-h-full rounded-2xl overflow-hidden border shadow-xl group flex flex-col justify-end"
             style={{ borderColor: `${themeColor}30`, boxShadow: `0 0 30px ${themeColor}15` }}
@@ -107,7 +107,7 @@ export default function ArtistMemberModal({ member, isOpen, onClose, themeColor 
                 className="object-cover object-top filter contrast-105 group-hover:scale-105 transition-transform duration-700 ease-out"
               />
             ) : (
-              <div className="w-full h-full bg-zinc-900 flex items-center justify-center text-zinc-600">Nincs kép</div>
+              <div className="w-full h-full bg-zinc-900 flex items-center justify-center text-zinc-600">Kein Bild</div>
             )}
             <div className="absolute inset-0 bg-linear-to-t from-[#0b0b0e] via-transparent to-transparent opacity-70" />
             
@@ -128,7 +128,7 @@ export default function ArtistMemberModal({ member, isOpen, onClose, themeColor 
                   >
                     <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
                   </svg>
-                  <span className="text-xs font-bold text-white tracking-wide">Hivatalos Instagram</span>
+                  <span className="text-xs font-bold text-white tracking-wide">Offizielles Instagram</span>
                 </div>
                 <span className="text-xs font-semibold group-hover/insta:translate-x-0.5 transition-transform" style={{ color: themeColor }}>
                   {member.instagram} ↗
@@ -144,7 +144,7 @@ export default function ArtistMemberModal({ member, isOpen, onClose, themeColor 
               {/* Pozíció & Koreai név */}
               <div className="flex items-center justify-between gap-4 mb-3">
                 <span className="text-xs uppercase tracking-[0.3em] font-extrabold" style={{ color: themeColor }}>
-                  {member.role || 'Tag'}
+                  {member.role || 'Mitglied'}
                 </span>
                 {member.koreanName && (
                   <span className="text-base sm:text-lg font-bold text-zinc-300 tracking-widest bg-white/5 px-3 py-1 rounded-lg border border-white/10">
@@ -163,7 +163,7 @@ export default function ArtistMemberModal({ member, isOpen, onClose, themeColor 
                 </p>
               )}
 
-              {/* Fő leírás - Finom témaszínű belső árnyékkal */}
+              {/* Fő leírás */}
               {member.shortBio && (
                 <div 
                   className="mb-4 p-4 rounded-2xl bg-[#141419]"
@@ -179,19 +179,19 @@ export default function ArtistMemberModal({ member, isOpen, onClose, themeColor 
               <div className="grid grid-cols-3 gap-3 mb-3">
                 {member.birthDate && (
                   <div className="p-3 rounded-2xl bg-[#141419] border border-white/10 hover:border-white/20 transition-colors">
-                    <span className="block text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-1">Születési idő</span>
+                    <span className="block text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-1">Geburtstag</span>
                     <span className="text-xs sm:text-sm font-bold text-white">{member.birthDate}</span>
                   </div>
                 )}
                 {member.zodiac && (
                   <div className="p-3 rounded-2xl bg-[#141419] border border-white/10 hover:border-white/20 transition-colors">
-                    <span className="block text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-1">Csillagjegy</span>
+                    <span className="block text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-1">Sternzeichen</span>
                     <span className="text-xs sm:text-sm font-bold text-white">{member.zodiac}</span>
                   </div>
                 )}
                 {member.height && (
                   <div className="p-3 rounded-2xl bg-[#141419] border border-white/10 hover:border-white/20 transition-colors">
-                    <span className="block text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-1">Magasság</span>
+                    <span className="block text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-1">Größe</span>
                     <span className="text-xs sm:text-sm font-bold text-white">{member.height}</span>
                   </div>
                 )}
@@ -205,13 +205,13 @@ export default function ArtistMemberModal({ member, isOpen, onClose, themeColor 
                       className="p-3.5 rounded-2xl bg-[#141419] flex-1"
                       style={{ border: `1px solid ${themeColor}40`, boxShadow: `0 0 15px ${themeColor}10` }}
                     >
-                      <span className="block text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-1">Márkanagykövet</span>
+                      <span className="block text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-1">Brand Ambassador</span>
                       <span className="text-sm font-bold" style={{ color: themeColor }}>{member.brandAmbassador}</span>
                     </div>
                   )}
                   {member.birthPlace && (
                     <div className="p-3.5 rounded-2xl bg-[#141419] border border-white/10 flex-1">
-                      <span className="block text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-1">Születési hely</span>
+                      <span className="block text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-1">Geburtsort</span>
                       <span className="text-sm font-semibold text-white">{member.birthPlace}</span>
                     </div>
                   )}
@@ -220,7 +220,7 @@ export default function ArtistMemberModal({ member, isOpen, onClose, themeColor 
                 <div className="sm:col-span-5 flex flex-col gap-3">
                   {member.bloodType && (
                     <div className="p-3.5 rounded-2xl bg-[#141419] border border-white/10">
-                      <span className="block text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-1">Vércsoport</span>
+                      <span className="block text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-1">Blutgruppe</span>
                       <span className="text-sm font-bold text-white">{member.bloodType}</span>
                     </div>
                   )}
@@ -247,7 +247,7 @@ export default function ArtistMemberModal({ member, isOpen, onClose, themeColor 
                   }}
                 >
                   <div className="absolute top-2 right-4 text-4xl font-serif select-none opacity-20" style={{ color: themeColor }}>“</div>
-                  <span className="block text-[10px] uppercase tracking-wider font-bold mb-1" style={{ color: themeColor }}>Híres idézet</span>
+                  <span className="block text-[10px] uppercase tracking-wider font-bold mb-1" style={{ color: themeColor }}>Bekanntes Zitat</span>
                   <p className="text-xs sm:text-sm text-white font-medium italic relative z-10">
                     &ldquo;{member.quote}&rdquo;
                   </p>

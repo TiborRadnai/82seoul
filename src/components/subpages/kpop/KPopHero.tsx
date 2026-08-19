@@ -111,13 +111,13 @@ export default function KPopHero() {
                   {slide.subtitle}
                 </p>
 
-                {/* GOMB */}
-                <div className="flex items-center gap-4">
+          {/* GOMB */}
+          <div className="flex items-center gap-4 pt-1">
                   <Link
                     href={`/kpop/${slide.id}`}
-                    className="px-8 py-4 rounded-full bg-white text-zinc-950 font-bold text-xs tracking-widest uppercase hover:bg-zinc-200 transition-all shadow-lg hover:scale-105 active:scale-95"
+                    className="inline-block px-8 py-4 rounded-full bg-white text-zinc-950 font-bold text-xs tracking-widest uppercase hover:bg-zinc-200 transition-all shadow-lg hover:shadow-xl active:scale-95"
                   >
-                    {slide.groupName} Profilja →
+                    Profil von {slide.groupName} →
                   </Link>
                 </div>
               </motion.div>

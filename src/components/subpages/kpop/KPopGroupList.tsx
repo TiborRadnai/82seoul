@@ -21,11 +21,10 @@ export default function KPopGroupList({ initialArtists }: KPopGroupListProps) {
   const selectedGeneration = (searchParams.get('generation') as GenerationCategory) || 'all';
   const searchQuery = searchParams.get('q') || '';
 
-// Segédfüggvény az URL paraméterek frissítésére anélkül, hogy újra töltené az oldalt (router.replace)
+  // Segédfüggvény az URL paraméterek frissítésére anélkül, hogy újra töltené az oldalt (router.replace)
   const updateQueryParam = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
     
-    // Itt a változtatás: Ha van érték és nem üres, akkor állítsuk be, egyébként töröljük
     if (value) {
       params.set(key, value);
     } else {
@@ -139,19 +138,18 @@ export default function KPopGroupList({ initialArtists }: KPopGroupListProps) {
         totalCount={displayedGroups.length}
         artists={artistIndexData}
         onSelectArtist={handleSelectArtist}
-
       />
 
       {displayedGroups.length === 0 ? (
         <div className="text-center py-20 bg-zinc-900/40 rounded-3xl border border-zinc-800 my-12">
           <p className="text-zinc-400 text-lg">
-            Sajnos nincs a keresésnek megfelelő előadó.
+            Leider wurden keine Künstler gefunden, die deiner Suche entsprechen.
           </p>
           <button
             onClick={handleResetFilters}
             className="mt-4 px-6 py-2.5 rounded-full bg-white text-zinc-950 text-xs font-bold uppercase tracking-wider hover:bg-zinc-200 transition-all cursor-pointer"
           >
-            Szűrők alaphelyzetbe
+            Filter zurücksetzen
           </button>
         </div>
       ) : (
