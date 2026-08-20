@@ -1,4 +1,4 @@
-export default {
+export const actor = {
   name: 'actor',
   title: 'Actors & Actresses',
   type: 'document',

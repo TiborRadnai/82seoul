@@ -1,4 +1,4 @@
-export default {
+export const drama = {
   name: 'drama',
   title: 'K-Drama & Movies',
   type: 'document',
