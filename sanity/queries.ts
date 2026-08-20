@@ -1,3 +1,5 @@
+// --- K-POP LEKÉRDEZÉSEK ---
+
 export const getArtistsQuery = `*[_type == "artist"]{
   name,
   id,
@@ -42,7 +44,6 @@ export const getArtistsQuery = `*[_type == "artist"]{
   }
 }`;
 
-// Lekérdez egyetlen előadót az 'id' mezője alapján (beágyazott tagokkal és albumokkal)
 export const getArtistByIdQuery = `*[_type == "artist" && id == $id][0]{
   name,
   id,
@@ -85,4 +86,58 @@ export const getArtistByIdQuery = `*[_type == "artist" && id == $id][0]{
     spotifyUrl,
     tracks
   }
+}`;
+
+
+// --- K-DRAMA & MOVIE LEKÉRDEZÉSEK ---
+
+// Lekéri az összes drámát/filmet a listázó oldalhoz
+export const getDramasQuery = `*[_type == "drama"]{
+  title,
+  id,
+  type,
+  tagline,
+  description,
+  platform,
+  releaseYear,
+  episodes,
+  "image": image.asset->url,
+  "wideImage": wideImage.asset->url,
+  rating,
+  featured,
+  cast[]->{
+    name,
+    id,
+    "image": image.asset->url
+  }
+}`;
+
+// Lekér egyetlen drámát/filmet az ID-ja alapján a részletes oldalhoz
+export const getDramaByIdQuery = `*[_type == "drama" && id == $id][0]{
+  title,
+  id,
+  type,
+  tagline,
+  description,
+  platform,
+  releaseYear,
+  episodes,
+  "image": image.asset->url,
+  "wideImage": wideImage.asset->url,
+  rating,
+  featured,
+  cast[]->{
+    name,
+    id,
+    bio,
+    "image": image.asset->url
+  }
+}`;
+
+// Lekéri az összes színészt (ha külön is listázni szeretnénk őket)
+export const getActorsQuery = `*[_type == "actor"]{
+  name,
+  id,
+  bio,
+  "image": image.asset->url
 }`;
