@@ -153,7 +153,7 @@ export default function KDramaSection() {
 
               <div className="pt-2 flex justify-center lg:justify-start">
                 <a
-                  href="#kdrama"
+                  href="/kdrama"
                   className="inline-flex items-center gap-3 px-7 py-3 bg-linear-to-r from-rose-600 via-rose-700 to-rose-800 hover:from-rose-500 hover:to-rose-700 text-white font-bold text-xs md:text-sm tracking-wider uppercase rounded-lg shadow-lg border border-rose-500/40 transition-all duration-300 hover:scale-[1.02] active:scale-98 group cursor-pointer"
                 >
                   <Play className="w-4 h-4 fill-white text-white group-hover:scale-110 transition-transform" />

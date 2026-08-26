@@ -111,7 +111,7 @@ export default function KPopSection({ groups }: { groups: any[] }) {
 
       <div className="mt-16 text-center z-10 relative">
         <a
-          href="#kpop-hub"
+          href="/kpop"
           className="inline-flex items-center gap-3 px-9 py-4 bg-linear-to-b from-slate-900 via-slate-800 to-black hover:from-black hover:to-slate-900 text-white font-bold text-xs md:text-sm tracking-wider uppercase rounded-full shadow-lg hover:shadow-2xl border border-slate-700/50 transition-all duration-300 hover:scale-105 active:scale-95 group cursor-pointer"
         >
           <span>ÖSSZES K-POP CSAPAT FELFEDEZÉSE</span>
