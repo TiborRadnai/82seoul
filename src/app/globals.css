@@ -37,3 +37,14 @@
 .animate-float-fast {
   animation: float 4s ease-in-out infinite;
 }
+
+/* Megfordítja a Swiper Coverflow 3D tengelyét a tökéletes kifelé dőlő tálca hatásért */
+.swiper-3d .swiper-slide-shadow-left,
+.swiper-3d .swiper-slide-shadow-right {
+  display: none; /* ha nem akarsz árnyékokat */
+}
+
+/* Itt kényszerítjük ki, hogy a kártyák a helyes irányba dőljenek a coverflow-ban */
+.swiper-effect-coverflow .swiper-slide {
+  transform-style: preserve-3d;
+}

@@ -91,10 +91,11 @@ export const getArtistByIdQuery = `*[_type == "artist" && id == $id][0]{
 
 // --- K-DRAMA & MOVIE LEKÉRDEZÉSEK ---
 
-// Lekéri az összes drámát/filmet a listázó oldalhoz
-export const getDramasQuery = `*[_type == "drama"]{
+export const getDramasQuery = `*[_type == "drama"] | order(order asc) {
   title,
+  koreanTitle,
   id,
+  order,
   type,
   tagline,
   description,
@@ -112,9 +113,9 @@ export const getDramasQuery = `*[_type == "drama"]{
   }
 }`;
 
-// Lekér egyetlen drámát/filmet az ID-ja alapján a részletes oldalhoz
 export const getDramaByIdQuery = `*[_type == "drama" && id == $id][0]{
   title,
+  koreanTitle,
   id,
   type,
   tagline,
@@ -130,14 +131,34 @@ export const getDramaByIdQuery = `*[_type == "drama" && id == $id][0]{
     name,
     id,
     bio,
+    birthDate,
+    birthPlace,
+    instagramUrl,
+    education,
+    debutYear,
+    filmography[]{
+      year,
+      title,
+      role
+    },
     "image": image.asset->url
   }
 }`;
 
-// Lekéri az összes színészt (ha külön is listázni szeretnénk őket)
+// Lekéri az összes színészt az új mezőkkel együtt
 export const getActorsQuery = `*[_type == "actor"]{
   name,
   id,
   bio,
+  birthDate,
+  birthPlace,
+  instagramUrl,
+  education,
+  debutYear,
+  filmography[]{
+    year,
+    title,
+    role
+  },
   "image": image.asset->url
 }`;
