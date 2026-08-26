@@ -4,10 +4,20 @@ export const drama = {
   type: 'document',
   fields: [
     {
+      name: 'order',
+      title: 'Sorrend',
+      type: 'number',
+    },
+    {
       name: 'title',
-      title: 'Cím (Angol / Eredeti)',
+      title: 'Cím (Angol)',
       type: 'string',
       validation: (Rule: any) => Rule.required(),
+    },
+    {
+      name: 'koreanTitle',
+      title: 'Koreai cím (pl. 환혼)',
+      type: 'string',
     },
     {
       name: 'id',
@@ -66,7 +76,7 @@ export const drama = {
     },
     {
       name: 'rating',
-      title: 'Értékelés / Pontszám (pl. 4.9)',
+      title: 'Értékelés / Pontszám (pl. 8.8 - IMDb)',
       type: 'string',
     },
     {
