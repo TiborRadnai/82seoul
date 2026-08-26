@@ -66,16 +66,15 @@ export default function DramaInteractiveShowcase({ dramas }: { dramas: any[] }) 
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-neutral-900/15 backdrop-blur-md border border-neutral-900/20 mb-3">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse" />
               <span className="text-[11px] uppercase tracking-widest font-extrabold text-neutral-900">
-                Eightytwo.Seoul • Kuratált Élmény
+                82Seoul • Complete Directory
               </span>
             </div>
             
             <h2 className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tight text-neutral-900">
-              Válogass a{' '}
+              Entdecke deine{' '}
               <span className="font-bold bg-linear-to-r from-amber-600 via-sky-700 to-neutral-900 bg-clip-text text-transparent">
-                kedvencek
-              </span>{' '}
-              között
+                Favoriten
+              </span>
             </h2>
           </div>
         </div>
@@ -86,7 +85,7 @@ export default function DramaInteractiveShowcase({ dramas }: { dramas: any[] }) 
           {/* Bal oldal: Adatok és gomb */}
           <div className="lg:col-span-4 flex flex-col justify-center">
             <div className="flex items-center gap-3 mb-3">
-<PlatformLogo platform={activeDrama.platform || "Sorozat"} />
+              <PlatformLogo platform={activeDrama.platform || "Serie"} />
               <span className="text-sm font-bold text-neutral-700">
                 {activeDrama.releaseYear || "2026"}
               </span>
@@ -109,14 +108,14 @@ export default function DramaInteractiveShowcase({ dramas }: { dramas: any[] }) 
             </div>
 
             <p className="text-base text-neutral-700 font-normal leading-relaxed mb-6 transition-all duration-500">
-              {activeDrama.tagline || "Merülj el a részletekben, és fedezd fel a legizgalmasabb pillanatokat."}
+              {activeDrama.tagline || "Tauche ein in die Details und entdecke die spannendsten Momente."}
             </p>
 
             <Link
               href={`/kdrama/${activeDrama.id}`}
               className="inline-flex items-center justify-center gap-3 px-7 py-3.5 rounded-xl bg-neutral-900 text-white font-bold text-sm tracking-wide hover:bg-neutral-800 transition-all duration-300 shadow-xl shadow-neutral-900/15 w-fit group"
             >
-              <span>Teljes adatlap megtekintése</span>
+              <span>Details ansehen</span>
               <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
               </svg>
@@ -139,7 +138,7 @@ export default function DramaInteractiveShowcase({ dramas }: { dramas: any[] }) 
 
         </div>
 
-        {/* KÁRTYAGALÉRIA (Szélesebb konténerrel a több háttérkártyáért és lassabb animációval) */}
+        {/* KÁRTYAGALÉRIA */}
         <div className="pt-8 border-t border-neutral-400/25">
           <div 
             className="flex items-center justify-center py-10 relative min-h-85 cursor-grab active:cursor-grabbing select-none overflow-hidden"
@@ -151,7 +150,6 @@ export default function DramaInteractiveShowcase({ dramas }: { dramas: any[] }) 
             onTouchMove={handleDragMove}
             onTouchEnd={handleDragEnd}
           >
-            {/* Megnövelt max-w-6xl a szélesebb elrendezéshez és több kártyához */}
             <div className="flex items-center justify-center relative w-full max-w-6xl h-72">
               {dramas.map((drama, index) => {
                 const thumbnailImage = drama.image || drama.wideImage;
@@ -159,7 +157,6 @@ export default function DramaInteractiveShowcase({ dramas }: { dramas: any[] }) 
                 const distance = index - activeIndex; 
                 const absDistance = Math.abs(distance);
 
-                // Megnövelt küszöb (5), hogy több kártya látszódjon hátul egészen a szélekig
                 if (absDistance > 5) return null;
 
                 const translateX = distance * 130; 
