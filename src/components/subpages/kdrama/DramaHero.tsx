@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 interface DramaHeroProps {
   title?: string;
-  koreanTitle?: string; // <--- EZT ADD HOZZÁ
+  koreanTitle?: string;
   tagline?: string;
   wideImage?: string;
   platform?: string;
@@ -18,7 +18,7 @@ interface DramaHeroProps {
 
 export default function DramaHero({
   title,
-  // koreanTitle, // <--- FOGADD DOLOGKÉNT IS
+  koreanTitle,
   tagline,
   wideImage,
   platform,
@@ -29,31 +29,35 @@ export default function DramaHero({
 }: DramaHeroProps) {
   const isDetailPage = Boolean(title);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const list = dramas && dramas.length > 0 ? dramas : [];
+
+  // Csak azok a drámák maradnak bent a listában, amelyeknél a 'featured' értéke igaz
+  const list = dramas && dramas.length > 0 
+    ? dramas.filter((drama) => drama.featured === true) 
+    : [];
 
   // Smooth képváltás időzítője
   useEffect(() => {
     if (isDetailPage || list.length <= 1) return;
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % list.length);
-    }, 7000); // 7 másodperc, hogy nyugodtan lehessen nézni
+    }, 7000);
     return () => clearInterval(interval);
   }, [isDetailPage, list.length]);
 
   const activeDrama = list[currentIndex];
   const bgImage = wideImage || activeDrama?.wideImage || activeDrama?.image;
   
-  const displayTitle = title || "Filmek és Sorozatok";
-  const displayTagline = tagline || "Fedezd fel a legkedveltebb dél-koreai drámákat, filmeket és a képernyők mögötti lenyűgöző világot egy helyen.";
+  const displayTitle = title || "Filme & Serien";
+  const displayTagline = tagline || "Entdecke die beliebtesten südkoreanischen Dramen, Filme und die faszinierende Welt hinter den Kulissen an einem Ort.";
   
   const activeDramaId = activeDrama?.id;
   const activeDramaTitle = activeDrama?.title;
   const activeDramaImage = activeDrama?.image || activeDrama?.wideImage;
 
   return (
-    <div className="relative w-full h-[85vh] min-h-[650px] max-h-[950px] overflow-hidden bg-[#050507] flex flex-col justify-between">
+    <div className="relative w-full h-[85vh] min-h-162.5 max-h-237.5 overflow-hidden bg-[#050507] flex flex-col justify-between">
       
-      {/* Háttérkép - Gyönyörű, drámai cross-fade és lassan lüktető zoom animáció */}
+      {/* Háttérkép - Cross-fade és lüktető zoom animáció */}
       {list.length > 0 && !isDetailPage ? (
         <div className="absolute inset-0 z-0">
           {list.map((drama, idx) => {
@@ -69,18 +73,18 @@ export default function DramaHero({
               >
                 <Image
                   src={imgUrl}
-                  alt={drama.title || "Dráma"}
+                  alt={drama.title || "Drama"}
                   fill
+                  sizes="100vw"
                   priority={idx === 0}
-                  className={`object-cover object-center transform transition-transform duration-[7000ms] ease-out ${
+                  className={`object-cover object-center transform transition-transform duration-7000 ease-out ${
                     isActive ? 'scale-105' : 'scale-100'
                   }`}
                 />
               </div>
             );
           })}
-          {/* Alapértelmezett statikus kép, ha nincs lista */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#050507] via-[#050507]/30 to-black/20 z-20 pointer-events-none" />
+          <div className="absolute inset-0 bg-linear-to-t from-[#050507] via-[#050507]/30 to-black/20 z-20 pointer-events-none" />
         </div>
       ) : (
         bgImage && (
@@ -92,22 +96,22 @@ export default function DramaHero({
               priority
               className="object-cover object-center opacity-75"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#050507] via-[#050507]/30 to-black/20 z-10" />
+            <div className="absolute inset-0 bg-linear-to-t from-[#050507] via-[#050507]/30 to-black/20 z-10" />
           </div>
         )
       )}
 
-      {/* Sötétítő átmenet réteg a listás módhoz (hogy a szöveg mindig olvasható maradjon) */}
+      {/* Sötétítő átmenet réteg */}
       {!isDetailPage && list.length > 0 && (
-        <div className="absolute inset-0 bg-gradient-to-t from-[#050507] via-[#050507]/20 to-black/30 z-20 pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-t from-[#050507] via-[#050507]/20 to-black/30 z-20 pointer-events-none" />
       )}
 
-      {/* Felső rész: Márkajelzés */}
+      {/* Felső rész: Frissített márkatok kapszula */}
       <div className="relative z-30 px-6 md:px-16 pt-12 max-w-7xl w-full mx-auto flex justify-between items-center">
         <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/20 shadow-lg">
           <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
           <span className="text-[11px] uppercase tracking-widest font-semibold text-white">
-            Eightytwo.Seoul • Cinema & Series
+            82Seoul • Movies & Series
           </span>
         </div>
       </div>
@@ -115,8 +119,13 @@ export default function DramaHero({
       {/* Alsó tartalomzóna */}
       <div className="relative z-30 px-6 md:px-16 pb-16 max-w-7xl w-full mx-auto flex flex-col md:flex-row md:items-end justify-between gap-6">
         
-        {/* Bal oldal: Kategória cím és leírás */}
+        {/* Bal oldal: Címek és leírás */}
         <div className="max-w-2xl">
+          {koreanTitle && (
+            <span className="text-amber-400 font-medium text-lg md:text-xl tracking-wider block mb-1 drop-shadow">
+              {koreanTitle}
+            </span>
+          )}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tight drop-shadow-2xl">
             {displayTitle}
           </h1>
@@ -138,7 +147,7 @@ export default function DramaHero({
           )}
         </div>
 
-        {/* Jobb oldal: Kiemelt kártya ("Szerkesztői ajánlat" szöveggel és smooth váltással) */}
+        {/* Jobb oldal: Kiemelt kártya német feliratokkal */}
         {!isDetailPage && activeDrama && activeDramaId && (
           <Link 
             href={`/kdrama/${activeDramaId}`}
@@ -148,7 +157,7 @@ export default function DramaHero({
               <div className="relative w-20 h-24 rounded-xl overflow-hidden shrink-0 border border-white/10 shadow-md">
                 <Image
                   src={activeDramaImage}
-                  alt={activeDramaTitle || "Dráma"}
+                  alt={activeDramaTitle || "Drama"}
                   fill
                   className="object-cover group-hover:scale-110 transition-transform duration-500"
                 />
@@ -158,14 +167,14 @@ export default function DramaHero({
               <div className="flex items-center gap-1.5 mb-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
                 <span className="text-[10px] uppercase tracking-widest text-amber-300 font-bold">
-                  Szerkesztői ajánlat
+                  Empfehlung der Redaktion
                 </span>
               </div>
               <h4 className="text-white font-bold text-base truncate group-hover:text-amber-200 transition-colors">
                 {activeDramaTitle}
               </h4>
               <span className="inline-flex items-center gap-2 text-xs text-neutral-300 mt-2 font-medium group-hover:text-white">
-                <span>Adatlap megtekintése</span>
+                <span>Details ansehen</span>
                 <svg className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
                 </svg>

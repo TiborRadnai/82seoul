@@ -137,6 +137,7 @@ export const getDramaByIdQuery = `*[_type == "drama" && id == $id][0]{
     education,
     debutYear,
     filmography[]{
+      mediaType,
       year,
       title,
       role
@@ -156,6 +157,7 @@ export const getActorsQuery = `*[_type == "actor"]{
   education,
   debutYear,
   filmography[]{
+    mediaType,
     year,
     title,
     role

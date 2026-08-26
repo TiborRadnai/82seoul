@@ -39,18 +39,18 @@ export default function DramaDetailHero({ drama }: DramaDetailHeroProps) {
           href="/kdrama" 
           className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-neutral-900/80 backdrop-blur-md border border-neutral-800 text-xs font-semibold text-neutral-300 hover:text-white hover:bg-neutral-800 transition-all mb-8 shadow-lg"
         >
-          ← Vissza a főoldalra
+          ← Zurück zur Übersicht
         </Link>
 
         {/* Badgek */}
         <div className="flex items-center gap-3 mb-4 flex-wrap">
-          <PlatformLogo platform={drama.platform || "Sorozat"} />
+          <PlatformLogo platform={drama.platform || "Serie"} />
           <span className="text-sm font-bold text-neutral-300">
             {drama.releaseYear}
           </span>
           {drama.episodes && (
             <span className="text-xs font-medium text-neutral-400 bg-neutral-900/80 px-2.5 py-0.5 rounded-md border border-neutral-800">
-              {drama.episodes} rész
+              {drama.episodes} Episoden
             </span>
           )}
           {drama.rating && (

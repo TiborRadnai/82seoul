@@ -41,7 +41,7 @@ export default function DramaDetailContent({ drama }: DramaDetailContentProps) {
               </div>
             ) : (
               <div className="w-full aspect-2/3 rounded-2xl bg-neutral-900 border border-neutral-700 flex items-center justify-center text-neutral-400 text-sm">
-                Nincs poszter
+                Kein Poster
               </div>
             )}
           </div>
@@ -49,12 +49,12 @@ export default function DramaDetailContent({ drama }: DramaDetailContentProps) {
           {/* Jobb oszlop: Történet és Főszereplők */}
           <div className="lg:col-span-8 space-y-12">
             
-            {/* Történet / Leírás – Sötét üvegkártya fehér szöveggel a jó kontrasztért */}
+            {/* Történet / Leírás */}
             {drama.description && (
               <div className="bg-neutral-900/75 backdrop-blur-xl rounded-2xl p-8 border border-neutral-700/60 shadow-2xl text-white">
                 <h2 className="text-2xl font-bold mb-6 text-white tracking-wide border-b border-neutral-800 pb-3 flex items-center space-x-2">
                   <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.8)]" />
-                  <span>Történet</span>
+                  <span>Handlung</span>
                 </h2>
                 <div className="max-h-125 overflow-y-auto pr-3 custom-scrollbar">
                   <p className="text-neutral-300 leading-relaxed font-light text-base md:text-lg whitespace-pre-line">
@@ -64,12 +64,12 @@ export default function DramaDetailContent({ drama }: DramaDetailContentProps) {
               </div>
             )}
 
-            {/* Főszereplők */}
+            {/* Főszereplők (Cast) */}
             {drama.cast && drama.cast.length > 0 && (
               <div className="relative">
                 <h2 className="text-2xl font-bold mb-6 text-white tracking-wide flex items-center space-x-2">
                   <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.8)]" />
-                  <span>Főszereplők</span>
+                  <span>Besetzung</span>
                 </h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                   {drama.cast.map((actor: any) => (
@@ -93,7 +93,7 @@ export default function DramaDetailContent({ drama }: DramaDetailContentProps) {
                         </div>
                       ) : (
                         <div className="w-12 h-12 rounded-full bg-neutral-950 flex items-center justify-center text-xs text-neutral-500 shrink-0 border border-neutral-700">
-                          Nincs
+                          Kein
                         </div>
                       )}
 
@@ -103,7 +103,7 @@ export default function DramaDetailContent({ drama }: DramaDetailContentProps) {
                           {actor.name}
                         </span>
                         <span className="text-xs text-neutral-400 group-hover:text-amber-400 transition-colors block line-clamp-1 font-medium">
-                          Ismerd meg jobban
+                          Mehr erfahren
                         </span>
                       </div>
                     </div>
@@ -141,7 +141,7 @@ export default function DramaDetailContent({ drama }: DramaDetailContentProps) {
         </div>
       </div>
 
-      {/* 3. Színész Részletek Modal */}
+      {/* 3. Itt volt a hiányzó elem: Színész Részletek Modal bekötése */}
       <ActorModal actor={selectedActor} onClose={() => setSelectedActor(null)} />
 
     </div>
