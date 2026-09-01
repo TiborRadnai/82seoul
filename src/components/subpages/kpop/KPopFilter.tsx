@@ -216,7 +216,8 @@ export default function KPopFilter({
                         <Image
                           src={artist.imageUrl}
                           alt={artist.name}
-                          fill
+                          width={36}
+                          height={36}
                           className="object-cover group-hover:scale-110 transition-transform duration-300"
                         />
                       ) : (

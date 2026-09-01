@@ -71,23 +71,21 @@ export default function ActorModal({ actor, onClose }: ActorModalProps) {
         return (
           <div 
             key={index} 
-            className="py-2.5 grid grid-cols-[85px_36px_1fr_1fr] items-center gap-3 text-sm group hover:bg-neutral-800/40 px-2 rounded-xl transition-colors"
+            className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4 text-sm group hover:bg-neutral-800/40 px-3 rounded-xl transition-colors"
           >
-            <div>
-              <span className="inline-block text-center text-xs font-mono font-bold text-neutral-300 bg-neutral-800/80 px-2.5 py-0.5 rounded-lg border border-neutral-700/50">
+            <div className="flex items-center gap-3 shrink-0">
+              <span className="inline-block text-center text-xs font-mono font-bold text-neutral-300 bg-neutral-800/80 px-2.5 py-1 rounded-lg border border-neutral-700/50">
                 {item.year}
               </span>
-            </div>
 
-            <div className="flex justify-center">
               {isMovie ? (
-                <span className="text-cyan-400" title="Film">
+                <span className="text-cyan-400 flex items-center" title="Film">
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
                   </svg>
                 </span>
               ) : (
-                <span className="text-amber-400" title="Serie / Drama">
+                <span className="text-amber-400 flex items-center" title="Serie / Drama">
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
@@ -95,18 +93,20 @@ export default function ActorModal({ actor, onClose }: ActorModalProps) {
               )}
             </div>
 
-            <div className={`font-medium truncate transition-colors ${accentColor}`}>
-              {item.title}
-            </div>
+            <div className="flex-1 flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 min-w-0">
+              <div className={`font-medium text-sm sm:text-base transition-colors ${accentColor} wrap-break-words`}>
+                {item.title}
+              </div>
 
-            <div className="text-left">
-              {item.role ? (
-                <span className="text-xs text-neutral-400 italic truncate block">
-                  {item.role}
-                </span>
-              ) : (
-                <span className="text-xs text-neutral-600">—</span>
-              )}
+              <div className="text-left sm:text-right shrink-0">
+                {item.role ? (
+                  <span className="text-xs text-neutral-400 italic block">
+                    {item.role}
+                  </span>
+                ) : (
+                  <span className="text-xs text-neutral-600">—</span>
+                )}
+              </div>
             </div>
           </div>
         );
@@ -122,10 +122,8 @@ export default function ActorModal({ actor, onClose }: ActorModalProps) {
       
       <div className="absolute inset-0" onClick={onClose} />
 
-      {/* Külső wrapper a tökéletes, kereten kívüli árnyékhoz */}
       <div className="relative z-10 w-full max-w-5xl rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.8),0_0_50px_rgba(251,191,36,0.12)]">
         
-        {/* Belső modális doboz */}
         <div className="relative w-full bg-linear-to-br from-neutral-900 via-neutral-900 to-neutral-950 border border-amber-500/20 rounded-3xl overflow-hidden p-6 md:p-10 text-neutral-100 flex flex-col max-h-[90vh]">
           
           <button 
@@ -176,7 +174,7 @@ export default function ActorModal({ actor, onClose }: ActorModalProps) {
                     alt={actor.name}
                     fill
                     priority
-                    sizes="(max-width: 768px) 100vw, 300px"
+                    sizes="(max-width: 768px) 80vw, 300px"
                     className="object-cover object-center"
                   />
                 </div>
@@ -250,7 +248,7 @@ export default function ActorModal({ actor, onClose }: ActorModalProps) {
                 {activeTab === 'bio' ? (
                   <div className="space-y-3">
                     {actor.bio ? (
-                      <p className="text-neutral-300 font-light text-sm md:text-base leading-relaxed whitespace-pre-line">
+                      <p className="text-neutral-300 font-light text-xs md:text-base leading-relaxed whitespace-pre-line text-justify">
                         {actor.bio}
                       </p>
                     ) : (

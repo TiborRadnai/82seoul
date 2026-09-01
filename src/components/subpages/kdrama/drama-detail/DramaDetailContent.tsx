@@ -35,7 +35,7 @@ export default function DramaDetailContent({ drama }: DramaDetailContentProps) {
                   alt={drama.title}
                   fill
                   priority
-                  sizes="(max-width: 1024px) 100vw, 400px"
+                  sizes="(max-width: 1024px) 90vw, 400px"
                   className="object-cover object-center"
                 />
               </div>
@@ -49,15 +49,15 @@ export default function DramaDetailContent({ drama }: DramaDetailContentProps) {
           {/* Jobb oszlop: Történet és Főszereplők */}
           <div className="lg:col-span-8 space-y-12">
             
-            {/* Történet / Leírás */}
+            {/* Történet / Leírás - Kisebb betűméret mobilon és sorkizárt (text-justify) elrendezés */}
             {drama.description && (
-              <div className="bg-neutral-900/75 backdrop-blur-xl rounded-2xl p-8 border border-neutral-700/60 shadow-2xl text-white">
+              <div className="bg-neutral-900/75 backdrop-blur-xl rounded-2xl p-6 md:p-8 border border-neutral-700/60 shadow-2xl text-white">
                 <h2 className="text-2xl font-bold mb-6 text-white tracking-wide border-b border-neutral-800 pb-3 flex items-center space-x-2">
                   <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.8)]" />
                   <span>Handlung</span>
                 </h2>
                 <div className="max-h-125 overflow-y-auto pr-3 custom-scrollbar">
-                  <p className="text-neutral-300 leading-relaxed font-light text-base md:text-lg whitespace-pre-line">
+                  <p className="text-neutral-300 leading-relaxed font-light text-sm md:text-lg text-justify whitespace-pre-line">
                     {drama.description}
                   </p>
                 </div>
@@ -141,7 +141,7 @@ export default function DramaDetailContent({ drama }: DramaDetailContentProps) {
         </div>
       </div>
 
-      {/* 3. Itt volt a hiányzó elem: Színész Részletek Modal bekötése */}
+      {/* 3. Színész Részletek Modal bekötése */}
       <ActorModal actor={selectedActor} onClose={() => setSelectedActor(null)} />
 
     </div>

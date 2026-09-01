@@ -164,3 +164,41 @@ export const getActorsQuery = `*[_type == "actor"]{
   },
   "image": image.asset->url
 }`;
+
+// --- K-FOOD LEKÉRDEZÉSEK ---
+
+export const getKFoodsQuery = `*[_type == "kfood"] | order(order asc) {
+  title,
+  koreanTitle,
+  "id": id.current,
+  category,
+  subCategory,
+  tagline,
+  description,
+  "image": image.asset->url,
+  order,
+  featured,
+  prepTime,
+  difficulty,
+  ingredients,
+  price,
+  location
+}`;
+
+export const getKFoodByIdQuery = `*[_type == "kfood" && id.current == $id][0]{
+  title,
+  koreanTitle,
+  "id": id.current,
+  category,
+  subCategory,
+  tagline,
+  description,
+  "image": image.asset->url,
+  order,
+  featured,
+  prepTime,
+  difficulty,
+  ingredients,
+  price,
+  location
+}`;
