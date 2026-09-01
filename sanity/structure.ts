@@ -35,7 +35,7 @@ export const structure = (S: StructureBuilder) =>
             .title('K-Food Tartalom')
             .items([
               S.documentTypeListItem('recipe').title('Receptek'),
-              S.documentTypeListItem('product').title('Termékek & Italok'),
+              S.documentTypeListItem('kFoodProduct').title('Termékek & Italok'),
             ])
         ),
     ]);
