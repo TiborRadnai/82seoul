@@ -9,6 +9,7 @@ interface DramaHeroProps {
   koreanTitle?: string;
   tagline?: string;
   wideImage?: string;
+  image?: string;
   platform?: string;
   releaseYear?: number;
   rating?: string;
@@ -21,6 +22,7 @@ export default function DramaHero({
   koreanTitle,
   tagline,
   wideImage,
+  image,
   platform,
   releaseYear,
   rating,
@@ -45,7 +47,10 @@ export default function DramaHero({
   }, [isDetailPage, list.length]);
 
   const activeDrama = list[currentIndex];
-  const bgImage = wideImage || activeDrama?.wideImage || activeDrama?.image;
+  
+  // Képek meghatározása (külön kezelve a wide és a sima mobilos képet)
+  const currentWideImg = wideImage || activeDrama?.wideImage || activeDrama?.image;
+  const currentMobileImg = image || activeDrama?.image || activeDrama?.wideImage;
   
   const displayTitle = title || "Filme & Serien";
   const displayTagline = tagline || "Entdecke die beliebtesten südkoreanischen Dramen, Filme und die faszinierende Welt hinter den Kulissen an einem Ort.";
@@ -57,46 +62,86 @@ export default function DramaHero({
   return (
     <div className="relative w-full h-[85vh] min-h-162.5 max-h-237.5 overflow-hidden bg-[#050507] flex flex-col justify-between">
       
-      {/* Háttérkép - Cross-fade és lüktető zoom animáció */}
+      {/* Háttérképek - Reszponzív váltás (Desktopon wide, mobilon sima image) */}
       {list.length > 0 && !isDetailPage ? (
         <div className="absolute inset-0 z-0">
           {list.map((drama, idx) => {
-            const imgUrl = drama.wideImage || drama.image;
-            if (!imgUrl) return null;
+            const wideUrl = drama.wideImage || drama.image;
+            const mobileUrl = drama.image || drama.wideImage;
+            if (!wideUrl && !mobileUrl) return null;
             const isActive = idx === currentIndex;
+            
             return (
               <div
-                key={imgUrl}
+                key={drama.id || idx}
                 className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
                   isActive ? 'opacity-75 z-10' : 'opacity-0 z-0'
                 }`}
               >
-                <Image
-                  src={imgUrl}
-                  alt={drama.title || "Drama"}
-                  fill
-                  sizes="100vw"
-                  priority={idx === 0}
-                  className={`object-cover object-center transform transition-transform duration-7000 ease-out ${
-                    isActive ? 'scale-105' : 'scale-100'
-                  }`}
-                />
+                {/* Desktop / Tablet kép (Wide) */}
+                {wideUrl && (
+                  <div className="hidden md:block absolute inset-0">
+                    <Image
+                      src={wideUrl}
+                      alt={drama.title || "Drama"}
+                      fill
+                      sizes="100vw"
+                      unoptimized
+                      priority={idx === 0}
+                      className={`object-cover object-center transform transition-transform duration-7000 ease-out ${
+                        isActive ? 'scale-105' : 'scale-100'
+                      }`}
+                    />
+                  </div>
+                )}
+
+                {/* Mobil kép (Álló / Normál) */}
+                {mobileUrl && (
+                  <div className="block md:hidden absolute inset-0">
+                    <Image
+                      src={mobileUrl}
+                      alt={drama.title || "Drama"}
+                      fill
+                      sizes="100vw"
+                      unoptimized
+                      priority={idx === 0}
+                      className={`object-cover object-center transform transition-transform duration-7000 ease-out ${
+                        isActive ? 'scale-105' : 'scale-100'
+                      }`}
+                    />
+                  </div>
+                )}
               </div>
             );
           })}
-          <div className="absolute inset-0 bg-linear-to-t from-[#050507] via-[#050507]/30 to-black/20 z-20 pointer-events-none" />
+          <div className="absolute inset-0 bg-linear-to-t from-[#050507] via-[#050507]/40 to-black/30 z-20 pointer-events-none" />
         </div>
       ) : (
-        bgImage && (
+        (currentWideImg || currentMobileImg) && (
           <div className="absolute inset-0 z-0">
-            <Image
-              src={bgImage}
-              alt={displayTitle}
-              fill
-              priority
-              className="object-cover object-center opacity-75"
-            />
-            <div className="absolute inset-0 bg-linear-to-t from-[#050507] via-[#050507]/30 to-black/20 z-10" />
+            <div className="hidden md:block absolute inset-0">
+              <Image
+                src={currentWideImg}
+                alt={displayTitle}
+                fill
+                sizes="100vw"
+                unoptimized
+                priority
+                className="object-cover object-center opacity-75"
+              />
+            </div>
+            <div className="block md:hidden absolute inset-0">
+              <Image
+                src={currentMobileImg || currentWideImg}
+                alt={displayTitle}
+                fill
+                sizes="100vw"
+                unoptimized
+                priority
+                className="object-cover object-center opacity-75"
+              />
+            </div>
+            <div className="absolute inset-0 bg-linear-to-t from-[#050507] via-[#050507]/40 to-black/30 z-10" />
           </div>
         )
       )}
@@ -106,7 +151,7 @@ export default function DramaHero({
         <div className="absolute inset-0 bg-linear-to-t from-[#050507] via-[#050507]/20 to-black/30 z-20 pointer-events-none" />
       )}
 
-      {/* Felső rész: Frissített márkatok kapszula */}
+      {/* Felső rész: Márkatok kapszula */}
       <div className="relative z-30 px-6 md:px-16 pt-12 max-w-7xl w-full mx-auto flex justify-between items-center">
         <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/20 shadow-lg">
           <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
@@ -159,6 +204,7 @@ export default function DramaHero({
                   src={activeDramaImage}
                   alt={activeDramaTitle || "Drama"}
                   fill
+                  sizes="(max-width: 768px) 80px, 96px"
                   className="object-cover group-hover:scale-110 transition-transform duration-500"
                 />
               </div>

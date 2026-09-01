@@ -58,6 +58,7 @@ export default function ArtistMembers({ membersList, onMemberClick, themeColor =
               fill
               priority
               sizes="(max-width: 1024px) 100vw, 750px"
+              unoptimized
               className="object-cover object-top sm:object-center group-hover:scale-105 transition-transform duration-700 ease-out"
             />
           )}
@@ -151,7 +152,7 @@ export default function ArtistMembers({ membersList, onMemberClick, themeColor =
             >
               {member.image && (
                 <div className={`relative w-6 h-6 sm:w-7 sm:h-7 rounded-full overflow-hidden border ${isActive ? 'border-white' : 'border-white/20'}`}>
-                  <Image src={member.image} alt={member.name} fill className="object-cover" />
+                  <Image src={member.image} alt={member.name} fill unoptimized className="object-cover" />
                 </div>
               )}
               <span>{member.name}</span>

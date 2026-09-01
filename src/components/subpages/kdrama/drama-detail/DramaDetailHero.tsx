@@ -9,27 +9,48 @@ interface DramaDetailHeroProps {
 }
 
 export default function DramaDetailHero({ drama }: DramaDetailHeroProps) {
-  const bgImage = drama.wideImage || drama.image;
+  const wideImg = drama.wideImage || drama.image;
+  const mobileImg = drama.image || drama.wideImage;
 
   return (
     <div className="relative w-full h-[85vh] min-h-150 flex items-end overflow-hidden bg-neutral-950">
       
-      {/* Háttérkép teljes méretben */}
-      {bgImage && (
-        <div className="absolute inset-0">
-          <Image
-            src={bgImage}
-            alt={drama.title}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-top opacity-55 scale-100"
-          />
-          {/* Sötétítő gradiensek, hogy a szöveg olvasható maradjon */}
-          <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0c] via-[#0a0a0c]/40 to-black/30" />
-          <div className="absolute inset-0 bg-linear-to-r from-[#0a0a0c]/90 via-transparent to-transparent" />
-        </div>
-      )}
+      {/* Háttérképek - Reszponzív váltás (Desktopon wide, mobilon álló kép) */}
+      <div className="absolute inset-0">
+        {wideImg && (
+          <div className="hidden md:block absolute inset-0">
+            <Image
+              src={wideImg}
+              alt={drama.title}
+              fill
+              priority
+              loading="eager"
+              sizes="100vw"
+              unoptimized
+              className="object-cover object-top opacity-55 scale-100"
+            />
+          </div>
+        )}
+
+        {mobileImg && (
+          <div className="block md:hidden absolute inset-0">
+            <Image
+              src={mobileImg}
+              alt={drama.title}
+              fill
+              priority
+              loading="eager"
+              sizes="100vw"
+              unoptimized
+              className="object-cover object-center opacity-60 scale-100"
+            />
+          </div>
+        )}
+
+        {/* Sötétítő gradiensek, hogy a szöveg olvasható maradjon */}
+        <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0c] via-[#0a0a0c]/50 to-black/30" />
+        <div className="absolute inset-0 bg-linear-to-r from-[#0a0a0c]/90 via-transparent to-transparent" />
+      </div>
 
       {/* Tartalom a Hero alján */}
       <div className="relative z-10 w-full max-w-375 mx-auto px-6 md:px-12 lg:px-16 pb-16">
@@ -61,16 +82,16 @@ export default function DramaDetailHero({ drama }: DramaDetailHeroProps) {
         </div>
 
         {/* Címek */}
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-white mb-3 drop-shadow-2xl">
+        <h1 className="text-4xl md:text-7xl lg:text-8xl font-black tracking-tight text-white mb-3 drop-shadow-2xl">
           {drama.title}
         </h1>
         {drama.koreanTitle && (
-          <p className="text-2xl md:text-3xl font-light text-neutral-300 tracking-wider mb-4">
+          <p className="text-xl md:text-3xl font-light text-neutral-300 tracking-wider mb-4">
             {drama.koreanTitle}
           </p>
         )}
         {drama.tagline && (
-          <p className="text-neutral-300 text-lg md:text-xl font-light max-w-3xl line-clamp-2">
+          <p className="text-neutral-300 text-base md:text-xl font-light max-w-3xl line-clamp-2">
             {drama.tagline}
           </p>
         )}

@@ -26,4 +26,15 @@ export const structure = (S: StructureBuilder) =>
               S.documentTypeListItem('actor').title('Színészek'),
             ])
         ),
+
+      // K-FOOD Mappa (ÚJ)
+      S.listItem()
+        .title('K-Food & Gasztro')
+        .child(
+          S.list()
+            .title('K-Food Tartalom')
+            .items([
+              S.documentTypeListItem('kfood').title('Receptek & Termékek'),
+            ])
+        ),
     ]);

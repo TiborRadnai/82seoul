@@ -57,7 +57,7 @@ export default function ArtistHero({ artist }: ArtistHeroProps) {
   return (
     <section className="relative w-full min-h-[75vh] sm:min-h-[90vh] flex flex-col items-center justify-center text-center overflow-hidden border-b border-white/10 rounded-none sm:rounded-b-[40px]">
       
-      {/* Háttérképek - JAVÍTVA: Optimalizált sizes beállítás a felbontásvesztés elkerülésére */}
+      {/* Háttérképek - unoptimized beillesztve a konzolpanasz elkerülésére */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
         <Image 
           src={artist.image} 
@@ -65,6 +65,7 @@ export default function ArtistHero({ artist }: ArtistHeroProps) {
           fill 
           priority 
           sizes="100vw" 
+          unoptimized
           className="object-cover object-center brightness-75 sm:hidden" 
         />
         <Image 
@@ -72,9 +73,8 @@ export default function ArtistHero({ artist }: ArtistHeroProps) {
           alt={artist.name} 
           fill 
           priority 
-          // JAVÍTÁS: Nemcsak 100vw, hanem device-pixel arányhoz igazított sávok, 
-          // hogy a nagy monitorokon se kicsi/pixeles képet kérjen le a böngésző.
           sizes="(max-width: 768px) 100vw, (max-width: 1536px) 100vw, 1920px" 
+          unoptimized
           className="hidden sm:block object-cover object-[center_20%] brightness-80" 
         />
       </div>
