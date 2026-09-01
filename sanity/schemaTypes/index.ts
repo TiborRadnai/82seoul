@@ -1,6 +1,7 @@
 import { artist } from './artist';
 import { drama } from './drama';
 import { actor } from './actor';
-import kfood from './kfood'; // <-- Új import
+import recipe from './recipe';
+import kFoodProduct from './kFoodProduct';
 
-export const schemaTypes = [artist, drama, actor, kfood];
+export const schemaTypes = [artist, drama, actor, recipe, kFoodProduct];

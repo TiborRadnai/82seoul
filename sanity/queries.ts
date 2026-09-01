@@ -167,11 +167,10 @@ export const getActorsQuery = `*[_type == "actor"]{
 
 // --- K-FOOD LEKÉRDEZÉSEK ---
 
-export const getKFoodsQuery = `*[_type == "kfood"] | order(order asc) {
+export const getRecipesQuery = `*[_type == "recipe"] | order(order asc) {
   title,
   koreanTitle,
   "id": id.current,
-  category,
   subCategory,
   tagline,
   description,
@@ -180,25 +179,44 @@ export const getKFoodsQuery = `*[_type == "kfood"] | order(order asc) {
   featured,
   prepTime,
   difficulty,
-  ingredients,
+  ingredients
+}`;
+
+export const getRecipeByIdQuery = `*[_type == "recipe" && id.current == $id][0]{
+  title,
+  koreanTitle,
+  "id": id.current,
+  subCategory,
+  tagline,
+  description,
+  "image": image.asset->url,
+  prepTime,
+  difficulty,
+  ingredients
+}`;
+
+export const getProductsQuery = `*[_type == "kFoodProduct"] | order(order asc) {
+  title,
+  koreanTitle,
+  "id": id.current,
+  subCategory,
+  tagline,
+  description,
+  "image": image.asset->url,
+  order,
+  featured,
   price,
   location
 }`;
 
-export const getKFoodByIdQuery = `*[_type == "kfood" && id.current == $id][0]{
+export const getProductByIdQuery = `*[_type == "kFoodProduct" && id.current == $id][0]{
   title,
   koreanTitle,
   "id": id.current,
-  category,
   subCategory,
   tagline,
   description,
   "image": image.asset->url,
-  order,
-  featured,
-  prepTime,
-  difficulty,
-  ingredients,
   price,
   location
 }`;

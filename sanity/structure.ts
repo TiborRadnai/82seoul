@@ -27,14 +27,15 @@ export const structure = (S: StructureBuilder) =>
             ])
         ),
 
-      // K-FOOD Mappa (ÚJ)
+      // K-FOOD Mappa (Szétválasztva receptekre és termékekre)
       S.listItem()
         .title('K-Food & Gasztro')
         .child(
           S.list()
             .title('K-Food Tartalom')
             .items([
-              S.documentTypeListItem('kfood').title('Receptek & Termékek'),
+              S.documentTypeListItem('recipe').title('Receptek'),
+              S.documentTypeListItem('product').title('Termékek & Italok'),
             ])
         ),
     ]);

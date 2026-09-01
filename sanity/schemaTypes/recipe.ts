@@ -1,11 +1,11 @@
 export default {
-  name: 'kfood',
-  title: 'K-Food & Termékek',
+  name: 'recipe',
+  title: 'Receptek',
   type: 'document',
   fields: [
     {
       name: 'title',
-      title: 'Megnevezés',
+      title: 'Recept Neve',
       type: 'string',
       validation: (Rule: any) => Rule.required(),
     },
@@ -22,21 +22,8 @@ export default {
       validation: (Rule: any) => Rule.required(),
     },
     {
-      name: 'category',
-      title: 'Típus',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Recept', value: 'recipe' },
-          { title: 'Bolti Termék / Ital', value: 'product' },
-        ],
-        layout: 'radio',
-      },
-      validation: (Rule: any) => Rule.required(),
-    },
-    {
       name: 'subCategory',
-      title: 'Kategória / Címke (pl. Street Food, Italkultúra)',
+      title: 'Kategória (pl. Főételek, Levesek, Street Food)',
       type: 'string',
     },
     {
@@ -69,13 +56,10 @@ export default {
       type: 'boolean',
       description: 'Ha bekapcsolod, ez jelenik meg a főoldali K-Food szekcióban.',
     },
-
-    // --- CSAK RECEPTEKHEZ ---
     {
       name: 'prepTime',
       title: 'Elkészítési idő',
       type: 'string',
-      hidden: ({ document }: { document: any }) => document?.category !== 'recipe',
     },
     {
       name: 'difficulty',
@@ -88,28 +72,12 @@ export default {
           { title: 'Nehéz', value: 'Nehéz' },
         ],
       },
-      hidden: ({ document }: { document: any }) => document?.category !== 'recipe',
     },
     {
       name: 'ingredients',
       title: 'Hozzávalók',
       type: 'array',
       of: [{ type: 'string' }],
-      hidden: ({ document }: { document: any }) => document?.category !== 'recipe',
-    },
-
-    // --- CSAK BOLTI TERMÉKESHEZ / ITALOKHOZ ---
-    {
-      name: 'price',
-      title: 'Ár (opcionális)',
-      type: 'string',
-      hidden: ({ document }: { document: any }) => document?.category !== 'product',
-    },
-    {
-      name: 'location',
-      title: 'Hol kapható',
-      type: 'string',
-      hidden: ({ document }: { document: any }) => document?.category !== 'product',
     },
   ],
 };
