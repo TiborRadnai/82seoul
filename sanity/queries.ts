@@ -170,7 +170,7 @@ export const getActorsQuery = `*[_type == "actor"]{
 export const getRecipesQuery = `*[_type == "recipe"] | order(order asc) {
   title,
   koreanTitle,
-  "id": id.current,
+  "id": coalesce(id.current, id),
   subCategory,
   tagline,
   description,
@@ -179,26 +179,29 @@ export const getRecipesQuery = `*[_type == "recipe"] | order(order asc) {
   featured,
   prepTime,
   difficulty,
-  ingredients
+  ingredients,
+  spiceLevel
 }`;
 
-export const getRecipeByIdQuery = `*[_type == "recipe" && id.current == $id][0]{
+export const getRecipeByIdQuery = `*[_type == "recipe" && (id.current == $id || id == $id)][0]{
   title,
   koreanTitle,
-  "id": id.current,
+  "id": coalesce(id.current, id),
   subCategory,
   tagline,
   description,
   "image": image.asset->url,
   prepTime,
   difficulty,
-  ingredients
+  ingredients,
+  instructions,
+  spiceLevel
 }`;
 
 export const getProductsQuery = `*[_type == "kFoodProduct"] | order(order asc) {
   title,
   koreanTitle,
-  "id": id.current,
+  "id": coalesce(id.current, id),
   subCategory,
   tagline,
   description,
@@ -206,17 +209,19 @@ export const getProductsQuery = `*[_type == "kFoodProduct"] | order(order asc) {
   order,
   featured,
   price,
-  location
+  location,
+  spiceLevel
 }`;
 
-export const getProductByIdQuery = `*[_type == "kFoodProduct" && id.current == $id][0]{
+export const getProductByIdQuery = `*[_type == "kFoodProduct" && (id.current == $id || id == $id)][0]{
   title,
   koreanTitle,
-  "id": id.current,
+  "id": coalesce(id.current, id),
   subCategory,
   tagline,
   description,
   "image": image.asset->url,
   price,
-  location
+  location,
+  spiceLevel
 }`;
