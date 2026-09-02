@@ -81,5 +81,19 @@ export default {
       type: 'number',
       hidden: true,
     },
+    {
+      name: 'spiceLevel',
+      title: 'Csípősségi szint',
+      type: 'string',
+      options: {
+        list: [
+          { title: '🌶️ Enyhén csípős', value: '1' },
+          { title: '🌶️🌶️ Közepesen csípős', value: '2' },
+          { title: '🌶️🌶️🌶️ Extrém erős', value: '3' },
+        ],
+        layout: 'dropdown', // vagy 'radio'
+      },
+      // Mivel nem kötelező, ezt nem teszjük bele a validation-be
+    }
   ],
 };
