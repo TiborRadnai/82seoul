@@ -1,4 +1,7 @@
 @import "tailwindcss";
+html {
+  scroll-behavior: smooth;
+}
 
 /* Kártyák lágy, áttetsző üveghatása (glassmorphism) */
 .glass-card {

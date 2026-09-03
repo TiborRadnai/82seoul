@@ -27,7 +27,7 @@ export const structure = (S: StructureBuilder) =>
             ])
         ),
 
-      // K-FOOD Mappa (Szétválasztva receptekre és termékekre)
+      // K-FOOD Mappa
       S.listItem()
         .title('K-Food & Gasztro')
         .child(
@@ -36,6 +36,74 @@ export const structure = (S: StructureBuilder) =>
             .items([
               S.documentTypeListItem('recipe').title('Receptek'),
               S.documentTypeListItem('kFoodProduct').title('Termékek & Italok'),
+            ])
+        ),
+
+      // WEBSHOP Mappa (Kategóriákra bontva)
+      S.listItem()
+        .title('Webshop (K-Beauty)')
+        .child(
+          S.list()
+            .title('Webshop Menü')
+            .items([
+              S.listItem()
+                .title('Összes Termék')
+                .child(S.documentTypeList('shopProduct').title('Összes Termék')),
+              
+              S.divider(),
+
+              // Kategória szerinti szűrt listák a jobb átláthatóságért
+              S.listItem()
+                .title('Arckrémek & Hidratálók')
+                .child(
+                  S.documentList()
+                    .title('Arckrémek')
+                    .schemaType('shopProduct')
+                    .filter('_type == "shopProduct" && category == "Arckrém & Hidratáló"')
+                ),
+              S.listItem()
+                .title('Szérumok & Esszenciák')
+                .child(
+                  S.documentList()
+                    .title('Szérumok')
+                    .schemaType('shopProduct')
+                    .filter('_type == "shopProduct" && category == "Szérum & Esszencia"')
+                ),
+              S.listItem()
+                .title('Arctisztítók')
+                .child(
+                  S.documentList()
+                    .title('Arctisztítók')
+                    .schemaType('shopProduct')
+                    .filter('_type == "shopProduct" && category == "Arctisztító"')
+                ),
+              S.listItem()
+                .title('Arcmaszkok & Peelingek')
+                .child(
+                  S.documentList()
+                    .title('Arcmaszkok')
+                    .schemaType('shopProduct')
+                    .filter('_type == "shopProduct" && category == "Arcmaszk & Peeling"')
+                ),
+              S.listItem()
+                .title('Smink & Egyéb')
+                .child(
+                  S.documentList()
+                    .title('Smink & Egyéb')
+                    .schemaType('shopProduct')
+                    .filter('_type == "shopProduct" && category == "Smink & Egyéb"')
+                ),
+            ])
+        ),
+
+      // ÜGYFElek ÉS MARKETING Mappa (Teljesen új szárny)
+      S.listItem()
+        .title('Ügyfelek & Marketing')
+        .child(
+          S.list()
+            .title('Marketing és Adatok')
+            .items([
+              S.documentTypeListItem('newsletterSubscriber').title('Hírlevél Feliratkozók'),
             ])
         ),
     ]);

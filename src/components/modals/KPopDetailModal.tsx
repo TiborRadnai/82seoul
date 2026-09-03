@@ -55,7 +55,7 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
         
         <button
           onClick={onClose}
-          aria-label="Modal bezárása"
+          aria-label="Modal schließen"
           className="absolute top-4 right-4 z-40 w-10 h-10 rounded-full bg-black/60 hover:bg-white hover:text-black backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all duration-300 shadow-lg cursor-pointer group"
         >
           <X className="w-5 h-5 transition-transform duration-300 group-hover:rotate-90" />
@@ -90,7 +90,7 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
             ) : (
               <>
                 <Users className="w-3.5 h-3.5 text-pink-400" />
-                <span>K-POP GROUP</span>
+                <span>K-POP GRUPPE</span>
               </>
             )}
           </div>
@@ -138,7 +138,7 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1">
               <div className="p-3 rounded-2xl bg-white/5 border border-white/10">
                 <div className="text-[10px] font-bold tracking-wider uppercase text-neutral-400">
-                  {isSolo ? "Státusz" : "Létszám"}
+                  {isSolo ? "Status" : "Mitglieder"}
                 </div>
                 <div className="text-xs font-semibold text-white mt-0.5">
                   {isSolo ? "Solo Artist" : (group.members || "N/A")}
@@ -147,7 +147,7 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
 
               <div className="p-3 rounded-2xl bg-white/5 border border-white/10">
                 <div className="text-[10px] font-bold tracking-wider uppercase text-neutral-400">
-                  Ügynökség
+                  Agentur
                 </div>
                 <div className="text-xs font-semibold text-white mt-0.5 line-clamp-1">
                   {group.filterAgency || group.agency || "N/A"}
@@ -160,7 +160,7 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
                   <span>Fandom</span>
                 </div>
                 <div className="text-xs font-bold text-pink-200 mt-0.5 line-clamp-1">
-                  {group.fandom || "Nincs megadva"}
+                  {group.fandom || "Keine Angabe"}
                 </div>
               </div>
             </div>
@@ -168,7 +168,7 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
             {!isSolo && Array.isArray(group.membersList) && group.membersList.length > 0 && (
               <div className="space-y-2 pt-2">
                 <div className="text-[11px] font-bold tracking-widest uppercase text-neutral-400">
-                  Tagok ({group.members || group.membersList.length})
+                  Mitglieder ({group.members || group.membersList.length})
                 </div>
                 
                 <div className="grid grid-cols-2 gap-2">
@@ -209,13 +209,13 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
               className="flex-1 py-3.5 px-6 rounded-full bg-white hover:bg-neutral-200 text-black font-bold text-xs tracking-wider uppercase transition-all duration-300 flex items-center justify-center gap-2 shadow-lg cursor-pointer"
             >
               <Sparkles className="w-4 h-4 text-black" />
-              <span>Teljes Profil</span>
+              <span>Komplettes Profil</span>
             </a>
 
             <button 
               onClick={handleShare}
-              aria-label="Megosztás"
-              title="Hivatkozás másolása"
+              aria-label="Teilen"
+              title="Link kopieren"
               className="p-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/15 transition-all duration-300 cursor-pointer relative"
             >
               {copied ? <Check className="w-4 h-4 text-green-400" /> : <ExternalLink className="w-4 h-4" />}

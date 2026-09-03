@@ -225,3 +225,38 @@ export const getProductByIdQuery = `*[_type == "kFoodProduct" && (id.current == 
   location,
   spiceLevel
 }`;
+
+// --- K-BEAUTY / WEBSHOP LEKÉRDEZÉSEK ---
+
+export const getShopProductsQuery = `*[_type == "shopProduct"]{
+  _id,
+  title,
+  koreanTitle,
+  "slug": id.current,
+  category,
+  badge,
+  "image": image.asset->url,
+  tagline,
+  rating,
+  variants,
+  featured
+}`;
+
+export const getShopProductBySlugQuery = `*[_type == "shopProduct" && id.current == $slug][0]{
+  _id,
+  title,
+  koreanTitle,
+  "slug": id.current,
+  category,
+  badge,
+  "image": image.asset->url,
+  "gallery": gallery[].asset->url,
+  tagline,
+  description,
+  ingredients,
+  howToUse,
+  variants,
+  stock,
+  rating,
+  featured
+}`;
