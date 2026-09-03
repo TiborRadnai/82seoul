@@ -53,14 +53,14 @@ export default function KPopSection({ groups }: { groups: any[] }) {
         </div>
 
         <h2 className="text-3xl sm:text-5xl md:text-6xl font-light tracking-tight text-white leading-[1.15] drop-shadow-md">
-          A K-Pop{" "}
+          Die globale K-Pop{" "}
           <span className="font-semibold text-transparent bg-clip-text bg-linear-to-r from-white via-slate-200 to-slate-400">
-            Globális Forradalma.
+            Revolution.
           </span>
         </h2>
 
         <p className="text-slate-300 text-base md:text-lg font-normal leading-relaxed max-w-2xl mx-auto drop-shadow-sm">
-          Ismerd meg a csapatokat, akik átírták a zeneipar szabályait és meghódították a világ legnagyobb színpadait. A legfrissebb hírek és a legnagyobb fandomok történetei – közvetlenül Szöulból.
+          Lerne die Gruppen kennen, die die Regeln der Musikindustrie neu geschrieben und die größten Bühnen der Welt erobert haben. Die neuesten News und die Geschichten der größten Fandoms – direkt aus Seoul.
         </p>
       </div>
 
@@ -114,7 +114,7 @@ export default function KPopSection({ groups }: { groups: any[] }) {
           href="/kpop"
           className="inline-flex items-center gap-3 px-9 py-4 bg-linear-to-b from-slate-900 via-slate-800 to-black hover:from-black hover:to-slate-900 text-white font-bold text-xs md:text-sm tracking-wider uppercase rounded-full shadow-lg hover:shadow-2xl border border-slate-700/50 transition-all duration-300 hover:scale-105 active:scale-95 group cursor-pointer"
         >
-          <span>ÖSSZES K-POP CSAPAT FELFEDEZÉSE</span>
+          <span>ALLE K-POP GRUPPEN ENTDECKEN</span>
           <span className="text-base text-slate-400 group-hover:text-white transition-all duration-300 group-hover:translate-x-1">➔</span>
         </a>
       </div>

@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/core/Navbar";
 import BackToTop from "@/components/core/BackToTop";
+import { CartProvider } from "../../context/CartContext";
+import CartDrawer from "@/components/CartDrawer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,14 +32,19 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-slate-950 text-slate-100">
-        {/* Globális Navbar minden aloldal tetején */}
-        <Navbar />
+        <CartProvider>
+          {/* Globális Kosár Fiók */}
+          <CartDrawer />
 
-        {/* Itt futnak be az egyes oldalak (pl. page.tsx) */}
-        <main className="grow">{children}</main>
+          {/* Globális Navbar minden aloldal tetején */}
+          <Navbar />
 
-        {/* Globális Back to Top gomb */}
-        <BackToTop />
+          {/* Itt futnak be az egyes oldalak (pl. page.tsx) */}
+          <main className="grow">{children}</main>
+
+          {/* Globális Back to Top gomb */}
+          <BackToTop />
+        </CartProvider>
       </body>
     </html>
   );

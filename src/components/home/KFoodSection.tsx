@@ -67,18 +67,18 @@ export default function KFoodSection({ items = [] }: KFoodSectionProps) {
       <div className="max-w-3xl mx-auto px-6 text-center z-10 relative mb-14 md:mb-20 space-y-5">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-neutral-900/90 border border-neutral-700/60 text-amber-400 text-xs font-bold tracking-widest uppercase shadow-md">
           <Utensils className="w-3.5 h-3.5 stroke-[1.75] text-amber-500" />
-          <span>K-FOOD & GASZTRONÓMIA</span>
+          <span>K-FOOD & GASTRONOMIE</span>
         </div>
 
         <h2 className="text-3xl sm:text-5xl md:text-6xl font-light tracking-tight text-white leading-[1.15]">
-          A Koreai Konyha{" "}
+          Die Kunst der{" "}
           <span className="font-semibold text-transparent bg-clip-text bg-linear-to-r from-amber-400 via-orange-300 to-amber-200">
-            Művészete.
+            koreanischen Küche.
           </span>
         </h2>
 
         <p className="text-neutral-300 text-base md:text-lg font-normal leading-relaxed max-w-2xl mx-auto">
-          A gőzölgő utcai ételektől a tradicionális fermentált fogásokig. Ízek, amelyek mögött évszázados történetek és kultúra rejlik.
+          Von dampfenden Street-Food-Klassikern bis hin zu traditionell fermentierten Gerichten. Aromen, hinter denen jahrhundertelange Geschichte und Kultur stehen.
         </p>
       </div>
 
@@ -86,7 +86,7 @@ export default function KFoodSection({ items = [] }: KFoodSectionProps) {
       <div className="max-w-7xl mx-auto px-6 z-10 relative">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           
-          {/* 1. KIEMELT FŐKÁRTYA (LARGE HERO BENTO) -> Közvetlenül a receptre visz */}
+          {/* 1. KIEMELT FŐKÁRTYA (LARGE HERO BENTO) */}
           <Link
             href={`/kfood/${getItemId(featuredItem)}`}
             className="lg:col-span-7 group relative h-120 md:h-135 rounded-3xl overflow-hidden bg-black border border-neutral-800 shadow-2xl transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[0_25px_50px_-12px_rgba(234,88,12,0.25)] hover:border-amber-500/50 block cursor-pointer"
@@ -134,7 +134,7 @@ export default function KFoodSection({ items = [] }: KFoodSectionProps) {
           {/* 2. JOBB OLDALI HASÁB */}
           <div className="lg:col-span-5 flex flex-col gap-6">
             
-            {/* Közepes Kártya -> Közvetlenül a receptre visz */}
+            {/* Közepes Kártya */}
             {mediumItem && (
               <Link
                 href={`/kfood/${getItemId(mediumItem)}`}
@@ -167,7 +167,7 @@ export default function KFoodSection({ items = [] }: KFoodSectionProps) {
               </Link>
             )}
 
-            {/* Alsó Dupla Kiskártya Sor -> Közvetlenül a receptre visznek */}
+            {/* Alsó Dupla Kiskártya Sor */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {smallItems.map((item, index) => (
                 <Link
@@ -208,13 +208,13 @@ export default function KFoodSection({ items = [] }: KFoodSectionProps) {
         </div>
       </div>
 
-      {/* CTA GOMB -> Ez visz a katalógus oldalra (/kfood) */}
+      {/* CTA GOMB */}
       <div className="mt-16 text-center z-10 relative">
         <Link
           href="/kfood"
           className="inline-flex items-center gap-3 px-9 py-4 bg-linear-to-r from-orange-600 via-amber-600 to-orange-700 hover:from-orange-500 hover:to-amber-500 text-white font-bold text-xs md:text-sm tracking-wider uppercase rounded-full shadow-[0_10px_30px_rgba(234,88,12,0.3)] hover:shadow-[0_15px_35px_rgba(234,88,12,0.45)] border border-orange-400/40 transition-all duration-300 hover:scale-105 active:scale-95 group cursor-pointer"
         >
-          <span>RECEPTEK ÉS K-FOOD KISOKOS FELFEDEZÉSE</span>
+          <span>REZEPTE & K-FOOD RATGEBER ENTDECKEN</span>
           <span className="text-base text-orange-200 group-hover:text-white transition-all duration-300 group-hover:translate-x-1">➔</span>
         </Link>
       </div>
