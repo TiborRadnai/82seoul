@@ -245,7 +245,7 @@ const handleAddToCart = () => {
                             : 'bg-white/80 text-slate-700 border-stone-300 hover:border-slate-900'
                         }`}
                       >
-                        {variant.size} — €{vPrice}
+                        {variant.size} — {vPrice}
                       </button>
                     );
                   })}

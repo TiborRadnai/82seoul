@@ -1,12 +1,15 @@
+// components/core/Navbar.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ShoppingBag } from 'lucide-react';
-import { useCart } from '../../../context/CartContext'; // <--- 1. Importáljuk a kosár contextet
+import { ShoppingBag, User as UserIcon } from 'lucide-react'; // <--- Új ikon importálva
+import { useCart } from '../../../context/CartContext';
+import { useAuth } from '../../../context/AuthContext'; // <--- Auth context importálása
 
 export default function Navbar() {
-  const { totalItems, setIsCartOpen } = useCart(); // <--- 2. Lekérjük a darabszámot és a nyitó függvényt
+  const { totalItems, setIsCartOpen } = useCart();
+  const { user } = useAuth(); // <-- Lekérjük az aktuális usert
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -55,7 +58,7 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* ASZTALI MENÜ ÉS KOSÁR */}
+          {/* ASZTALI MENÜ ÉS IKONOK */}
           <div className="hidden md:flex items-center space-x-10">
             <div className="flex items-center space-x-10 text-xs font-semibold tracking-widest uppercase text-slate-300">
               <Link href="/kbeauty" className="hover:text-white transition-colors duration-300 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all">
@@ -75,25 +78,51 @@ export default function Navbar() {
               </Link>
             </div>
 
-            {/* Kosár Ikon Gomb (Asztali) */}
-            <button
-              onClick={() => setIsCartOpen(true)} // <--- 3. Kattintásra megnyitja a fiókot
-              className="relative p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer flex items-center justify-center"
-              aria-label="Warenkorb"
-            >
-              <ShoppingBag className="w-4 h-4 text-rose-300" />
-              {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-rose-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-md animate-pulse">
-                  {totalItems}
-                </span>
-              )}
-            </button>
+            <div className="flex items-center gap-3">
+              {/* Felhasználó / Fiók Ikon (Asztali) */}
+              <Link
+                href={user ? "/account" : "/auth"} // Ha be van lépve, fiók oldal; ha nincs, auth oldal
+                className="relative p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer flex items-center justify-center"
+                aria-label="Fiók"
+              >
+                <UserIcon className="w-4 h-4 text-slate-300" />
+                {user && (
+                  <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-slate-950" />
+                )}
+              </Link>
+
+              {/* Kosár Ikon Gomb (Asztali) */}
+              <button
+                onClick={() => setIsCartOpen(true)}
+                className="relative p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer flex items-center justify-center"
+                aria-label="Warenkorb"
+              >
+                <ShoppingBag className="w-4 h-4 text-rose-300" />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-rose-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-md animate-pulse">
+                    {totalItems}
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
 
-          {/* MOBIL JOBB OLDALI GOMBOK (Kosár + Hamburger) */}
-          <div className="flex items-center gap-3 md:hidden z-50">
+          {/* MOBIL JOBB OLDALI GOMBOK (User + Kosár + Hamburger) */}
+          <div className="flex items-center gap-2 md:hidden z-50">
+            {/* Felhasználó Ikon (Mobil) */}
+            <Link
+              href={user ? "/account" : "/auth"}
+              className="relative p-2 rounded-full bg-white/10 text-white flex items-center justify-center cursor-pointer"
+              aria-label="Fiók"
+            >
+              <UserIcon className="w-4 h-4 text-slate-300" />
+              {user && (
+                <span className="absolute top-0 right-0 w-2 h-2 bg-emerald-500 rounded-full border border-slate-950" />
+              )}
+            </Link>
+
             <button
-              onClick={() => setIsCartOpen(true)} // <--- 4. Mobil verzió is nyitja
+              onClick={() => setIsCartOpen(true)}
               className="relative p-2 rounded-full bg-white/10 text-white flex items-center justify-center cursor-pointer"
               aria-label="Warenkorb"
             >
