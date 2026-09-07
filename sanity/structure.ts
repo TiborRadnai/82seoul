@@ -1,3 +1,4 @@
+// sanity/structure.ts
 import { StructureBuilder } from 'sanity/structure';
 
 export const structure = (S: StructureBuilder) =>
@@ -39,7 +40,7 @@ export const structure = (S: StructureBuilder) =>
             ])
         ),
 
-      // WEBSHOP Mappa (Kategóriákra bontva)
+      // WEBSHOP Mappa (Kategóriákra bontva) - ITT VOLTAK A HIÁNYZÓ API VERZIÓK
       S.listItem()
         .title('Webshop (K-Beauty)')
         .child(
@@ -52,7 +53,6 @@ export const structure = (S: StructureBuilder) =>
               
               S.divider(),
 
-              // Kategória szerinti szűrt listák a jobb átláthatóságért
               S.listItem()
                 .title('Arckrémek & Hidratálók')
                 .child(
@@ -60,6 +60,7 @@ export const structure = (S: StructureBuilder) =>
                     .title('Arckrémek')
                     .schemaType('shopProduct')
                     .filter('_type == "shopProduct" && category == "Arckrém & Hidratáló"')
+                    .apiVersion('2023-05-03') // <--- HIÁNYZOTT
                 ),
               S.listItem()
                 .title('Szérumok & Esszenciák')
@@ -68,6 +69,7 @@ export const structure = (S: StructureBuilder) =>
                     .title('Szérumok')
                     .schemaType('shopProduct')
                     .filter('_type == "shopProduct" && category == "Szérum & Esszencia"')
+                    .apiVersion('2023-05-03') // <--- HIÁNYZOTT
                 ),
               S.listItem()
                 .title('Arctisztítók')
@@ -76,6 +78,7 @@ export const structure = (S: StructureBuilder) =>
                     .title('Arctisztítók')
                     .schemaType('shopProduct')
                     .filter('_type == "shopProduct" && category == "Arctisztító"')
+                    .apiVersion('2023-05-03') // <--- HIÁNYZOTT
                 ),
               S.listItem()
                 .title('Arcmaszkok & Peelingek')
@@ -84,6 +87,7 @@ export const structure = (S: StructureBuilder) =>
                     .title('Arcmaszkok')
                     .schemaType('shopProduct')
                     .filter('_type == "shopProduct" && category == "Arcmaszk & Peeling"')
+                    .apiVersion('2023-05-03') // <--- HIÁNYZOTT
                 ),
               S.listItem()
                 .title('Smink & Egyéb')
@@ -92,17 +96,43 @@ export const structure = (S: StructureBuilder) =>
                     .title('Smink & Egyéb')
                     .schemaType('shopProduct')
                     .filter('_type == "shopProduct" && category == "Smink & Egyéb"')
+                    .apiVersion('2023-05-03') // <--- HIÁNYZOTT
                 ),
             ])
         ),
 
-      // ÜGYFElek ÉS MARKETING Mappa (Teljesen új szárny)
+      // ÜGYFELEK ÉS MARKETING Mappa
       S.listItem()
         .title('Ügyfelek & Marketing')
         .child(
           S.list()
             .title('Marketing és Adatok')
             .items([
+              // Aktív vásárlók (ahol a státusz nem archivált, vagy nincs még státusz megadva)
+              S.listItem()
+                .title('Regisztrált Felhasználók')
+                .child(
+                  S.documentList()
+                    .title('Aktív Felhasználók')
+                    .schemaType('customer')
+                    .filter('_type == "customer" && (status != "archived" || !defined(status))')
+                    .apiVersion('2023-05-03')
+                ),
+
+              // Archivált vásárlók (akiknél a státusz át lett állítva "archived"-ra)
+              S.listItem()
+                .title('Archivált Felhasználók')
+                .child(
+                  S.documentList()
+                    .title('Archivált Fiókok (Adóügyi megőrzés)')
+                    .schemaType('customer')
+                    .filter('_type == "customer" && status == "archived"')
+                    .apiVersion('2023-05-03')
+                ),
+
+              S.divider(),
+
+              // Hírlevél feliratkozók marad a helyén
               S.documentTypeListItem('newsletterSubscriber').title('Hírlevél Feliratkozók'),
             ])
         ),

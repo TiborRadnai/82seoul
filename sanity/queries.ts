@@ -260,3 +260,17 @@ export const getShopProductBySlugQuery = `*[_type == "shopProduct" && id.current
   rating,
   featured
 }`;
+
+// --- ÜGYFÉL LEKÉRDEZÉSEK ---
+
+export const getCustomerByUserIdQuery = `*[_type == "customer" && userId == $userId][0]{
+  _id,
+  userId,
+  email,
+  lastName,
+  firstName,
+  koreanName,
+  phone,
+  shippingAddress,
+  createdAt
+}`;

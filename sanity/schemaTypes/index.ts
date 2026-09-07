@@ -5,6 +5,7 @@ import recipe from './recipe';
 import kFoodProduct from './kFoodProduct';
 import shopProduct from './shopProduct';
 import newsletterSubscriber from './newsletterSubscriber';
+import customer from './customer';
 
 export const schemaTypes = [
     artist, 
@@ -13,5 +14,6 @@ export const schemaTypes = [
     recipe, 
     kFoodProduct, 
     shopProduct, 
-    newsletterSubscriber
+    newsletterSubscriber,
+    customer
 ];

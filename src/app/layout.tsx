@@ -1,9 +1,11 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/core/Navbar";
 import BackToTop from "@/components/core/BackToTop";
 import { CartProvider } from "../../context/CartContext";
+import { AuthProvider } from "../../context/AuthContext"; 
 import CartDrawer from "@/components/CartDrawer";
 
 const geistSans = Geist({
@@ -27,24 +29,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="hu"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+  <html
+    lang="hu"
+    className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+    data-scroll-behavior="smooth"
     >
       <body className="min-h-full flex flex-col bg-slate-950 text-slate-100">
-        <CartProvider>
-          {/* Globális Kosár Fiók */}
-          <CartDrawer />
+        <AuthProvider> {/* <-- AUTHPROVIDER KÖSZÖNTI A USEREKET */}
+          <CartProvider>
+            {/* Globális Kosár Fiók */}
+            <CartDrawer />
 
-          {/* Globális Navbar minden aloldal tetején */}
-          <Navbar />
+            {/* Globális Navbar minden aloldal tetején */}
+            <Navbar />
 
-          {/* Itt futnak be az egyes oldalak (pl. page.tsx) */}
-          <main className="grow">{children}</main>
+            {/* Itt futnak be az egyes oldalak (pl. page.tsx) */}
+            <main className="grow">{children}</main>
 
-          {/* Globális Back to Top gomb */}
-          <BackToTop />
-        </CartProvider>
+            {/* Globális Back to Top gomb */}
+            <BackToTop />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

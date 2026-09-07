@@ -102,7 +102,7 @@ export default function KBeautyCatalog({ products = [] }: KBeautyCatalogProps) {
                 {/* Hajszálvékony ghost keret hoverre */}
                 <div className="absolute inset-3 border border-stone-900/0 group-hover:border-stone-900/15 transition-all duration-500 pointer-events-none" />
 
-                {/* Hover sáv: most már kosár helyett "Részletek megtekintése" finom jelzéssel */}
+                {/* Hover sáv */}
                 <div className="absolute inset-x-0 bottom-0 p-4 bg-linear-to-t from-[#f7f3ef]/95 via-[#f7f3ef]/80 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end justify-between">
                   <div>
                     <span className="text-[9px] font-bold tracking-widest text-rose-700 uppercase block mb-0.5">
@@ -120,10 +120,10 @@ export default function KBeautyCatalog({ products = [] }: KBeautyCatalogProps) {
                 </div>
               </Link>
 
-              {/* Stabil, kompakt tipográfia a kép alatt */}
-              <div className="mt-3 pt-2.5 border-t border-stone-200/80 flex items-start justify-between px-1">
-                <div className="space-y-0.5">
-                  <span className="text-[9px] font-bold tracking-widest text-rose-700 uppercase block">
+              {/* Stabil, kompakt tipográfia a kép alatt - Fixált flex elrendezés az ár csúszásának megakadályozására */}
+              <div className="mt-3 pt-2.5 border-t border-stone-200/80 flex items-start justify-between gap-4 px-1">
+                <div className="space-y-0.5 min-w-0 flex-1">
+                  <span className="text-[9px] font-bold tracking-widest text-rose-700 uppercase block truncate">
                     {product.badge || product.category || 'K-Beauty'}
                   </span>
                   <h4 className="text-sm font-light text-slate-950 group-hover:text-rose-700 transition-colors line-clamp-1">
@@ -133,8 +133,8 @@ export default function KBeautyCatalog({ products = [] }: KBeautyCatalogProps) {
                     {product.tagline}
                   </p>
                 </div>
-                <span className="text-xs font-mono font-medium text-slate-900 pt-0.5">
-                  €{displayPrice}
+                <span className="text-xs font-mono font-medium text-slate-900 pt-0.5 shrink-0 whitespace-nowrap">
+                  {displayPrice}
                 </span>
               </div>
 
