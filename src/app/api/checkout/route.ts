@@ -26,20 +26,16 @@ export async function POST(request: Request) {
 
     let finalUserId = userId;
 
-    // HA VENDÉG KÉRT REGISZTRÁCIÓT: Létrehozzuk a fiókot a Sanityben
     if (registerNewAccount && password && customerEmail) {
       try {
-        // Ellenőrizzük, hogy létezik-e már ez az e-mail cím a customer adatbázisban
         const existingCustomer = await writeClient.fetch(
           `*[_type == "customer" && email == $email][0]{_id, userId}`,
           { email: customerEmail }
         );
 
         if (existingCustomer) {
-          // Ha már létezik, csak frissítjük a userId-t ha vendég volt
           finalUserId = existingCustomer.userId;
         } else {
-          // Új fiók létrehozása
           const salt = await bcrypt.genSalt(10);
           const passwordHash = await bcrypt.hash(password, salt);
           const newUserId = `cust_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
@@ -65,17 +61,20 @@ export async function POST(request: Request) {
         }
       } catch (regErr) {
         console.error('Hiba a vendég fiók létrehozásakor checkout alatt:', regErr);
-        // A fizetést ettől függetlenül engedjük továbbmenni, de logoljuk a hibát
       }
     }
 
-    // Átalakítjuk a kosár elemeit a Stripe által elvárt formátumra
+    // Átalakítjuk a kosár elemeit, belepakolva a Sanity termék ID-t és a méretet a metadata-ba
     const lineItems = items.map((item: any) => ({
       price_data: {
         currency: 'eur',
         product_data: {
-          name: item.name,
+          name: `${item.title} (${item.size})`,
           images: item.image ? [item.image] : [],
+          metadata: {
+            sanityProductId: item.id, // ITT ADJUK ÁT A SANITY TERMÉK _ID-JÉT!
+            size: item.size,         // ITT ADJUK ÁT A MÉRETET!
+          },
         },
         unit_amount: Math.round(item.price * 100),
       },
@@ -83,16 +82,14 @@ export async function POST(request: Request) {
     }));
 
     const isNewRegistration = registerNewAccount && password && customerEmail ? 'true' : 'false';
-    // Létrehozzuk a Stripe Checkout Sessiont
+    
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
-
       invoice_creation: {
         enabled: true,
       },
-      
       success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/checkout/success?session_id={CHECKOUT_SESSION_ID}&registered=${isNewRegistration}`,
       cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/cart`,
       customer_email: customerEmail || undefined,

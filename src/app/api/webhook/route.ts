@@ -40,7 +40,7 @@ export async function POST(request: Request) {
     const session = event.data.object as Stripe.Checkout.Session;
 
     try {
-      // 1. Termékek lekérdezése
+      // 1. Termékek lekérdezése expandált metadata-val
       const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
         expand: ['data.price.product'],
       });
@@ -63,14 +63,13 @@ export async function POST(request: Request) {
       const customerEmail = session.customer_email || session.customer_details?.email || 'N/A';
       const userId = session.metadata?.userId || 'guest';
 
-      // Ügyfél nevének lekérdezése a Sanityből a számlához
       const customer = await writeClient.fetch(
         `*[_type == "customer" && userId == $userId][0]{ firstName, lastName }`,
         { userId }
       );
       const customerName = customer ? `${customer.firstName || ''} ${customer.lastName || ''}`.trim() : 'Geschätzter Kunde';
 
-      // 2. PDF generálása a fix vásárlási adatokkal
+      // 2. PDF generálás
       const pdfBuffer = await generateInvoicePDF({
         invoiceNumber,
         orderDate,
@@ -86,13 +85,13 @@ export async function POST(request: Request) {
         totalAmount,
       });
 
-      // 3. PDF feltöltése a Sanity Asset tárhelyére
+      // 3. PDF feltöltés
       const pdfAsset = await writeClient.assets.upload('file', pdfBuffer, {
         filename: `${invoiceNumber}.pdf`,
         contentType: 'application/pdf',
       });
 
-      // 4. Rendelés mentése a Sanitybe a generált fájl referenciájával
+      // 4. Rendelés mentése
       await writeClient.create({
         _type: 'order',
         stripeSessionId: session.id,
@@ -119,40 +118,41 @@ export async function POST(request: Request) {
         createdAt,
       });
 
-      // 5. RAKTÁRKÉSZLET CSÖKKENTÉSE A SANITYBEN
+      // 5. RAKTÁRKÉSZLET PONTOS CSÖKKENTÉSE ID ÉS MÉRET ALAPJÁN
       for (const item of lineItems.data) {
         const product = item.price?.product as Stripe.Product;
         const boughtQty = item.quantity || 1;
-        const productName = product?.name;
+        const metadata = product?.metadata;
+        const sanityProductId = metadata?.sanityProductId;
+        const targetSize = metadata?.size;
 
-        if (productName) {
-          // Megkeressük a terméket a Sanityben a neve alapján
+        if (sanityProductId) {
+          // Lekérdezzük a terméket közvetlenül az _id alapján
           const sanityProduct = await writeClient.fetch(
-            `*[_type == "shopProduct" && title == $title][0]{ _id, variants }`,
-            { title: productName }
+            `*[_type == "shopProduct" && _id == $id][0]{ _id, variants }`,
+            { id: sanityProductId }
           );
 
           if (sanityProduct && sanityProduct.variants) {
-            // Megkeressük azt a variációt, ami egyezik (vagy ha nincs méret, az elsőt)
-            // A kosár mentésnél / Stripe item description-ben benne szokott lenni a méret is (pl. "Termék név (30 ml)")
-            const matchingVariant = sanityProduct.variants.find((v: any) => 
-              item.description?.includes(v.size) || product?.name?.includes(v.size)
-            ) || sanityProduct.variants[0];
+            // Megkeressük a pontos méretű variációt
+            const matchingVariant = sanityProduct.variants.find((v: any) => v.size === targetSize) || sanityProduct.variants[0];
 
             if (matchingVariant && matchingVariant._key) {
               await writeClient
                 .patch(sanityProduct._id)
                 .dec({ [`variants[_key == "${matchingVariant._key}"].stock`]: boughtQty })
                 .commit();
+              
+              console.log(`Készlet csökkentve: ${sanityProductId} (${targetSize}) - ${boughtQty} db`);
             }
           }
         }
       }
 
-      console.log(`Sikeres rendelés, fix számla (${invoiceNumber}) generálva, mentve és raktárkészlet frissítve.`);
+      console.log(`Sikeres rendelés, számla (${invoiceNumber}) generálva és raktárkészlet frissítve.`);
     } catch (sanityErr) {
-      console.error('Hiba a rendelés Sanitybe mentésekor, PDF generáláskor vagy készletcsökkentéskor:', sanityErr);
-      return NextResponse.json({ error: 'Sanity mentési / PDF / Készlet hiba' }, { status: 500 });
+      console.error('Hiba a webhook feldolgozásakor:', sanityErr);
+      return NextResponse.json({ error: 'Webhook feldolgozási hiba' }, { status: 500 });
     }
   }
 
