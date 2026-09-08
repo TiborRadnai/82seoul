@@ -24,6 +24,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'A kosár üres.' }, { status: 400 });
     }
 
+    // DINAMIKUS ORIGIN MEGHATÁROZÁS (Automatikusan felismeri a Vercel éles domaint vagy a localhostot)
+    const host = request.headers.get('host') || 'localhost:3000';
+    const protocol = host.includes('localhost') ? 'http' : 'https';
+    const origin = `${protocol}://${host}`;
+
     let finalUserId = userId;
 
     if (registerNewAccount && password && customerEmail) {
@@ -64,7 +69,6 @@ export async function POST(request: Request) {
       }
     }
 
-    // Átalakítjuk a kosár elemeit, belepakolva a Sanity termék ID-t és a méretet a metadata-ba
     const lineItems = items.map((item: any) => ({
       price_data: {
         currency: 'eur',
@@ -72,8 +76,8 @@ export async function POST(request: Request) {
           name: `${item.title} (${item.size})`,
           images: item.image ? [item.image] : [],
           metadata: {
-            sanityProductId: item.id, // ITT ADJUK ÁT A SANITY TERMÉK _ID-JÉT!
-            size: item.size,         // ITT ADJUK ÁT A MÉRETET!
+            sanityProductId: item.id,
+            size: item.size,
           },
         },
         unit_amount: Math.round(item.price * 100),
@@ -90,8 +94,8 @@ export async function POST(request: Request) {
       invoice_creation: {
         enabled: true,
       },
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/checkout/success?session_id={CHECKOUT_SESSION_ID}&registered=${isNewRegistration}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/cart`,
+      success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}&registered=${isNewRegistration}`,
+      cancel_url: `${origin}/cart`,
       customer_email: customerEmail || undefined,
       metadata: {
         userId: finalUserId || 'guest',
