@@ -227,13 +227,11 @@ export const getProductByIdQuery = `*[_type == "kFoodProduct" && (id.current == 
 }`;
 
 
-// --- K-BEAUTY / WEBSHOP LEKÉRDEZÉSEK ---
-
 export const getShopProductsQuery = `*[_type == "shopProduct"]{
   _id,
   title,
   koreanTitle,
-  "slug": id.current,
+  "slug": coalesce(id.current, id),
   category,
   badge,
   "image": image.asset->url,
@@ -249,11 +247,11 @@ export const getShopProductsQuery = `*[_type == "shopProduct"]{
   featured
 }`;
 
-export const getShopProductBySlugQuery = `*[_type == "shopProduct" && id.current == $slug][0]{
+export const getShopProductBySlugQuery = `*[_type == "shopProduct" && (id.current == $slug || id == $slug)][0]{
   _id,
   title,
   koreanTitle,
-  "slug": id.current,
+  "slug": coalesce(id.current, id),
   category,
   badge,
   "image": image.asset->url,
@@ -295,11 +293,11 @@ export const getOrdersByUserIdOrEmailQuery = `
     stripeSessionId,
     invoiceNumber,
     "invoiceUrl": invoiceFile.asset->url,
-    totalAmount,
     amountTotal,
     currency,
     paymentStatus,
     items,
-    shippingDetails
+    shippingDetails,
+    createdAt
   }
 `;

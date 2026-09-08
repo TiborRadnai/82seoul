@@ -44,21 +44,24 @@ export async function POST(request: Request) {
         expand: ['data.price.product'],
       });
 
-      // 1. Javított item feldolgozás: itt mentjük el a méretet is a tételbe, hogy a profilban se legyen undefined
+      // 1. Tételek feldolgozása a rendelési séma (order.ts -> items) szerint: { name, price, quantity }
       const items = lineItems.data.map((item, index) => {
         const product = item.price?.product as Stripe.Product;
-        const description = item.description || product?.name || '';
-        const match = description.match(/^(.*?)\s*\((.*?)\)$/);
+        const rawName = product?.name || item.description || 'Termék';
         
-        const productName = match ? match[1].trim() : description;
-        const productSize = match ? match[2].trim() : 'Standard';
+        // Ha a név tartalmazza a méretet zárójelben (pl. "Serum (30 ml)"), szétválasztjuk a tiszta névre és méretre
+        const match = rawName.match(/^(.*?)\s*\((.*?)\)$/);
+        const cleanName = match ? match[1].trim() : rawName;
+        const variantSize = match ? match[2].trim() : 'Standard';
 
         return {
           _key: `item_${Date.now()}_${index}`,
-          name: productName,
-          size: productSize,
+          name: `${cleanName} (${variantSize})`, // A séma szerinti mezőbe mentjük
           price: item.amount_total ? item.amount_total / 100 / (item.quantity || 1) : 0,
           quantity: item.quantity || 1,
+          // Segédmezők a belső készletcsökkentéshez (ezek nem zavarják a Sanity sémát, de itt fel tudjuk használni)
+          _cleanName: cleanName,
+          _variantSize: variantSize,
         };
       });
 
@@ -88,7 +91,7 @@ export async function POST(request: Request) {
           city: session.metadata?.city || '',
           country: session.metadata?.country || 'Deutschland',
         },
-        items,
+        items: items.map(i => ({ name: i.name, price: i.price, quantity: i.quantity })),
         totalAmount,
       });
 
@@ -98,7 +101,14 @@ export async function POST(request: Request) {
         contentType: 'application/pdf',
       });
 
-      // 4. Rendelés mentése (Mostantól a helyes nevet és méretet tartalmazó items tömbbel)
+      // 4. Rendelés mentése a pontos order sémával (kivéve a belső segédmezőket)
+      const sanityOrderItems = items.map(i => ({
+        _key: i._key,
+        name: i.name,
+        price: i.price,
+        quantity: i.quantity,
+      }));
+
       await writeClient.create({
         _type: 'order',
         stripeSessionId: session.id,
@@ -115,7 +125,7 @@ export async function POST(request: Request) {
         amountTotal: totalAmount,
         currency: session.currency || 'eur',
         paymentStatus: session.payment_status,
-        items,
+        items: sanityOrderItems,
         shippingDetails: {
           street: session.metadata?.street || '',
           city: session.metadata?.city || '',
@@ -125,28 +135,31 @@ export async function POST(request: Request) {
         createdAt,
       });
 
-      // 5. RAKTÁRKÉSZLET CSÖKKENTÉSE AZ ELŐRE KINYERT ADATOKKAL
+      // 5. PONTOS KÉSZLETCSÖKKENTÉS A shopProduct -> title és variants -> size / stock alapján
       for (const item of items) {
         const boughtQty = item.quantity || 1;
-        const productName = item.name;
-        const targetSize = item.size;
+        const targetTitle = item._cleanName;
+        const targetSize = item._variantSize;
 
-        if (productName) {
+        if (targetTitle) {
+          // Lekérdezzük a terméket a title alapján
           const sanityProduct = await writeClient.fetch(
             `*[_type == "shopProduct" && title == $title][0]{ _id, variants }`,
-            { title: productName }
+            { title: targetTitle }
           );
 
           if (sanityProduct && sanityProduct.variants) {
+            // Megkeressük a megfelelő méretű variációt a variants tömbben
             const matchingVariant = sanityProduct.variants.find((v: any) => v.size === targetSize) || sanityProduct.variants[0];
 
             if (matchingVariant && matchingVariant._key) {
+              // Csökkentjük a stock mezőt
               await writeClient
                 .patch(sanityProduct._id)
                 .dec({ [`variants[_key == "${matchingVariant._key}"].stock`]: boughtQty })
                 .commit();
               
-              console.log(`Készlet sikeresen csökkentve: ${sanityProduct._id} (${targetSize}) - ${boughtQty} db`);
+              console.log(`Készlet csökkentve: ${sanityProduct._id} (${targetSize}) - ${boughtQty} db`);
             }
           }
         }
