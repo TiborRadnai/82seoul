@@ -55,18 +55,18 @@ export default function AccountPage() {
             }
           }
 
-          // 2. Rendelések lekérdezése (legújabb legfelül) - Mindkét mezőnév támogatásával a hibátlan megjelenítésért
+          // 2. Rendelések lekérdezése a Sanitybe mentett fix számla URL-jével
           const fetchedOrders = await client.fetch(
             `*[_type == "order" && (userId == $userId || customerEmail == $email)] | order(_createdAt desc){
               _id,
               _createdAt,
               stripeSessionId,
+              invoiceNumber,
+              "invoiceUrl": invoiceFile.asset->url,
               totalAmount,
               amountTotal,
               currency,
               paymentStatus,
-              invoiceId,
-              invoiceUrl,
               items,
               shippingDetails
             }`,
@@ -426,15 +426,14 @@ export default function AccountPage() {
           ) : (
             <div className="space-y-4">
               {orders.map((order) => {
-                // Biztosra megyünk mindkét mezőnévvel (amountTotal vagy totalAmount)
                 const finalAmount = order.amountTotal ?? order.totalAmount ?? 0;
 
                 return (
                   <div key={order._id} className="p-6 rounded-2xl bg-stone-50 border border-stone-200/80 space-y-4 text-xs">
                     <div className="flex flex-wrap items-center justify-between gap-2 border-b border-stone-200/60 pb-3">
                       <div>
-                        <span className="text-[10px] uppercase tracking-wider text-stone-400 block">Bestell-ID</span>
-                        <span className="font-mono font-bold text-slate-950">{order.orderId || order._id}</span>
+                        <span className="text-[10px] uppercase tracking-wider text-stone-400 block">Bestell-ID / Rechnung</span>
+                        <span className="font-mono font-bold text-slate-950">{order.invoiceNumber || order.orderId || order._id}</span>
                       </div>
                       <div className="text-right">
                         <span className="text-[10px] uppercase tracking-wider text-stone-400 block">Datum</span>
@@ -469,7 +468,7 @@ export default function AccountPage() {
                       </div>
                     )}
 
-                    {/* Számla letöltése gomb szép Tailwind dizájnnal és ikonnal */}
+                    {/* Hivatalos, Sanitybe mentett PDF számla letöltése gomb */}
                     {order.invoiceUrl && (
                       <div className="pt-3 border-t border-stone-200/60 flex justify-end">
                         <a

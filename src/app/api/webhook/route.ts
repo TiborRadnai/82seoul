@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@sanity/client';
+import { generateInvoicePDF } from '@/lib/invoice/generator';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: '2025-02-24.acacia' as any,
@@ -35,59 +36,93 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
   }
 
-  // Ha a fizetés sikeresen megtörtént
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session;
 
     try {
-      // 1. Lekérjük a vásárolt termékeket (line_items) a Stripe-tól
+      // 1. Termékek lekérdezése
       const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
         expand: ['data.price.product'],
       });
 
-      const items = lineItems.data.map((item) => {
+      const items = lineItems.data.map((item, index) => {
         const product = item.price?.product as Stripe.Product;
         return {
+          _key: `item_${Date.now()}_${index}`,
           name: product?.name || item.description || 'Termék',
           price: item.amount_total ? item.amount_total / 100 / (item.quantity || 1) : 0,
           quantity: item.quantity || 1,
         };
       });
 
-      // 2. Lekérjük a Stripe által generált számla adatait (ha van invoice ID)
-      let invoiceUrl = '';
-      const invoiceId = session.invoice as string;
-      
-      if (invoiceId) {
-        const invoice = await stripe.invoices.retrieve(invoiceId);
-        invoiceUrl = invoice.hosted_invoice_url || invoice.invoice_pdf || '';
-      }
+      const createdAt = new Date().toISOString();
+      const tempIdForInvoice = session.id.slice(-6).toUpperCase();
+      const invoiceNumber = `RE-${tempIdForInvoice}`;
+      const orderDate = new Date(createdAt).toLocaleDateString('de-DE');
+      const totalAmount = session.amount_total ? session.amount_total / 100 : 0;
+      const customerEmail = session.customer_email || session.customer_details?.email || 'N/A';
+      const userId = session.metadata?.userId || 'guest';
 
-      // 3. Rendelés mentése a Sanitybe (beleértve az items-t is!)
+      // Ügyfél nevének lekérdezése a Sanityből a számlához
+      const customer = await writeClient.fetch(
+        `*[_type == "customer" && userId == $userId][0]{ firstName, lastName }`,
+        { userId }
+      );
+      const customerName = customer ? `${customer.firstName || ''} ${customer.lastName || ''}`.trim() : 'Geschätzter Kunde';
+
+      // 2. PDF generálása a fix vásárlási adatokkal
+      const pdfBuffer = await generateInvoicePDF({
+        invoiceNumber,
+        orderDate,
+        customerName,
+        customerEmail,
+        shippingAddress: {
+          street: session.metadata?.street || '',
+          postalCode: session.metadata?.postalCode || '',
+          city: session.metadata?.city || '',
+          country: session.metadata?.country || 'Deutschland',
+        },
+        items,
+        totalAmount,
+      });
+
+      // 3. PDF feltöltése a Sanity Asset tárhelyére
+      const pdfAsset = await writeClient.assets.upload('file', pdfBuffer, {
+        filename: `${invoiceNumber}.pdf`,
+        contentType: 'application/pdf',
+      });
+
+      // 4. Rendelés mentése a Sanitybe a generált fájl referenciájával
       await writeClient.create({
         _type: 'order',
         stripeSessionId: session.id,
-        customerEmail: session.customer_email || session.customer_details?.email || '',
-        userId: session.metadata?.userId || 'guest',
-        amountTotal: session.amount_total ? session.amount_total / 100 : 0,
+        invoiceNumber,
+        invoiceFile: {
+          _type: 'file',
+          asset: {
+            _type: 'reference',
+            _ref: pdfAsset._id,
+          },
+        },
+        customerEmail,
+        userId,
+        amountTotal: totalAmount,
         currency: session.currency || 'eur',
         paymentStatus: session.payment_status,
-        invoiceId: invoiceId || '',
-        invoiceUrl: invoiceUrl,
-        items: items, // <-- ITT VOLT A HIÁNYZÓ MEZŐ!
+        items,
         shippingDetails: {
           street: session.metadata?.street || '',
           city: session.metadata?.city || '',
           postalCode: session.metadata?.postalCode || '',
           country: session.metadata?.country || 'Deutschland',
         },
-        createdAt: new Date().toISOString(),
+        createdAt,
       });
 
-      console.log(`Sikeres rendelés, termékek és számla mentve a Sanitybe session ID: ${session.id}`);
+      console.log(`Sikeres rendelés, fix számla (${invoiceNumber}) generálva és mentve.`);
     } catch (sanityErr) {
-      console.error('Hiba a rendelés Sanitybe mentésekor:', sanityErr);
-      return NextResponse.json({ error: 'Sanity mentési hiba' }, { status: 500 });
+      console.error('Hiba a rendelés Sanitybe mentésekor vagy PDF generáláskor:', sanityErr);
+      return NextResponse.json({ error: 'Sanity mentési / PDF hiba' }, { status: 500 });
     }
   }
 
