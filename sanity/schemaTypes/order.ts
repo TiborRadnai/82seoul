@@ -1,4 +1,6 @@
 // sanity/schemaTypes/order.ts
+import { InvoiceDownloadButton } from '../components/InvoiceDownloadButton';
+
 export default {
   name: 'order',
   title: 'Bestellungen (Rendelések)',
@@ -28,6 +30,29 @@ export default {
       name: 'currency', 
       title: 'Valuta', 
       type: 'string' 
+    },
+    { 
+      name: 'paymentStatus', 
+      title: 'Fizetési Státusz', 
+      type: 'string' 
+    },
+    { 
+      name: 'invoiceId', 
+      title: 'Stripe Invoice ID', 
+      type: 'string' 
+    },
+    { 
+      name: 'invoiceUrl', 
+      title: 'Stripe Invoice URL', 
+      type: 'url' 
+    },
+    {
+      name: 'invoiceAction',
+      title: 'Hivatalos Számla',
+      type: 'string',
+      components: {
+        field: InvoiceDownloadButton,
+      },
     },
     {
       name: 'items',
@@ -61,7 +86,6 @@ export default {
       type: 'datetime' 
     },
   ],
-  // Ez tünteti el az "Untitled" feliratot, és helyette a Dátumot + E-mail címet mutatja a listában!
   preview: {
     select: {
       email: 'customerEmail',

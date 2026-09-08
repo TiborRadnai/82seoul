@@ -40,7 +40,21 @@ export async function POST(request: Request) {
     const session = event.data.object as Stripe.Checkout.Session;
 
     try {
-      // Lekérjük a Stripe által generált számla adatait (ha van invoice ID)
+      // 1. Lekérjük a vásárolt termékeket (line_items) a Stripe-tól
+      const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
+        expand: ['data.price.product'],
+      });
+
+      const items = lineItems.data.map((item) => {
+        const product = item.price?.product as Stripe.Product;
+        return {
+          name: product?.name || item.description || 'Termék',
+          price: item.amount_total ? item.amount_total / 100 / (item.quantity || 1) : 0,
+          quantity: item.quantity || 1,
+        };
+      });
+
+      // 2. Lekérjük a Stripe által generált számla adatait (ha van invoice ID)
       let invoiceUrl = '';
       const invoiceId = session.invoice as string;
       
@@ -49,7 +63,7 @@ export async function POST(request: Request) {
         invoiceUrl = invoice.hosted_invoice_url || invoice.invoice_pdf || '';
       }
 
-      // Rendelés mentése a Sanitybe
+      // 3. Rendelés mentése a Sanitybe (beleértve az items-t is!)
       await writeClient.create({
         _type: 'order',
         stripeSessionId: session.id,
@@ -60,6 +74,7 @@ export async function POST(request: Request) {
         paymentStatus: session.payment_status,
         invoiceId: invoiceId || '',
         invoiceUrl: invoiceUrl,
+        items: items, // <-- ITT VOLT A HIÁNYZÓ MEZŐ!
         shippingDetails: {
           street: session.metadata?.street || '',
           city: session.metadata?.city || '',
@@ -69,7 +84,7 @@ export async function POST(request: Request) {
         createdAt: new Date().toISOString(),
       });
 
-      console.log(`Sikeres rendelés és számla mentve a Sanitybe session ID: ${session.id}`);
+      console.log(`Sikeres rendelés, termékek és számla mentve a Sanitybe session ID: ${session.id}`);
     } catch (sanityErr) {
       console.error('Hiba a rendelés Sanitybe mentésekor:', sanityErr);
       return NextResponse.json({ error: 'Sanity mentési hiba' }, { status: 500 });

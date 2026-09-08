@@ -59,7 +59,7 @@ function SuccessContent() {
   return (
     <div className="min-h-screen pt-36 pb-20 px-5 md:px-12 bg-[#0d0d12] text-neutral-100 relative overflow-hidden flex items-center justify-center">
       
-      <div className="absolute top-20 right-10 w-[550px] h-[550px] bg-emerald-500/10 rounded-full blur-[160px] pointer-events-none" />
+      <div className="absolute top-20 right-10 w-137.5 h-137.5 bg-emerald-500/10 rounded-full blur-[160px] pointer-events-none" />
 
       <div className="max-w-md w-full bg-[#17171d]/95 backdrop-blur-3xl border border-white/15 rounded-[2.5rem] p-8 md:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] text-center relative z-10 space-y-6">
         

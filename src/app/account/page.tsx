@@ -55,9 +55,21 @@ export default function AccountPage() {
             }
           }
 
-          // 2. Rendelések lekérdezése (legújabb legfelül)
+          // 2. Rendelések lekérdezése (legújabb legfelül) - Mindkét mezőnév támogatásával a hibátlan megjelenítésért
           const fetchedOrders = await client.fetch(
-            `*[_type == "order" && (userId == $userId || customerEmail == $email)] | order(_createdAt desc)`,
+            `*[_type == "order" && (userId == $userId || customerEmail == $email)] | order(_createdAt desc){
+              _id,
+              _createdAt,
+              stripeSessionId,
+              totalAmount,
+              amountTotal,
+              currency,
+              paymentStatus,
+              invoiceId,
+              invoiceUrl,
+              items,
+              shippingDetails
+            }`,
             { userId: user.userId || '', email: user.email || '' }
           );
           setOrders(fetchedOrders);
@@ -413,47 +425,71 @@ export default function AccountPage() {
             </p>
           ) : (
             <div className="space-y-4">
-              {orders.map((order) => (
-                <div key={order._id} className="p-6 rounded-2xl bg-stone-50 border border-stone-200/80 space-y-4 text-xs">
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-stone-200/60 pb-3">
-                    <div>
-                      <span className="text-[10px] uppercase tracking-wider text-stone-400 block">Bestell-ID</span>
-                      <span className="font-mono font-bold text-slate-950">{order.orderId || order._id}</span>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-[10px] uppercase tracking-wider text-stone-400 block">Datum</span>
-                      <span className="font-mono text-stone-700">
-                        {new Date(order._createdAt).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}
-                      </span>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-[10px] uppercase tracking-wider text-stone-400 block">Gesamtbetrag</span>
-                      <span className="font-mono font-bold text-rose-800 text-sm">€{order.totalAmount?.toFixed(2)}</span>
-                    </div>
-                  </div>
+              {orders.map((order) => {
+                // Biztosra megyünk mindkét mezőnévvel (amountTotal vagy totalAmount)
+                const finalAmount = order.amountTotal ?? order.totalAmount ?? 0;
 
-                  <div className="space-y-2">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400">Artikel</span>
-                    <div className="divide-y divide-stone-200/40">
-                      {order.items?.map((item: any, idx: number) => (
-                        <div key={idx} className="py-2 flex justify-between items-center">
-                          <span className="text-stone-800 font-medium">{item.name} (Anzahl: {item.quantity})</span>
-                          <span className="font-mono text-stone-600">€{(item.price * item.quantity).toFixed(2)}</span>
-                        </div>
-                      ))}
+                return (
+                  <div key={order._id} className="p-6 rounded-2xl bg-stone-50 border border-stone-200/80 space-y-4 text-xs">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-stone-200/60 pb-3">
+                      <div>
+                        <span className="text-[10px] uppercase tracking-wider text-stone-400 block">Bestell-ID</span>
+                        <span className="font-mono font-bold text-slate-950">{order.orderId || order._id}</span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[10px] uppercase tracking-wider text-stone-400 block">Datum</span>
+                        <span className="font-mono text-stone-700">
+                          {new Date(order._createdAt).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                        </span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[10px] uppercase tracking-wider text-stone-400 block">Gesamtbetrag</span>
+                        <span className="font-mono font-bold text-rose-800 text-sm">€{finalAmount.toFixed(2)}</span>
+                      </div>
                     </div>
-                  </div>
 
-                  {order.shippingDetails && (
-                    <div className="pt-2 border-t border-stone-200/60 flex items-start gap-2 text-stone-500 text-[11px]">
-                      <MapPin className="w-3.5 h-3.5 text-rose-700 shrink-0 mt-0.5" />
-                      <p>
-                        Lieferadresse: {order.shippingDetails.street}, {order.shippingDetails.postalCode} {order.shippingDetails.city}, {order.shippingDetails.country}
-                      </p>
+                    <div className="space-y-2">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400">Artikel</span>
+                      <div className="divide-y divide-stone-200/40">
+                        {order.items?.map((item: any, idx: number) => (
+                          <div key={idx} className="py-2 flex justify-between items-center">
+                            <span className="text-stone-800 font-medium">{item.name} (Anzahl: {item.quantity})</span>
+                            <span className="font-mono text-stone-600">€{(item.price * item.quantity).toFixed(2)}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  )}
-                </div>
-              ))}
+
+                    {order.shippingDetails && (
+                      <div className="pt-2 border-t border-stone-200/60 flex items-start gap-2 text-stone-500 text-[11px]">
+                        <MapPin className="w-3.5 h-3.5 text-rose-700 shrink-0 mt-0.5" />
+                        <p>
+                          Lieferadresse: {order.shippingDetails.street}, {order.shippingDetails.postalCode} {order.shippingDetails.city}, {order.shippingDetails.country}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Számla letöltése gomb szép Tailwind dizájnnal és ikonnal */}
+                    {order.invoiceUrl && (
+                      <div className="pt-3 border-t border-stone-200/60 flex justify-end">
+                        <a
+                          href={order.invoiceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-white text-[11px] font-bold tracking-widest uppercase transition-all shadow-md cursor-pointer"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                          </svg>
+                          <span>Rechnung herunterladen (PDF)</span>
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>

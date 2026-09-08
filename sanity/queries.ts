@@ -284,6 +284,9 @@ export const getOrdersByUserIdOrEmailQuery = `
     totalAmount,
     amountTotal,
     currency,
+    paymentStatus,
+    invoiceId,
+    invoiceUrl,
     items,
     shippingDetails
   }
