@@ -4,11 +4,13 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Sparkles, ShoppingBag, ShieldCheck, Truck, RefreshCw, Plus, Minus, ChevronLeft, ChevronRight, X, Maximize2 } from 'lucide-react';
 import { useCart } from '../../../../../context/CartContext';
+
 interface Variant {
   size: string;
   price: string;
   onSale?: boolean;
   salePrice?: string;
+  stock?: number;
 }
 
 interface Product {
@@ -38,11 +40,9 @@ export default function KBeautyDetailContent({ product }: KBeautyDetailContentPr
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  // Összegyűjtjük az összes képet: a fő kép a 0. indexű, utána jönnek a galéria képek
+  
   const allImages = [product.image, ...(product.gallery || [])].filter(Boolean);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-
-  // Teljes képernyős Lightbox / Modal állapota
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   const currentVariant = product.variants?.[selectedVariantIndex] || product.variants?.[0];
@@ -54,7 +54,7 @@ export default function KBeautyDetailContent({ product }: KBeautyDetailContentPr
   );
 
   const totalPrice = (rawUnitPrice * quantity).toFixed(2);
-  const maxStock = product.stock !== undefined ? product.stock : 0;
+  const maxStock = currentVariant?.stock !== undefined ? currentVariant.stock : (product.stock !== undefined ? product.stock : 0);
 
   const handleQuantityChange = (delta: number) => {
     setQuantity((prev) => {
@@ -65,8 +65,7 @@ export default function KBeautyDetailContent({ product }: KBeautyDetailContentPr
     });
   };
 
-const handleAddToCart = () => {
-    // Globális kosárba tétel
+  const handleAddToCart = () => {
     addToCart({
       id: product._id,
       title: product.title,
@@ -77,7 +76,6 @@ const handleAddToCart = () => {
     });
 
     const message = `${quantity}x ${product.title} (${currentVariant?.size}) wurde in den Warenkorb gelegt — €${totalPrice}`;
-    
     setToastMessage(message);
 
     setTimeout(() => {
@@ -97,13 +95,10 @@ const handleAddToCart = () => {
 
   return (
     <section className="relative w-full min-h-screen bg-[#f7f3ef] text-slate-900 pt-36 pb-20 px-6 md:px-12 lg:px-20 overflow-hidden">
-      
-      {/* Sötétítő felső sáv a navigációhoz */}
       <div className="absolute top-0 left-0 right-0 h-44 bg-linear-to-b from-stone-950/45 via-stone-950/20 to-transparent pointer-events-none z-20" />
       <div className="absolute top-1/4 right-1/4 w-150 h-150 bg-rose-200/20 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Vissza a katalógusba gomb */}
         <div className="mb-8">
           <Link
             href="/kbeauty"
@@ -116,13 +111,9 @@ const handleAddToCart = () => {
           </Link>
         </div>
         
-        {/* Fő Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           
-          {/* BAL OLDAL: Fő kép + Galéria sáv */}
           <div className="lg:col-span-7 flex flex-col space-y-4">
-            
-            {/* Aktuális Nagy Kép */}
             <div 
               onClick={() => setIsLightboxOpen(true)}
               className="relative w-full aspect-square flex items-center justify-center bg-transparent overflow-hidden border border-stone-200/60 rounded-2xl shadow-xs cursor-zoom-in group"
@@ -143,7 +134,6 @@ const handleAddToCart = () => {
                 className="w-full h-full object-contain p-10 transition-transform duration-700 group-hover:scale-105"
               />
 
-              {/* Lapozó nyilak a fő képen is, ha van több kép */}
               {allImages.length > 1 && (
                 <>
                   <button 
@@ -162,7 +152,6 @@ const handleAddToCart = () => {
               )}
             </div>
 
-            {/* Kis képekből álló galéria sáv (Thumbnails) */}
             {allImages.length > 1 && (
               <div className="grid grid-cols-5 gap-3">
                 {allImages.map((imgUrl, idx) => (
@@ -180,12 +169,9 @@ const handleAddToCart = () => {
                 ))}
               </div>
             )}
-
           </div>
 
-          {/* JOBB OLDAL: Adatok, Variációk, Mennyiség és Kosárba gomb */}
           <div className="lg:col-span-5 space-y-8 sticky top-32">
-            
             <div>
               <div className="flex items-center gap-3 mb-2">
                 <span className="text-[10px] font-bold tracking-widest text-rose-700 uppercase">
@@ -209,7 +195,6 @@ const handleAddToCart = () => {
               )}
             </div>
 
-            {/* Egységár és Készlet */}
             <div className="flex items-baseline justify-between py-4 border-y border-stone-300/60">
               <div>
                 <span className="text-3xl font-mono font-medium text-slate-950">
@@ -226,7 +211,6 @@ const handleAddToCart = () => {
               </span>
             </div>
 
-            {/* Kiszerelések / Változatok */}
             {product.variants && product.variants.length > 0 && (
               <div className="space-y-3">
                 <label className="text-xs font-bold tracking-widest text-slate-700 uppercase block">
@@ -253,7 +237,6 @@ const handleAddToCart = () => {
               </div>
             )}
 
-            {/* Mennyiség választó */}
             <div className="space-y-3">
               <label className="text-xs font-bold tracking-widest text-slate-700 uppercase block">
                 Menge:
@@ -282,7 +265,6 @@ const handleAddToCart = () => {
               </div>
             </div>
 
-            {/* Kosárba gomb */}
             <div className="pt-2">
               <button
                 onClick={handleAddToCart}
@@ -305,7 +287,6 @@ const handleAddToCart = () => {
               </button>
             </div>
 
-            {/* Garanciák */}
             <div className="grid grid-cols-3 gap-4 pt-6 border-t border-stone-300/60 text-center">
               <div className="flex flex-col items-center space-y-1.5">
                 <Truck className="w-4 h-4 text-rose-700" />
@@ -320,12 +301,9 @@ const handleAddToCart = () => {
                 <span className="text-[10px] text-stone-600 font-medium">30 Tage Rückgaberecht</span>
               </div>
             </div>
-
           </div>
-
         </div>
 
-        {/* Részletes leírás, összetevők és használat */}
         <div className="mt-28 grid grid-cols-1 lg:grid-cols-3 gap-12 pt-16 border-t border-stone-300/60">
           {product.description && (
             <div className="space-y-3">
@@ -360,16 +338,13 @@ const handleAddToCart = () => {
             </div>
           )}
         </div>
-
       </div>
 
-      {/* --- TELJES KÉPERNYŐS LIGHTBOX MODAL (Kattintásra nagyban, háttérhomályosítással) --- */}
       {isLightboxOpen && (
         <div 
           onClick={() => setIsLightboxOpen(false)}
           className="fixed inset-0 z-50 bg-stone-950/85 backdrop-blur-md flex items-center justify-center p-4 md:p-12 animate-fadeIn"
         >
-          {/* Bezáró gomb */}
           <button 
             onClick={() => setIsLightboxOpen(false)}
             className="absolute top-6 right-6 z-55 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
@@ -377,7 +352,6 @@ const handleAddToCart = () => {
             <X className="w-6 h-6" />
           </button>
 
-          {/* Bal nyíl */}
           {allImages.length > 1 && (
             <button 
               onClick={prevImage}
@@ -387,7 +361,6 @@ const handleAddToCart = () => {
             </button>
           )}
 
-          {/* Jobb nyíl */}
           {allImages.length > 1 && (
             <button 
               onClick={nextImage}
@@ -397,7 +370,6 @@ const handleAddToCart = () => {
             </button>
           )}
 
-          {/* Nagy kép konténer */}
           <div 
             onClick={(e) => e.stopPropagation()}
             className="relative w-full max-w-5xl h-[80vh] flex items-center justify-center"
@@ -408,7 +380,6 @@ const handleAddToCart = () => {
               className="max-w-full max-h-full object-contain rounded-xl shadow-2xl"
             />
             
-            {/* Képszámláló alul */}
             <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 text-white/70 font-mono text-xs tracking-widest">
               {activeImageIndex + 1} / {allImages.length}
             </div>
@@ -416,7 +387,6 @@ const handleAddToCart = () => {
         </div>
       )}
 
-      {/* Elegáns, webshop-stílusú Toast Értesítés */}
       {toastMessage && (
         <div className="fixed bottom-8 right-8 z-50 bg-slate-950 text-white px-6 py-4 rounded-2xl shadow-2xl border border-stone-800 flex items-center gap-4 animate-bounce-once">
           <div className="w-8 h-8 rounded-full bg-rose-900/40 border border-rose-700/50 flex items-center justify-center shrink-0">
@@ -428,7 +398,6 @@ const handleAddToCart = () => {
           </div>
         </div>
       )}
-
     </section>
   );
 }
