@@ -1,6 +1,4 @@
 // sanity/schemaTypes/order.ts
-import { InvoiceDownloadButton } from '../components/InvoiceDownloadButton';
-
 export default {
   name: 'order',
   title: 'Bestellungen (Rendelések)',
@@ -10,6 +8,19 @@ export default {
       name: 'stripeSessionId', 
       title: 'Stripe Session ID', 
       type: 'string' 
+    },
+    { 
+      name: 'invoiceNumber', 
+      title: 'Számlaszám (pl. RE-XXXXXX)', 
+      type: 'string' 
+    },
+    { 
+      name: 'invoiceFile', 
+      title: 'Hivatalos Számla PDF', 
+      type: 'file',
+      options: {
+        storeOriginalFilename: true
+      }
     },
     { 
       name: 'userId', 
@@ -35,24 +46,6 @@ export default {
       name: 'paymentStatus', 
       title: 'Fizetési Státusz', 
       type: 'string' 
-    },
-    { 
-      name: 'invoiceId', 
-      title: 'Stripe Invoice ID', 
-      type: 'string' 
-    },
-    { 
-      name: 'invoiceUrl', 
-      title: 'Stripe Invoice URL', 
-      type: 'url' 
-    },
-    {
-      name: 'invoiceAction',
-      title: 'Hivatalos Számla',
-      type: 'string',
-      components: {
-        field: InvoiceDownloadButton,
-      },
     },
     {
       name: 'items',
@@ -91,12 +84,13 @@ export default {
       email: 'customerEmail',
       amount: 'amountTotal',
       date: 'createdAt',
+      inv: 'invoiceNumber',
     },
-    prepare(selection: { email?: string; amount?: number; date?: string }) {
-      const { email, amount, date } = selection;
+    prepare(selection: { email?: string; amount?: number; date?: string; inv?: string }) {
+      const { email, amount, date, inv } = selection;
       const formattedDate = date ? new Date(date).toLocaleDateString('de-DE') : 'Dátum nélkül';
       return {
-        title: `${email || 'Ismeretlen vásárló'} - €${amount?.toFixed(2) || '0.00'}`,
+        title: `${inv || 'Számla nélkül'} - ${email || 'Ismeretlen'} - €${amount?.toFixed(2) || '0.00'}`,
         subtitle: formattedDate,
       };
     },

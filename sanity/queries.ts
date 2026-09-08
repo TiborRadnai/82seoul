@@ -275,18 +275,18 @@ export const getCustomerByUserIdQuery = `*[_type == "customer" && userId == $use
   createdAt
 }`;
 
-
+// Javítva az új fix számlázási sémához (invoiceNumber és invoiceFile URL)
 export const getOrdersByUserIdOrEmailQuery = `
   *[_type == "order" && (userId == $userId || customerEmail == $email)] | order(_createdAt desc) {
     _id,
     _createdAt,
     stripeSessionId,
+    invoiceNumber,
+    "invoiceUrl": invoiceFile.asset->url,
     totalAmount,
     amountTotal,
     currency,
     paymentStatus,
-    invoiceId,
-    invoiceUrl,
     items,
     shippingDetails
   }
