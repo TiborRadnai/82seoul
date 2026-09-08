@@ -146,7 +146,6 @@ export const getDramaByIdQuery = `*[_type == "drama" && id == $id][0]{
   }
 }`;
 
-// Lekéri az összes színészt az új mezőkkel együtt
 export const getActorsQuery = `*[_type == "actor"]{
   name,
   id,
@@ -164,6 +163,7 @@ export const getActorsQuery = `*[_type == "actor"]{
   },
   "image": image.asset->url
 }`;
+
 
 // --- K-FOOD LEKÉRDEZÉSEK ---
 
@@ -226,6 +226,7 @@ export const getProductByIdQuery = `*[_type == "kFoodProduct" && (id.current == 
   spiceLevel
 }`;
 
+
 // --- K-BEAUTY / WEBSHOP LEKÉRDEZÉSEK ---
 
 export const getShopProductsQuery = `*[_type == "shopProduct"]{
@@ -272,7 +273,8 @@ export const getShopProductBySlugQuery = `*[_type == "shopProduct" && id.current
   featured
 }`;
 
-// --- ÜGYFÉL LEKÉRDEZÉSEK ---
+
+// --- ÜGYFÉL & RENDELÉS LEKÉRDEZÉSEK ---
 
 export const getCustomerByUserIdQuery = `*[_type == "customer" && userId == $userId][0]{
   _id,
@@ -286,7 +288,6 @@ export const getCustomerByUserIdQuery = `*[_type == "customer" && userId == $use
   createdAt
 }`;
 
-// Javítva az új fix számlázási sémához (invoiceNumber és invoiceFile URL)
 export const getOrdersByUserIdOrEmailQuery = `
   *[_type == "order" && (userId == $userId || customerEmail == $email)] | order(_createdAt desc) {
     _id,
