@@ -119,10 +119,40 @@ export async function POST(request: Request) {
         createdAt,
       });
 
-      console.log(`Sikeres rendelés, fix számla (${invoiceNumber}) generálva és mentve.`);
+      // 5. RAKTÁRKÉSZLET CSÖKKENTÉSE A SANITYBEN
+      for (const item of lineItems.data) {
+        const product = item.price?.product as Stripe.Product;
+        const boughtQty = item.quantity || 1;
+        const productName = product?.name;
+
+        if (productName) {
+          // Megkeressük a terméket a Sanityben a neve alapján
+          const sanityProduct = await writeClient.fetch(
+            `*[_type == "shopProduct" && title == $title][0]{ _id, variants }`,
+            { title: productName }
+          );
+
+          if (sanityProduct && sanityProduct.variants) {
+            // Megkeressük azt a variációt, ami egyezik (vagy ha nincs méret, az elsőt)
+            // A kosár mentésnél / Stripe item description-ben benne szokott lenni a méret is (pl. "Termék név (30 ml)")
+            const matchingVariant = sanityProduct.variants.find((v: any) => 
+              item.description?.includes(v.size) || product?.name?.includes(v.size)
+            ) || sanityProduct.variants[0];
+
+            if (matchingVariant && matchingVariant._key) {
+              await writeClient
+                .patch(sanityProduct._id)
+                .dec({ [`variants[_key == "${matchingVariant._key}"].stock`]: boughtQty })
+                .commit();
+            }
+          }
+        }
+      }
+
+      console.log(`Sikeres rendelés, fix számla (${invoiceNumber}) generálva, mentve és raktárkészlet frissítve.`);
     } catch (sanityErr) {
-      console.error('Hiba a rendelés Sanitybe mentésekor vagy PDF generáláskor:', sanityErr);
-      return NextResponse.json({ error: 'Sanity mentési / PDF hiba' }, { status: 500 });
+      console.error('Hiba a rendelés Sanitybe mentésekor, PDF generáláskor vagy készletcsökkentéskor:', sanityErr);
+      return NextResponse.json({ error: 'Sanity mentési / PDF / Készlet hiba' }, { status: 500 });
     }
   }
 
