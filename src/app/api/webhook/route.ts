@@ -40,7 +40,6 @@ export async function POST(request: Request) {
     const session = event.data.object as Stripe.Checkout.Session;
 
     try {
-      // 1. Termékek lekérdezése expandált metadata-val
       const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
         expand: ['data.price.product'],
       });
@@ -118,23 +117,32 @@ export async function POST(request: Request) {
         createdAt,
       });
 
-      // 5. RAKTÁRKÉSZLET PONTOS CSÖKKENTÉSE ID ÉS MÉRET ALAPJÁN
+      // 5. BIZTOS ÉS HATÉKONY KÉSZLETCSÖKKENTÉS NÉV ÉS MÉRET ALAPJÁN
+      // Mivel a termék neve formátuma a kosárban: "Termék Neve (Méret)"
       for (const item of lineItems.data) {
-        const product = item.price?.product as Stripe.Product;
         const boughtQty = item.quantity || 1;
-        const metadata = product?.metadata;
-        const sanityProductId = metadata?.sanityProductId;
-        const targetSize = metadata?.size;
+        const description = item.description || ''; // Pl: "Glow Serum With Rice Water (30 ml)"
 
-        if (sanityProductId) {
-          // Lekérdezzük a terméket közvetlenül az _id alapján
+        // Kinyerjük a nevet és a méretet a descriptionből regex-szel vagy string vágással
+        const match = description.match(/^(.*?)\s*\((.*?)\)$/);
+        
+        let productName = description;
+        let targetSize = 'Standard';
+
+        if (match) {
+          productName = match[1].trim();
+          targetSize = match[2].trim();
+        }
+
+        if (productName) {
+          // Megkeressük a terméket a Sanityben a pontos név alapján
           const sanityProduct = await writeClient.fetch(
-            `*[_type == "shopProduct" && _id == $id][0]{ _id, variants }`,
-            { id: sanityProductId }
+            `*[_type == "shopProduct" && title == $title][0]{ _id, variants }`,
+            { title: productName }
           );
 
           if (sanityProduct && sanityProduct.variants) {
-            // Megkeressük a pontos méretű variációt
+            // Megkeressük a variációt a méret alapján
             const matchingVariant = sanityProduct.variants.find((v: any) => v.size === targetSize) || sanityProduct.variants[0];
 
             if (matchingVariant && matchingVariant._key) {
@@ -143,7 +151,7 @@ export async function POST(request: Request) {
                 .dec({ [`variants[_key == "${matchingVariant._key}"].stock`]: boughtQty })
                 .commit();
               
-              console.log(`Készlet csökkentve: ${sanityProductId} (${targetSize}) - ${boughtQty} db`);
+              console.log(`Készlet sikeresen csökkentve: ${sanityProduct._id} (${targetSize}) - ${boughtQty} db`);
             }
           }
         }
