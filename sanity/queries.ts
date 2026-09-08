@@ -238,7 +238,13 @@ export const getShopProductsQuery = `*[_type == "shopProduct"]{
   "image": image.asset->url,
   tagline,
   rating,
-  variants,
+  variants[]{
+    size,
+    price,
+    onSale,
+    salePrice,
+    stock
+  },
   featured
 }`;
 
@@ -255,8 +261,13 @@ export const getShopProductBySlugQuery = `*[_type == "shopProduct" && id.current
   description,
   ingredients,
   howToUse,
-  variants,
-  stock,
+  variants[]{
+    size,
+    price,
+    onSale,
+    salePrice,
+    stock
+  },
   rating,
   featured
 }`;
