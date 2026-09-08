@@ -7,12 +7,14 @@ import { useRouter } from 'next/navigation';
 import { client } from '../../../sanity/lib/client';
 import { getCustomerByUserIdQuery } from '../../../sanity/queries';
 import Link from 'next/link';
+import { Package, MapPin, User, ArrowRight, ShieldCheck, ShoppingBag } from 'lucide-react';
 
 export default function AccountPage() {
   const { user, logout, loading: authLoading } = useAuth();
   const router = useRouter();
   
   const [customerData, setCustomerData] = useState<any>(null);
+  const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -35,22 +37,33 @@ export default function AccountPage() {
       return;
     }
 
-    async function fetchCustomerProfile() {
-      if (user?.userId) {
+    async function fetchCustomerDataAndOrders() {
+      if (user?.userId || user?.email) {
         try {
-          const data = await client.fetch(getCustomerByUserIdQuery, { userId: user.userId });
-          setCustomerData(data);
-          if (data) {
-            setFirstName(data.firstName || '');
-            setLastName(data.lastName || '');
-            setPhone(data.phone || '');
-            setStreet(data.shippingAddress?.street || '');
-            setCity(data.shippingAddress?.city || '');
-            setPostalCode(data.shippingAddress?.postalCode || '');
-            setCountry(data.shippingAddress?.country || 'Németország');
+          // 1. Ügyfél profil lekérdezése
+          if (user.userId) {
+            const customer = await client.fetch(getCustomerByUserIdQuery, { userId: user.userId });
+            setCustomerData(customer);
+            if (customer) {
+              setFirstName(customer.firstName || '');
+              setLastName(customer.lastName || '');
+              setPhone(customer.phone || '');
+              setStreet(customer.shippingAddress?.street || '');
+              setCity(customer.shippingAddress?.city || '');
+              setPostalCode(customer.shippingAddress?.postalCode || '');
+              setCountry(customer.shippingAddress?.country || 'Deutschland');
+            }
           }
+
+          // 2. Rendelések lekérdezése (legújabb legfelül)
+          const fetchedOrders = await client.fetch(
+            `*[_type == "order" && (userId == $userId || customerEmail == $email)] | order(_createdAt desc)`,
+            { userId: user.userId || '', email: user.email || '' }
+          );
+          setOrders(fetchedOrders);
+
         } catch (err) {
-          console.error('Hiba a felhasználói adatok lekérdezésekor:', err);
+          console.error('Hiba a felhasználói adatok vagy rendelések lekérdezésekor:', err);
         } finally {
           setLoading(false);
         }
@@ -60,7 +73,7 @@ export default function AccountPage() {
     }
 
     if (user) {
-      fetchCustomerProfile();
+      fetchCustomerDataAndOrders();
     }
   }, [user, authLoading, router]);
 
@@ -72,7 +85,7 @@ export default function AccountPage() {
     }
   };
 
-const handleUpdateProfile = async (e: React.FormEvent) => {
+  const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccessMessage('');
@@ -98,12 +111,9 @@ const handleUpdateProfile = async (e: React.FormEvent) => {
         },
       };
 
-      // Meghívjuk a saját biztonságos API route-unkat
       const res = await fetch('/api/update-profile', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedFields),
       });
 
@@ -113,14 +123,13 @@ const handleUpdateProfile = async (e: React.FormEvent) => {
         throw new Error(data.error || 'Hiba történt a mentés során.');
       }
 
-      // Helyi state frissítése
       setCustomerData((prev: any) => ({
         ...prev,
         ...updatedFields,
       }));
 
       setIsEditing(false);
-      setSuccessMessage('Az adataid sikeresen frissültek!');
+      setSuccessMessage('Ihre Daten wurden erfolgreich aktualisiert!');
     } catch (err: any) {
       console.error('Mentési hiba:', err);
       setError(err.message || 'Nem sikerült menteni a módosításokat.');
@@ -130,7 +139,7 @@ const handleUpdateProfile = async (e: React.FormEvent) => {
   };
 
   const handleDeleteAccount = async () => {
-    if (!window.confirm('Biztosan archiválni szeretnéd a fiókodat?')) {
+    if (!window.confirm('Möchten Sie Ihr Konto wirklich archivieren?')) {
       return;
     }
 
@@ -144,12 +153,12 @@ const handleUpdateProfile = async (e: React.FormEvent) => {
         .patch(customerData._id)
         .set({
           status: 'archived',
-          phone: '[TÖRÖLVE]',
+          phone: '[GELÖSCHT]',
           shippingAddress: {
-            street: '[TÖRÖLVE]',
-            city: '[TÖRÖLVE]',
-            postalCode: '[TÖRÖLVE]',
-            country: '[TÖRÖLVE]',
+            street: '[GELÖSCHT]',
+            city: '[GELÖSCHT]',
+            postalCode: '[GELÖSCHT]',
+            country: '[GELÖSCHT]',
           },
         })
         .commit();
@@ -157,253 +166,301 @@ const handleUpdateProfile = async (e: React.FormEvent) => {
       await logout();
     } catch (err: any) {
       console.error('Fiók archiválási hiba:', err);
-      setError('Nem sikerült archiválni a fiókot. Kérlek próbáld újra később.');
+      setError('Fehler beim Archivieren des Kontos.');
       setLoading(false);
     }
   };
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen pt-36 pb-20 px-5 flex items-center justify-center bg-[#0d0d12] text-neutral-300">
-        <p className="animate-pulse tracking-[0.25em] uppercase text-xs font-semibold">Profil betöltése...</p>
+      <div className="min-h-screen pt-36 pb-20 px-5 flex items-center justify-center bg-[#f7f3ef] text-slate-900">
+        <p className="animate-pulse tracking-[0.25em] uppercase text-xs font-semibold">Profil wird geladen...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen pt-36 pb-20 px-5 md:px-12 bg-[#0d0d12] text-neutral-100 relative overflow-hidden">
-      
-      <div className="absolute top-20 right-10 w-137.5 h-137.5 bg-rose-500/10 rounded-full blur-[160px] pointer-events-none" />
-
-      <div className="max-w-4xl mx-auto relative z-10">
+    <div className="min-h-screen pt-32 pb-20 px-4 md:px-12 bg-[#f7f3ef] text-slate-900">
+      <div className="max-w-4xl mx-auto space-y-8">
         
         {error && (
-          <div className="mb-6 p-4 rounded-2xl bg-rose-500/20 border border-rose-500/40 text-rose-200 text-xs text-center font-semibold">
+          <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-medium">
             {error}
           </div>
         )}
 
         {successMessage && (
-          <div className="mb-6 p-4 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-200 text-xs text-center font-semibold">
+          <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium">
             {successMessage}
           </div>
         )}
 
-        {/* Felső header rész */}
-        <div className="bg-[#17171d]/95 backdrop-blur-3xl border border-white/15 rounded-[2.5rem] p-8 md:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        {/* FEJLÉC KÁRTYA */}
+        <div className="bg-white p-8 md:p-10 rounded-3xl border border-stone-200/80 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
-            <span className="text-[10px] tracking-[0.3em] uppercase text-rose-400 font-bold mb-1.5 block">
-              Ügyfélportál
+            <span className="text-[10px] tracking-[0.3em] uppercase text-rose-700 font-bold mb-1 block">
+              82Seoul Kundenportal
             </span>
-            <h1 className="text-3xl font-extrabold tracking-wider uppercase text-white">
-              Fiókom
+            <h1 className="text-2xl font-extrabold tracking-wide uppercase text-slate-950">
+              Mein Konto
             </h1>
-            <p className="text-xs text-neutral-300 tracking-wide mt-1 font-medium">
-              Üdv újra, <span className="text-white font-bold">{customerData?.firstName || 'Felhasználó'}</span>!
+            <p className="text-xs text-stone-500 mt-1">
+              Willkommen zurück, <span className="text-slate-950 font-bold">{customerData?.firstName || 'Kunde'}</span>!
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={() => setIsEditing(!isEditing)}
-              className="px-5 py-3 rounded-2xl bg-white text-black hover:bg-neutral-200 text-xs font-extrabold tracking-widest uppercase transition-all cursor-pointer shadow-md"
+              className="px-5 py-3 rounded-2xl bg-slate-950 hover:bg-slate-800 text-white text-xs font-bold tracking-widest uppercase transition-all cursor-pointer shadow-md"
             >
-              {isEditing ? 'Mégsem' : 'Adatok szerkesztése'}
+              {isEditing ? 'Abbrechen' : 'Daten bearbeiten'}
             </button>
             <button
               onClick={handleLogout}
-              className="px-5 py-3 rounded-2xl bg-[#202028] border border-white/20 text-neutral-200 hover:bg-[#282832] text-xs font-bold tracking-widest uppercase transition-all cursor-pointer shadow-md"
+              className="px-5 py-3 rounded-2xl bg-stone-100 hover:bg-stone-200 text-slate-800 text-xs font-bold tracking-widest uppercase transition-all cursor-pointer"
             >
-              Kijelentkezés
+              Abmelden
             </button>
             <button
               onClick={handleDeleteAccount}
-              className="px-5 py-3 rounded-2xl bg-rose-500/20 border border-rose-500/40 text-rose-200 hover:bg-rose-500/30 text-xs font-bold tracking-widest uppercase transition-all cursor-pointer shadow-md"
+              className="px-4 py-3 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold tracking-widest uppercase transition-all cursor-pointer border border-rose-200"
             >
-              Fiók törlése
+              Konto löschen
             </button>
           </div>
         </div>
 
-        {/* Ha szerkesztési módban vagyunk, egy űrlap jelenik meg */}
+        {/* SZERKESZTÉSI ŰRLAP VAGY PROFIL KÁRTYÁK */}
         {isEditing ? (
-          <form onSubmit={handleUpdateProfile} className="bg-[#17171d]/95 backdrop-blur-3xl border border-white/15 rounded-[2.5rem] p-8 md:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] mb-8 space-y-6">
-            <h2 className="text-lg font-bold tracking-wider uppercase text-white border-b border-white/15 pb-4">
-              Adatok Módosítása
+          <form onSubmit={handleUpdateProfile} className="bg-white p-8 md:p-10 rounded-3xl border border-stone-200/80 shadow-xl space-y-6">
+            <h2 className="text-sm font-bold tracking-widest uppercase text-slate-950 border-b border-stone-100 pb-3">
+              Profilinformationen bearbeiten
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[11px] font-bold tracking-widest uppercase text-neutral-300 mb-1.5">Vezetéknév</label>
-                <input
-                  type="text"
-                  required
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl bg-[#202028] border border-white/20 text-white text-sm focus:outline-none focus:border-rose-400"
-                />
-              </div>
-              <div>
-                <label className="block text-[11px] font-bold tracking-widest uppercase text-neutral-300 mb-1.5">Keresztnév</label>
+                <label className="block text-[11px] font-medium text-stone-600 mb-1">Vorname (Keresztnév)</label>
                 <input
                   type="text"
                   required
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl bg-[#202028] border border-white/20 text-white text-sm focus:outline-none focus:border-rose-400"
+                  className="w-full px-4 py-3 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900"
+                />
+              </div>
+              <div>
+                <label className="block text-[11px] font-medium text-stone-600 mb-1">Nachname (Vezetéknév)</label>
+                <input
+                  type="text"
+                  required
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-[11px] font-bold tracking-widest uppercase text-neutral-300 mb-1.5">Telefonszám</label>
+              <label className="block text-[11px] font-medium text-stone-600 mb-1">Telefonnummer</label>
               <input
                 type="tel"
                 required
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="w-full px-4 py-3 rounded-2xl bg-[#202028] border border-white/20 text-white text-sm focus:outline-none focus:border-rose-400"
+                className="w-full px-4 py-3 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900"
               />
             </div>
 
-            <div className="pt-4 border-t border-white/10">
-              <p className="text-[11px] uppercase tracking-widest text-rose-400 font-bold mb-3">Szállítási cím</p>
-              <div className="space-y-4">
+            <div className="pt-4 border-t border-stone-100 space-y-4">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-slate-950">Lieferadresse</h3>
+              <div>
+                <label className="block text-[11px] font-medium text-stone-600 mb-1">Straße und Hausnummer</label>
+                <input
+                  type="text"
+                  required
+                  value={street}
+                  onChange={(e) => setStreet(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[11px] font-bold tracking-widest uppercase text-neutral-300 mb-1.5">Utca, Házszám</label>
+                  <label className="block text-[11px] font-medium text-stone-600 mb-1">Postleitzahl (PLZ)</label>
                   <input
                     type="text"
                     required
-                    value={street}
-                    onChange={(e) => setStreet(e.target.value)}
-                    className="w-full px-4 py-3 rounded-2xl bg-[#202028] border border-white/20 text-white text-sm focus:outline-none focus:border-rose-400"
+                    value={postalCode}
+                    onChange={(e) => setPostalCode(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900"
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-[11px] font-bold tracking-widest uppercase text-neutral-300 mb-1.5">Város</label>
-                    <input
-                      type="text"
-                      required
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                      className="w-full px-4 py-3 rounded-2xl bg-[#202028] border border-white/20 text-white text-sm focus:outline-none focus:border-rose-400"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[11px] font-bold tracking-widest uppercase text-neutral-300 mb-1.5">Irányítószám</label>
-                    <input
-                      type="text"
-                      required
-                      value={postalCode}
-                      onChange={(e) => setPostalCode(e.target.value)}
-                      className="w-full px-4 py-3 rounded-2xl bg-[#202028] border border-white/20 text-white text-sm focus:outline-none focus:border-rose-400"
-                    />
-                  </div>
-                </div>
                 <div>
-                  <label className="block text-[11px] font-bold tracking-widest uppercase text-neutral-300 mb-1.5">Ország</label>
+                  <label className="block text-[11px] font-medium text-stone-600 mb-1">Stadt</label>
                   <input
                     type="text"
                     required
-                    value={country}
-                    onChange={(e) => setCountry(e.target.value)}
-                    className="w-full px-4 py-3 rounded-2xl bg-[#202028] border border-white/20 text-white text-sm focus:outline-none focus:border-rose-400"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-medium text-stone-600 mb-1">Land</label>
+                <select
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900"
+                >
+                  <option value="Deutschland">Deutschland</option>
+                  <option value="Österreich">Österreich</option>
+                </select>
               </div>
             </div>
 
             <button
               type="submit"
               disabled={saving}
-              className="w-full py-3.5 rounded-2xl bg-white text-black font-extrabold tracking-widest uppercase text-xs hover:bg-neutral-200 transition-all cursor-pointer disabled:opacity-50 shadow-lg"
+              className="w-full py-4 rounded-2xl bg-slate-950 hover:bg-slate-800 text-white font-bold text-xs tracking-widest uppercase transition-all shadow-lg cursor-pointer disabled:opacity-50"
             >
-              {saving ? 'Mentés folyamatban...' : 'Módosítások mentése'}
+              {saving ? 'Wird gespeichert...' : 'Änderungen speichern'}
             </button>
           </form>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
-            {/* Személyes adatok kártya */}
-            <div className="bg-[#17171d]/95 backdrop-blur-3xl border border-white/15 rounded-[2.5rem] p-8 md:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] relative overflow-hidden">
-              <h2 className="text-[11px] font-bold tracking-[0.25em] uppercase text-neutral-400 mb-6 border-b border-white/15 pb-3">
-                Személyes Adatok
+            {/* SZEMÉLYES ADATOK KÁRTYA */}
+            <div className="bg-white p-8 rounded-3xl border border-stone-200/80 shadow-xl space-y-5">
+              <h2 className="text-xs font-bold tracking-widest uppercase text-slate-950 border-b border-stone-100 pb-3">
+                Persönliche Daten
               </h2>
 
-              <div className="space-y-5 text-sm">
+              <div className="space-y-4 text-xs">
                 <div>
-                  <span className="block text-[11px] font-bold uppercase tracking-widest text-neutral-400 mb-1">Teljes Név</span>
-                  <span className="font-bold text-white text-base">{customerData?.lastName} {customerData?.firstName}</span>
+                  <span className="block text-[10px] uppercase tracking-wider text-stone-400 mb-0.5">Vollständiger Name</span>
+                  <span className="font-bold text-slate-950 text-sm">{customerData?.firstName} {customerData?.lastName}</span>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-[#202028] border border-white/15 flex items-center justify-between shadow-inner">
+                <div className="p-4 rounded-2xl bg-stone-50 border border-stone-200/80 flex items-center justify-between">
                   <div>
-                    <span className="block text-[11px] font-bold uppercase tracking-widest text-rose-400 mb-1">Koreai Neved (Hangeul)</span>
-                    <span className="text-3xl font-extrabold tracking-wider text-white">{customerData?.koreanName || 'N/A'}</span>
+                    <span className="block text-[10px] uppercase tracking-wider text-rose-700 font-bold mb-0.5">Koreanischer Name (Hangeul)</span>
+                    <span className="text-2xl font-extrabold text-slate-950">{customerData?.koreanName || 'N/A'}</span>
                   </div>
-                  <span className="text-3xl">🇰🇷</span>
+                  <span className="text-2xl">🇰🇷</span>
                 </div>
 
                 <div>
-                  <span className="block text-[11px] font-bold uppercase tracking-widest text-neutral-400 mb-1">E-mail Cím</span>
-                  <span className="text-neutral-200 font-semibold">{customerData?.email || user?.email}</span>
+                  <span className="block text-[10px] uppercase tracking-wider text-stone-400 mb-0.5">E-Mail-Adresse</span>
+                  <span className="text-slate-800 font-medium">{customerData?.email || user?.email}</span>
                 </div>
 
                 <div>
-                  <span className="block text-[11px] font-bold uppercase tracking-widest text-neutral-400 mb-1">Telefonszám</span>
-                  <span className="text-neutral-200 font-semibold">{customerData?.phone || 'Nincs megadva'}</span>
+                  <span className="block text-[10px] uppercase tracking-wider text-stone-400 mb-0.5">Telefonnummer</span>
+                  <span className="text-slate-800 font-medium">{customerData?.phone || 'Nicht angegeben'}</span>
                 </div>
               </div>
             </div>
 
-            {/* Szállítási cím kártya */}
-            <div className="bg-[#17171d]/95 backdrop-blur-3xl border border-white/15 rounded-[2.5rem] p-8 md:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.8)]">
-              <h2 className="text-[11px] font-bold tracking-[0.25em] uppercase text-neutral-400 mb-6 border-b border-white/15 pb-3">
-                Alapértelmezett Szállítási Cím
+            {/* SZÁLLÍTÁSI CÍM KÁRTYA */}
+            <div className="bg-white p-8 rounded-3xl border border-stone-200/80 shadow-xl space-y-5">
+              <h2 className="text-xs font-bold tracking-widest uppercase text-slate-950 border-b border-stone-100 pb-3">
+                Standard-Lieferadresse
               </h2>
 
               {customerData?.shippingAddress ? (
-                <div className="space-y-5 text-sm">
+                <div className="space-y-4 text-xs">
                   <div>
-                    <span className="block text-[11px] font-bold uppercase tracking-widest text-neutral-400 mb-1">Utca, Házszám</span>
-                    <span className="font-bold text-white text-base">{customerData.shippingAddress.street}</span>
+                    <span className="block text-[10px] uppercase tracking-wider text-stone-400 mb-0.5">Straße und Hausnummer</span>
+                    <span className="font-bold text-slate-950 text-sm">{customerData.shippingAddress.street}</span>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <span className="block text-[11px] font-bold uppercase tracking-widest text-neutral-400 mb-1">Város</span>
-                      <span className="font-bold text-white text-base">{customerData.shippingAddress.city}</span>
+                      <span className="block text-[10px] uppercase tracking-wider text-stone-400 mb-0.5">Postleitzahl</span>
+                      <span className="font-bold text-slate-950 text-sm">{customerData.shippingAddress.postalCode}</span>
                     </div>
                     <div>
-                      <span className="block text-[11px] font-bold uppercase tracking-widest text-neutral-400 mb-1">Irányítószám</span>
-                      <span className="font-bold text-white text-base">{customerData.shippingAddress.postalCode}</span>
+                      <span className="block text-[10px] uppercase tracking-wider text-stone-400 mb-0.5">Stadt</span>
+                      <span className="font-bold text-slate-950 text-sm">{customerData.shippingAddress.city}</span>
                     </div>
                   </div>
                   <div>
-                    <span className="block text-[11px] font-bold uppercase tracking-widest text-neutral-400 mb-1">Ország</span>
-                    <span className="font-bold text-white text-base">{customerData.shippingAddress.country}</span>
+                    <span className="block text-[10px] uppercase tracking-wider text-stone-400 mb-0.5">Land</span>
+                    <span className="font-bold text-slate-950 text-sm">{customerData.shippingAddress.country}</span>
                   </div>
                 </div>
               ) : (
-                <p className="text-xs text-neutral-400 italic py-8 text-center font-semibold">Még nincs rögzítve szállítási cím.</p>
+                <p className="text-xs text-stone-400 italic py-8 text-center">Keine Lieferadresse gespeichert.</p>
               )}
             </div>
           </div>
         )}
 
-        {/* Rendelések szekció */}
-        <div className="mt-8 bg-[#17171d]/95 backdrop-blur-3xl border border-white/15 rounded-[2.5rem] p-8 md:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.8)]">
-          <h2 className="text-[11px] font-bold tracking-[0.25em] uppercase text-neutral-400 mb-4 border-b border-white/15 pb-3">
-            Korábbi Rendelések
-          </h2>
-          <p className="text-xs text-neutral-400 py-6 text-center font-semibold">
-            Még nincsenek leadott rendeléseid. Mikor elkezded a vásárlást, itt fogod látni az állapotukat!
-          </p>
+        {/* KORÁBBI RENDELÉSEK SZEKCIÓ */}
+        <div className="bg-white p-8 md:p-10 rounded-3xl border border-stone-200/80 shadow-xl space-y-6">
+          <div className="flex items-center gap-3 border-b border-stone-100 pb-4">
+            <Package className="w-5 h-5 text-rose-700" />
+            <h2 className="text-sm font-bold tracking-widest uppercase text-slate-950">
+              Meine Bestellungen ({orders.length})
+            </h2>
+          </div>
+
+          {orders.length === 0 ? (
+            <p className="text-xs text-stone-500 py-6 text-center font-medium">
+              Sie haben noch keine Bestellungen aufgegeben. Sobald Sie einkaufen, sehen Sie hier Ihre Bestellhistorie!
+            </p>
+          ) : (
+            <div className="space-y-4">
+              {orders.map((order) => (
+                <div key={order._id} className="p-6 rounded-2xl bg-stone-50 border border-stone-200/80 space-y-4 text-xs">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-stone-200/60 pb-3">
+                    <div>
+                      <span className="text-[10px] uppercase tracking-wider text-stone-400 block">Bestell-ID</span>
+                      <span className="font-mono font-bold text-slate-950">{order.orderId || order._id}</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-[10px] uppercase tracking-wider text-stone-400 block">Datum</span>
+                      <span className="font-mono text-stone-700">
+                        {new Date(order._createdAt).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                      </span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-[10px] uppercase tracking-wider text-stone-400 block">Gesamtbetrag</span>
+                      <span className="font-mono font-bold text-rose-800 text-sm">€{order.totalAmount?.toFixed(2)}</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400">Artikel</span>
+                    <div className="divide-y divide-stone-200/40">
+                      {order.items?.map((item: any, idx: number) => (
+                        <div key={idx} className="py-2 flex justify-between items-center">
+                          <span className="text-stone-800 font-medium">{item.name} (Anzahl: {item.quantity})</span>
+                          <span className="font-mono text-stone-600">€{(item.price * item.quantity).toFixed(2)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {order.shippingDetails && (
+                    <div className="pt-2 border-t border-stone-200/60 flex items-start gap-2 text-stone-500 text-[11px]">
+                      <MapPin className="w-3.5 h-3.5 text-rose-700 shrink-0 mt-0.5" />
+                      <p>
+                        Lieferadresse: {order.shippingDetails.street}, {order.shippingDetails.postalCode} {order.shippingDetails.city}, {order.shippingDetails.country}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        <div className="mt-8 text-center">
-          <Link href="/" className="text-[10px] uppercase tracking-[0.25em] text-neutral-400 hover:text-white transition-colors font-bold">
-            ← Vissza a főoldalra
+        <div className="text-center pt-2">
+          <Link href="/" className="text-xs font-bold text-stone-600 hover:text-slate-950 tracking-wider uppercase transition-colors">
+            ← Zurück zur Startseite
           </Link>
         </div>
 

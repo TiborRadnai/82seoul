@@ -1,22 +1,78 @@
+// src/components/CartDrawer.tsx
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext'; // <--- Behozzuk az auth-ot is
 import { X, ShoppingBag, Plus, Minus, Trash2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function CartDrawer() {
+  const router = useRouter();
   const { cart, isCartOpen, setIsCartOpen, removeFromCart, updateQuantity, subtotal, totalItems } = useCart();
+  const { user } = useAuth(); // <--- Lekérjük a usert, hogy tudjuk az e-mail címét
+  const [loadingCheckout, setLoadingCheckout] = useState(false);
 
   if (!isCartOpen) return null;
 
   const freeShippingThreshold = 50;
   const progress = Math.min((subtotal / freeShippingThreshold) * 100, 100);
   const remainingForFreeShipping = Math.max(freeShippingThreshold - subtotal, 0);
+  const shippingCost = remainingForFreeShipping === 0 ? 0 : 4.90;
+  const grandTotal = subtotal + shippingCost;
+
+  // EZ A STRIPE FIZETÉST INDÍTÓ FÜGGVÉNY
+  const handleStripeCheckout = async () => {
+    try {
+      setLoadingCheckout(true);
+
+      // Összeállítjuk a küldendő tételeket (beleértve a szállítási költséget is, ha van)
+      const itemsToSend = cart.map(item => ({
+        name: `${item.title} (${item.size})`,
+        price: item.price,
+        quantity: item.quantity,
+        image: item.image,
+      }));
+
+      // Ha van szállítási költség, azt is hozzáadhatjuk külön tételként a Stripe-hoz
+      if (shippingCost > 0) {
+        itemsToSend.push({
+          name: 'Versandkosten (Standard)',
+          price: shippingCost,
+          quantity: 1,
+          image: '',
+        });
+      }
+
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: itemsToSend,
+          customerEmail: user?.email || undefined,
+          userId: user?.userId || 'guest',
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.url) {
+        window.location.href = data.url; // Átirányítás a Stripe felületére!
+      } else {
+        alert(data.error || 'Hiba történt a fizetés indításakor.');
+        setLoadingCheckout(false);
+      }
+    } catch (err) {
+      console.error('Checkout hiba:', err);
+      alert('Nem sikerült csatlakozni a fizetési szerverhez.');
+      setLoadingCheckout(false);
+    }
+  };
 
   return (
-    <div className="fixed inset-0 z-100 overflow-hidden"> {/* <--- Itt emeltük z-100-ra */}
-      {/* Sötétített háttér / backdrop blur */}
+    <div className="fixed inset-0 z-100 overflow-hidden">
+      {/* Sötétített háttér */}
       <div 
         className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm transition-opacity animate-fadeIn"
         onClick={() => setIsCartOpen(false)}
@@ -26,8 +82,7 @@ export default function CartDrawer() {
         <div className="w-screen max-w-md bg-[#f7f3ef] text-slate-900 shadow-2xl flex flex-col border-l border-stone-300/60 animate-slideLeft">
           
           {/* FEJLÉC */}
-          <div className="flex items-center justify-between px-6 py-6 border-b border-stone-200 bg-white/9onta">
-...
+          <div className="flex items-center justify-between px-6 py-6 border-b border-stone-200 bg-white/90">
             <div className="flex items-center gap-3">
               <ShoppingBag className="w-5 h-5 text-rose-700" />
               <h2 className="text-base font-bold tracking-widest uppercase text-slate-950">
@@ -136,20 +191,22 @@ export default function CartDrawer() {
                 <div className="flex justify-between text-xs text-stone-600">
                   <span>Versand</span>
                   <span className="font-mono font-medium text-slate-900">
-                    {remainingForFreeShipping === 0 ? 'Kostenfrei' : '€4.90'}
+                    {shippingCost === 0 ? 'Kostenfrei' : `€${shippingCost.toFixed(2)}`}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm font-bold text-slate-950 pt-2 border-t border-stone-200">
                   <span>Gesamtsumme</span>
                   <span className="font-mono text-base text-rose-800">
-                    €{(subtotal + (remainingForFreeShipping === 0 ? 0 : 4.90)).toFixed(2)}
+                    €{grandTotal.toFixed(2)}
                   </span>
                 </div>
               </div>
 
+              {/* STRIPE FIZETÉSI GOMB */}
               <button
                 onClick={() => {
-                  alert('A pénztár (Stripe checkout) a következő fázisban érkezik! 🎉');
+                  setIsCartOpen(false); // Bezárjuk a kosár drawer-t
+                  router.push('/checkout'); // Átirányítunk az új címkérő oldalra
                 }}
                 className="w-full py-4 rounded-2xl bg-slate-950 hover:bg-slate-800 text-white font-bold text-xs tracking-widest uppercase flex items-center justify-center gap-3 shadow-lg transition-all duration-300 cursor-pointer active:scale-98"
               >

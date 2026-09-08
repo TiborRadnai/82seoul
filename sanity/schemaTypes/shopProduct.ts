@@ -52,43 +52,32 @@ export default {
         ],
       },
     },
-{
+    {
       name: 'featured',
       title: 'Kiemelt a főoldalon (Max. 4 darab engedélyezett)',
       type: 'boolean',
       initialValue: false,
       validation: (Rule: any) =>
         Rule.custom(async (isFeatured: boolean, context: { document: { _id: string }; getClient: (options: { apiVersion: string }) => any }) => {
-          if (!isFeatured) return true; // Ha nincs bekapcsolva, nincs teendő
+          if (!isFeatured) return true;
 
           const client = context.getClient({ apiVersion: '2024-03-01' });
           const currentId = context.document._id.replace(/^drafts\./, '');
 
-          // Lekérjük az összes terméket, aminek be van kapcsolva a featured mezője
           const featuredProducts = await client.fetch(
             '*[_type == "shopProduct" && featured == true]{ _id }'
           );
 
-          // Megszűrjük JS-ben úgy, hogy a saját ID-nk (függetlenül a drafts. előtagtól) ne számítson bele duplán
           const uniqueFeaturedIds = new Set(
             featuredProducts.map((p: any) => p._id.replace(/^drafts\./, ''))
           );
 
-          // Ha a megszámlált egyedi termékek száma már eléri a 4-et, ÉS a jelenlegi termék még nincs benne a listában
           if (uniqueFeaturedIds.size >= 4 && !uniqueFeaturedIds.has(currentId)) {
             return 'Maximum 4 kiemelt termék lehet egyszerre! Kérlek, kapcsold ki a kiemelést egy másik terméken, mielőtt ezt bekapcsolod.';
           }
 
           return true;
         }),
-    },
-    // --- KÉSZLET & MENNYISÉG ---
-    {
-      name: 'stock',
-      title: 'Raktárkészlet (Darabszám)',
-      type: 'number',
-      initialValue: 25,
-      validation: (Rule: any) => Rule.min(0).required(),
     },
     {
       name: 'image',
@@ -140,10 +129,10 @@ export default {
       rows: 3,
     },
 
-    // --- DINAMIKUS KISZERELÉSEK ÉS ÁRAK (Szabad mértékegységgel) ---
+    // --- DINAMIKUS KISZERELÉSEK, ÁRAK ÉS KÉSZLET ---
     {
       name: 'variants',
-      title: 'Kiszerelések és Árak (EUR)',
+      title: 'Kiszerelések, Árak és Készlet (EUR)',
       type: 'array',
       of: [
         {
@@ -158,7 +147,7 @@ export default {
             {
               name: 'price',
               title: 'Alapár (pl. 12.50)',
-              type: 'string', // <-- Átállítva szövegre a tizedesek miatt
+              type: 'string',
               validation: (Rule: any) => Rule.required(),
             },
             {
@@ -170,8 +159,15 @@ export default {
             {
               name: 'salePrice',
               title: 'Redukált / Akciós ár (pl. 9.90)',
-              type: 'string', // <-- Átállítva szövegre a tizedesek miatt
+              type: 'string',
               hidden: ({ parent }: { parent?: { onSale?: boolean } }) => !parent?.onSale,
+            },
+            {
+              name: 'stock',
+              title: 'Raktárkészlet ehhez a mérethez (Darabszám)',
+              type: 'number',
+              initialValue: 20,
+              validation: (Rule: any) => Rule.min(0).required(),
             },
           ],
           preview: {
@@ -180,11 +176,12 @@ export default {
               price: 'price',
               salePrice: 'salePrice',
               onSale: 'onSale',
+              stock: 'stock',
             },
-            prepare(selection: { size: string; price: string; salePrice: string; onSale: boolean }) {
-              const { size, price, salePrice, onSale } = selection;
+            prepare(selection: { size: string; price: string; salePrice: string; onSale: boolean; stock: number }) {
+              const { size, price, salePrice, onSale, stock } = selection;
               return {
-                title: `${size} — ${onSale ? `${salePrice} € (Akciós!)` : `${price} €`}`,
+                title: `${size} — ${onSale ? `${salePrice} € (Akciós!)` : `${price} €`} (Készlet: ${stock ?? 0} db)`,
               };
             },
           },
@@ -192,6 +189,8 @@ export default {
       ],
       validation: (Rule: any) => Rule.required().min(1, 'Legalább egy kiszerelést meg kell adni!'),
     },
+    
+    // --- ÉRTÉKELÉS ---
     {
       name: 'rating',
       title: 'Értékelés (pl. 4.9)',
@@ -200,7 +199,7 @@ export default {
       options: {
         step: 0.1,
       },
-      validation: (Rule: any) => Rule.min(1).max(5), // <--- A min és max korlát kényszeríti ki a tizedes léptetést a nyilaknál
+      validation: (Rule: any) => Rule.min(1).max(5),
     },
   ],
 };
