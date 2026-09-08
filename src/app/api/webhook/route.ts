@@ -44,11 +44,19 @@ export async function POST(request: Request) {
         expand: ['data.price.product'],
       });
 
+      // 1. Javított item feldolgozás: itt mentjük el a méretet is a tételbe, hogy a profilban se legyen undefined
       const items = lineItems.data.map((item, index) => {
         const product = item.price?.product as Stripe.Product;
+        const description = item.description || product?.name || '';
+        const match = description.match(/^(.*?)\s*\((.*?)\)$/);
+        
+        const productName = match ? match[1].trim() : description;
+        const productSize = match ? match[2].trim() : 'Standard';
+
         return {
           _key: `item_${Date.now()}_${index}`,
-          name: product?.name || item.description || 'Termék',
+          name: productName,
+          size: productSize,
           price: item.amount_total ? item.amount_total / 100 / (item.quantity || 1) : 0,
           quantity: item.quantity || 1,
         };
@@ -90,7 +98,7 @@ export async function POST(request: Request) {
         contentType: 'application/pdf',
       });
 
-      // 4. Rendelés mentése
+      // 4. Rendelés mentése (Mostantól a helyes nevet és méretet tartalmazó items tömbbel)
       await writeClient.create({
         _type: 'order',
         stripeSessionId: session.id,
@@ -117,32 +125,19 @@ export async function POST(request: Request) {
         createdAt,
       });
 
-      // 5. BIZTOS ÉS HATÉKONY KÉSZLETCSÖKKENTÉS NÉV ÉS MÉRET ALAPJÁN
-      // Mivel a termék neve formátuma a kosárban: "Termék Neve (Méret)"
-      for (const item of lineItems.data) {
+      // 5. RAKTÁRKÉSZLET CSÖKKENTÉSE AZ ELŐRE KINYERT ADATOKKAL
+      for (const item of items) {
         const boughtQty = item.quantity || 1;
-        const description = item.description || ''; // Pl: "Glow Serum With Rice Water (30 ml)"
-
-        // Kinyerjük a nevet és a méretet a descriptionből regex-szel vagy string vágással
-        const match = description.match(/^(.*?)\s*\((.*?)\)$/);
-        
-        let productName = description;
-        let targetSize = 'Standard';
-
-        if (match) {
-          productName = match[1].trim();
-          targetSize = match[2].trim();
-        }
+        const productName = item.name;
+        const targetSize = item.size;
 
         if (productName) {
-          // Megkeressük a terméket a Sanityben a pontos név alapján
           const sanityProduct = await writeClient.fetch(
             `*[_type == "shopProduct" && title == $title][0]{ _id, variants }`,
             { title: productName }
           );
 
           if (sanityProduct && sanityProduct.variants) {
-            // Megkeressük a variációt a méret alapján
             const matchingVariant = sanityProduct.variants.find((v: any) => v.size === targetSize) || sanityProduct.variants[0];
 
             if (matchingVariant && matchingVariant._key) {
