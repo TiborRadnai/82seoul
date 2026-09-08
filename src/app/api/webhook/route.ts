@@ -49,17 +49,16 @@ export async function POST(request: Request) {
         const product = item.price?.product as Stripe.Product;
         const rawName = product?.name || item.description || 'Termék';
         
-        // Ha a név tartalmazza a méretet zárójelben (pl. "Serum (30 ml)"), szétválasztjuk a tiszta névre és méretre
+        // Ha a név tartalmazza a méretet zárójelben (pl. "Water Bank Moisture Cream (50 ml)"), szétválasztjuk
         const match = rawName.match(/^(.*?)\s*\((.*?)\)$/);
         const cleanName = match ? match[1].trim() : rawName;
         const variantSize = match ? match[2].trim() : 'Standard';
 
         return {
           _key: `item_${Date.now()}_${index}`,
-          name: `${cleanName} (${variantSize})`, // A séma szerinti mezőbe mentjük
+          name: `${cleanName} (${variantSize})`, 
           price: item.amount_total ? item.amount_total / 100 / (item.quantity || 1) : 0,
           quantity: item.quantity || 1,
-          // Segédmezők a belső készletcsökkentéshez (ezek nem zavarják a Sanity sémát, de itt fel tudjuk használni)
           _cleanName: cleanName,
           _variantSize: variantSize,
         };
@@ -101,7 +100,7 @@ export async function POST(request: Request) {
         contentType: 'application/pdf',
       });
 
-      // 4. Rendelés mentése a pontos order sémával (kivéve a belső segédmezőket)
+      // 4. Rendelés mentése a pontos order sémával
       const sanityOrderItems = items.map(i => ({
         _key: i._key,
         name: i.name,
@@ -135,28 +134,26 @@ export async function POST(request: Request) {
         createdAt,
       });
 
-      // 5. PONTOS KÉSZLETCSÖKKENTÉS A shopProduct -> title és variants -> size / stock alapján
+      // 5. PONTOS KÉSZLETCSÖKKENTÉS A shopProduct -> title és variants -> size / stock alapján (Tranzakciós patch-csel)
       for (const item of items) {
         const boughtQty = item.quantity || 1;
         const targetTitle = item._cleanName;
         const targetSize = item._variantSize;
 
         if (targetTitle) {
-          // Lekérdezzük a terméket a title alapján
           const sanityProduct = await writeClient.fetch(
             `*[_type == "shopProduct" && title == $title][0]{ _id, variants }`,
             { title: targetTitle }
           );
 
           if (sanityProduct && sanityProduct.variants) {
-            // Megkeressük a megfelelő méretű variációt a variants tömbben
             const matchingVariant = sanityProduct.variants.find((v: any) => v.size === targetSize) || sanityProduct.variants[0];
 
             if (matchingVariant && matchingVariant._key) {
-              // Csökkentjük a stock mezőt
+              // Tranzakció használata, hogy a legfrissebb raktárkészletből vonja le a mennyiséget
               await writeClient
-                .patch(sanityProduct._id)
-                .dec({ [`variants[_key == "${matchingVariant._key}"].stock`]: boughtQty })
+                .transaction()
+                .patch(sanityProduct._id, p => p.dec({ [`variants[_key == "${matchingVariant._key}"].stock`]: boughtQty }))
                 .commit();
               
               console.log(`Készlet csökkentve: ${sanityProduct._id} (${targetSize}) - ${boughtQty} db`);
