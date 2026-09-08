@@ -274,3 +274,17 @@ export const getCustomerByUserIdQuery = `*[_type == "customer" && userId == $use
   shippingAddress,
   createdAt
 }`;
+
+
+export const getOrdersByUserIdOrEmailQuery = `
+  *[_type == "order" && (userId == $userId || customerEmail == $email)] | order(_createdAt desc) {
+    _id,
+    _createdAt,
+    stripeSessionId,
+    totalAmount,
+    amountTotal,
+    currency,
+    items,
+    shippingDetails
+  }
+`;

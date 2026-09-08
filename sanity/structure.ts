@@ -40,7 +40,7 @@ export const structure = (S: StructureBuilder) =>
             ])
         ),
 
-      // WEBSHOP Mappa (Kategóriákra bontva) - ITT VOLTAK A HIÁNYZÓ API VERZIÓK
+      // WEBSHOP Mappa (Kategóriákra bontva)
       S.listItem()
         .title('Webshop (K-Beauty)')
         .child(
@@ -60,7 +60,7 @@ export const structure = (S: StructureBuilder) =>
                     .title('Arckrémek')
                     .schemaType('shopProduct')
                     .filter('_type == "shopProduct" && category == "Arckrém & Hidratáló"')
-                    .apiVersion('2023-05-03') // <--- HIÁNYZOTT
+                    .apiVersion('2023-05-03')
                 ),
               S.listItem()
                 .title('Szérumok & Esszenciák')
@@ -69,7 +69,7 @@ export const structure = (S: StructureBuilder) =>
                     .title('Szérumok')
                     .schemaType('shopProduct')
                     .filter('_type == "shopProduct" && category == "Szérum & Esszencia"')
-                    .apiVersion('2023-05-03') // <--- HIÁNYZOTT
+                    .apiVersion('2023-05-03')
                 ),
               S.listItem()
                 .title('Arctisztítók')
@@ -78,7 +78,7 @@ export const structure = (S: StructureBuilder) =>
                     .title('Arctisztítók')
                     .schemaType('shopProduct')
                     .filter('_type == "shopProduct" && category == "Arctisztító"')
-                    .apiVersion('2023-05-03') // <--- HIÁNYZOTT
+                    .apiVersion('2023-05-03')
                 ),
               S.listItem()
                 .title('Arcmaszkok & Peelingek')
@@ -87,7 +87,7 @@ export const structure = (S: StructureBuilder) =>
                     .title('Arcmaszkok')
                     .schemaType('shopProduct')
                     .filter('_type == "shopProduct" && category == "Arcmaszk & Peeling"')
-                    .apiVersion('2023-05-03') // <--- HIÁNYZOTT
+                    .apiVersion('2023-05-03')
                 ),
               S.listItem()
                 .title('Smink & Egyéb')
@@ -96,19 +96,57 @@ export const structure = (S: StructureBuilder) =>
                     .title('Smink & Egyéb')
                     .schemaType('shopProduct')
                     .filter('_type == "shopProduct" && category == "Smink & Egyéb"')
-                    .apiVersion('2023-05-03') // <--- HIÁNYZOTT
+                    .apiVersion('2023-05-03')
                 ),
             ])
         ),
 
-      // ÜGYFELEK ÉS MARKETING Mappa
+      S.divider(),
+
+      // 1. FŐ ÁG: RENDELÉSEK MAPPA (Külön a logisztikának)
+      S.listItem()
+        .title('Rendelések')
+        .child(
+          S.list()
+            .title('Rendelések Kezelése')
+            .items([
+              S.listItem()
+                .title('Minden Rendelés (Időrendben)')
+                .child(
+                  S.documentList()
+                    .title('Összes Rendelés')
+                    .schemaType('order')
+                    .filter('_type == "order"')
+                    .defaultOrdering([{ field: '_createdAt', direction: 'desc' }])
+                    .apiVersion('2023-05-03')
+                ),
+              S.listItem()
+                .title('Rendelések Vásárlóink Szerint')
+                .child(
+                  S.documentTypeList('customer')
+                    .title('Válassz Vásárlót')
+                    .filter('_type == "customer"')
+                    .apiVersion('2023-05-03')
+                    .child((customerId) =>
+                      S.documentList()
+                        .title('Ügyfél Rendelései')
+                        .schemaType('order')
+                        .filter('_type == "order" && (customerEmail == *[_id == $custId][0].email || userId == *[_id == $custId][0].userId)')
+                        .params({ custId: customerId })
+                        .defaultOrdering([{ field: '_createdAt', direction: 'desc' }])
+                        .apiVersion('2023-05-03')
+                    )
+                ),
+            ])
+        ),
+
+      // 2. FŐ ÁG: ÜGYFELEK & MARKETING MAPPA (Külön a felhasználóknak és hírlevélnek)
       S.listItem()
         .title('Ügyfelek & Marketing')
         .child(
           S.list()
-            .title('Marketing és Adatok')
+            .title('Ügyfelek és Hírlevél')
             .items([
-              // Aktív vásárlók (ahol a státusz nem archivált, vagy nincs még státusz megadva)
               S.listItem()
                 .title('Regisztrált Felhasználók')
                 .child(
@@ -118,8 +156,6 @@ export const structure = (S: StructureBuilder) =>
                     .filter('_type == "customer" && (status != "archived" || !defined(status))')
                     .apiVersion('2023-05-03')
                 ),
-
-              // Archivált vásárlók (akiknél a státusz át lett állítva "archived"-ra)
               S.listItem()
                 .title('Archivált Felhasználók')
                 .child(
@@ -129,10 +165,7 @@ export const structure = (S: StructureBuilder) =>
                     .filter('_type == "customer" && status == "archived"')
                     .apiVersion('2023-05-03')
                 ),
-
               S.divider(),
-
-              // Hírlevél feliratkozók marad a helyén
               S.documentTypeListItem('newsletterSubscriber').title('Hírlevél Feliratkozók'),
             ])
         ),
