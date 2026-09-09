@@ -57,7 +57,7 @@ export default function AuthPage() {
   const [street, setStreet] = useState('');
   const [city, setCity] = useState('');
   const [postalCode, setPostalCode] = useState('');
-  const [country, setCountry] = useState('Németország');
+  const [country, setCountry] = useState('Deutschland');
 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -95,36 +95,34 @@ export default function AuthPage() {
         router.push('/');
       }
     } catch (err: any) {
-      console.error("AUTH HIBA:", err);
-      setError(err.message || 'Hiba történt a folyamat során.');
+      console.error("AUTH FEHLER:", err);
+      setError(err.message || 'Ein Fehler ist aufgetreten.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen pt-36 pb-20 px-5 flex items-center justify-center bg-[#0d0d12] text-neutral-100 relative overflow-hidden">
-      
-      {/* Finom, elegáns háttérfények */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 h-175 bg-linear-to-tr from-rose-500/10 via-purple-500/5 to-transparent rounded-full blur-[160px] pointer-events-none" />
+    <div className="relative min-h-screen pt-32 pb-20 px-4 md:px-12 bg-[#f7f3ef] text-slate-900 flex items-center justify-center">
+      {/* FELSŐ ÉJKÉK ÁTMENET A NAVIGÁCIÓHOZ */}
+      <div className="absolute top-0 left-0 right-0 h-44 bg-linear-to-b from-indigo-950/70 via-indigo-950/20 to-transparent pointer-events-none z-20" />
 
-      {/* Prémium, tiszta, olvasható üveg kártya */}
-      <div className="w-full max-w-xl bg-[#17171d]/95 backdrop-blur-3xl border border-white/15 rounded-[2.5rem] p-8 md:p-12 shadow-[0_30px_100px_rgba(0,0,0,0.8)] relative z-10">
+      <div className="w-full max-w-xl bg-white/95 backdrop-blur-md p-8 md:p-12 rounded-3xl border border-stone-200/85 shadow-xl relative z-35">
         
         <div className="text-center mb-8">
-          <span className="text-[10px] tracking-[0.3em] uppercase text-rose-400 font-bold mb-2 block">
+          <span className="text-[10px] tracking-[0.3em] uppercase text-rose-700 font-bold mb-2 block">
             82SEOUL BEAUTY CLUB
           </span>
-          <h1 className="text-2xl md:text-3xl font-bold tracking-wider uppercase text-white mb-2">
-            {isLogin ? 'Bejelentkezés' : 'Fiók létrehozása'}
+          <h1 className="text-2xl md:text-3xl font-extrabold tracking-wide uppercase text-slate-950 mb-2">
+            {isLogin ? 'Anmeldung' : 'Konto erstellen'}
           </h1>
-          <p className="text-xs tracking-wide text-neutral-300 font-medium">
-            {isLogin ? 'Üdv újra a 82.Seoul világában!' : 'Regisztrálj a rendelésekhez és a koreai élményekhez.'}
+          <p className="text-xs tracking-wide text-stone-500 font-medium">
+            {isLogin ? 'Willkommen zurück in der Welt von 82.Seoul!' : 'Registrieren Sie sich für Bestellungen und koreanische Erlebnisse.'}
           </p>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 rounded-2xl bg-rose-500/20 border border-rose-500/40 text-rose-200 text-xs text-center font-semibold">
+          <div className="mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs text-center font-semibold">
             {error}
           </div>
         )}
@@ -134,28 +132,28 @@ export default function AuthPage() {
           {!isLogin && (
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-[11px] font-bold tracking-widest uppercase text-neutral-300 mb-1.5">
-                  Vezetéknév
+                <label className="block text-[11px] font-bold tracking-widest uppercase text-stone-600 mb-1.5">
+                  Nachname
                 </label>
                 <input
                   type="text"
                   required
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
-                  className="w-full px-4 py-3.5 rounded-2xl bg-[#202028] border border-white/20 text-white text-sm focus:outline-none focus:border-rose-400 focus:bg-[#282832] transition-all placeholder:text-neutral-500"
+                  className="w-full px-4 py-3.5 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900 placeholder:text-stone-400"
                   placeholder="Kovács"
                 />
               </div>
               <div>
-                <label className="block text-[11px] font-bold tracking-widest uppercase text-neutral-300 mb-1.5">
-                  Keresztnév
+                <label className="block text-[11px] font-bold tracking-widest uppercase text-stone-600 mb-1.5">
+                  Vorname
                 </label>
                 <input
                   type="text"
                   required
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  className="w-full px-4 py-3.5 rounded-2xl bg-[#202028] border border-white/20 text-white text-sm focus:outline-none focus:border-rose-400 focus:bg-[#282832] transition-all placeholder:text-neutral-500"
+                  className="w-full px-4 py-3.5 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900 placeholder:text-stone-400"
                   placeholder="Péter"
                 />
               </div>
@@ -163,22 +161,22 @@ export default function AuthPage() {
           )}
 
           <div>
-            <label className="block text-[11px] font-bold tracking-widest uppercase text-neutral-300 mb-1.5">
-              E-mail cím
+            <label className="block text-[11px] font-bold tracking-widest uppercase text-stone-600 mb-1.5">
+              E-Mail-Adresse
             </label>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3.5 rounded-2xl bg-[#202028] border border-white/20 text-white text-sm focus:outline-none focus:border-rose-400 focus:bg-[#282832] transition-all placeholder:text-neutral-500"
-              placeholder="pelda@email.com"
+              className="w-full px-4 py-3.5 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900 placeholder:text-stone-400"
+              placeholder="beispiel@email.com"
             />
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold tracking-widest uppercase text-neutral-300 mb-1.5">
-              Jelszó
+            <label className="block text-[11px] font-bold tracking-widest uppercase text-stone-600 mb-1.5">
+              Passwort
             </label>
             <div className="relative">
               <input
@@ -186,13 +184,13 @@ export default function AuthPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3.5 pr-12 rounded-2xl bg-[#202028] border border-white/20 text-white text-sm focus:outline-none focus:border-rose-400 focus:bg-[#282832] transition-all placeholder:text-neutral-500"
+                className="w-full px-4 py-3.5 pr-12 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900 placeholder:text-stone-400"
                 placeholder="••••••••"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-300 hover:text-white transition-colors cursor-pointer"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-stone-500 hover:text-slate-950 transition-colors cursor-pointer"
               >
                 {showPassword ? (
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
@@ -211,64 +209,78 @@ export default function AuthPage() {
           {!isLogin && (
             <>
               <div>
-                <label className="block text-[11px] font-bold tracking-widest uppercase text-neutral-300 mb-1.5">
-                  Telefonszám (kiszállításhoz)
+                <label className="block text-[11px] font-bold tracking-widest uppercase text-stone-600 mb-1.5">
+                  Telefonnummer (für den Versand)
                 </label>
                 <input
                   type="tel"
                   required
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full px-4 py-3.5 rounded-2xl bg-[#202028] border border-white/20 text-white text-sm focus:outline-none focus:border-rose-400 focus:bg-[#282832] transition-all placeholder:text-neutral-500"
+                  className="w-full px-4 py-3.5 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900 placeholder:text-stone-400"
                   placeholder="+49 123 456789"
                 />
               </div>
 
-              <div className="pt-4 border-t border-white/15">
-                <p className="text-[11px] uppercase tracking-widest text-rose-400 font-bold mb-3">Szállítási cím</p>
+              <div className="pt-4 border-t border-stone-200/85">
+                <p className="text-[11px] uppercase tracking-widest text-rose-700 font-bold mb-3">Lieferadresse</p>
                 
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-[11px] font-bold tracking-widest uppercase text-neutral-300 mb-1.5">
-                      Utca, Házszám
+                    <label className="block text-[11px] font-bold tracking-widest uppercase text-stone-600 mb-1.5">
+                      Straße und Hausnummer
                     </label>
                     <input
                       type="text"
                       required
                       value={street}
                       onChange={(e) => setStreet(e.target.value)}
-                      className="w-full px-4 py-3.5 rounded-2xl bg-[#202028] border border-white/20 text-white text-sm focus:outline-none focus:border-rose-400 focus:bg-[#282832] transition-all placeholder:text-neutral-500"
-                      placeholder="Hauptstraße 12."
+                      className="w-full px-4 py-3.5 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900 placeholder:text-stone-400"
+                      placeholder="Hauptstraße 12"
                     />
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-[11px] font-bold tracking-widest uppercase text-neutral-300 mb-1.5">
-                        Város
+                      <label className="block text-[11px] font-bold tracking-widest uppercase text-stone-600 mb-1.5">
+                        Stadt
                       </label>
                       <input
                         type="text"
                         required
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
-                        className="w-full px-4 py-3.5 rounded-2xl bg-[#202028] border border-white/20 text-white text-sm focus:outline-none focus:border-rose-400 focus:bg-[#282832] transition-all placeholder:text-neutral-500"
+                        className="w-full px-4 py-3.5 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900 placeholder:text-stone-400"
                         placeholder="München"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-bold tracking-widest uppercase text-neutral-300 mb-1.5">
-                        Irányítószám
+                      <label className="block text-[11px] font-bold tracking-widest uppercase text-stone-600 mb-1.5">
+                        Postleitzahl (PLZ)
                       </label>
                       <input
                         type="text"
                         required
                         value={postalCode}
                         onChange={(e) => setPostalCode(e.target.value)}
-                        className="w-full px-4 py-3.5 rounded-2xl bg-[#202028] border border-white/20 text-white text-sm focus:outline-none focus:border-rose-400 focus:bg-[#282832] transition-all placeholder:text-neutral-500"
+                        className="w-full px-4 py-3.5 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900 placeholder:text-stone-400"
                         placeholder="80331"
                       />
                     </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold tracking-widest uppercase text-stone-600 mb-1.5">
+                      Land
+                    </label>
+                    <select
+                      value={country}
+                      onChange={(e) => setCountry(e.target.value)}
+                      className="w-full px-4 py-3.5 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900"
+                    >
+                      <option value="Deutschland">Deutschland</option>
+                      <option value="Österreich">Österreich</option>
+                    </select>
                   </div>
                 </div>
               </div>
@@ -278,9 +290,9 @@ export default function AuthPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-4 rounded-2xl bg-white text-black font-extrabold tracking-[0.2em] uppercase text-xs hover:bg-neutral-200 transition-all cursor-pointer disabled:opacity-50 mt-6 shadow-[0_10px_35px_rgba(255,255,255,0.3)] active:scale-[0.99]"
+            className="w-full py-4 rounded-2xl bg-slate-950 hover:bg-slate-800 text-white font-bold tracking-widest uppercase text-xs transition-all cursor-pointer disabled:opacity-50 mt-6 shadow-md"
           >
-            {loading ? 'Folyamatban...' : isLogin ? 'Bejelentkezés' : 'Regisztráció és Fiók létrehozása'}
+            {loading ? 'Wird verarbeitet...' : isLogin ? 'Anmelden' : 'Registrieren & Konto erstellen'}
           </button>
         </form>
 
@@ -290,15 +302,15 @@ export default function AuthPage() {
               setIsLogin(!isLogin);
               setError('');
             }}
-            className="text-xs text-neutral-300 hover:text-white transition-colors cursor-pointer tracking-wider font-semibold"
+            className="text-xs text-stone-600 hover:text-slate-950 transition-colors cursor-pointer tracking-wider font-semibold"
           >
-            {isLogin ? 'Nincs még fiókod? Regisztrálj itt!' : 'Már van fiókod? Jelentkezz be!'}
+            {isLogin ? 'Noch kein Konto? Hier registrieren!' : 'Bereits ein Konto? Anmelden!'}
           </button>
         </div>
 
-        <div className="mt-6 text-center border-t border-white/15 pt-4">
-          <Link href="/" className="text-[10px] uppercase tracking-[0.25em] text-neutral-400 hover:text-white transition-colors font-bold">
-            ← Vissza a főoldalra
+        <div className="mt-6 text-center border-t border-stone-200/85 pt-4">
+          <Link href="/" className="text-[10px] uppercase tracking-[0.25em] text-stone-500 hover:text-slate-950 transition-colors font-bold">
+            ← Zurück zur Startseite
           </Link>
         </div>
 
