@@ -3,12 +3,14 @@
 import { useState } from "react";
 import { Sparkles, ShoppingBag, Star, ArrowUpRight } from "lucide-react";
 import KBeautyDetailModal from "@/components/modals/KBeautyDetailModal";
+// 1. Beimportáljuk a központi fordító függvényeket
+import { translateCategory, translateBadge } from "@/utils/kbeautyTranslations";
 
-interface KBeautySectionProps {
+interface KBundleSectionProps {
   products: any[];
 }
 
-export default function KBeautySection({ products = [] }: KBeautySectionProps) {
+export default function KBeautySection({ products = [] }: KBundleSectionProps) {
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
 
   // Közvetlen kosárba helyezés funkció
@@ -76,6 +78,10 @@ export default function KBeautySection({ products = [] }: KBeautySectionProps) {
             const currentPrice = isOnSale ? firstVariant?.salePrice : firstVariant?.price;
             const originalPrice = isOnSale ? firstVariant?.price : null;
 
+            // 2. Használjuk a központi fordító függvényeket
+            const germanCategory = translateCategory(product.category);
+            const germanBadge = translateBadge(product.badge);
+
             return (
               <div
                 key={product._id}
@@ -85,9 +91,9 @@ export default function KBeautySection({ products = [] }: KBeautySectionProps) {
                 
                 {/* Kártya Teteje: Tag & Értékelés & Lebegő ikon */}
                 <div className="flex items-center justify-between relative z-20">
-                  {product.badge ? (
+                  {germanBadge ? (
                     <span className="px-3.5 py-1 rounded-full bg-linear-to-r from-slate-100 to-slate-200/80 text-slate-800 border border-slate-300/80 text-[10px] font-extrabold uppercase tracking-widest shadow-2xs">
-                      {product.badge}
+                      {germanBadge}
                     </span>
                   ) : <div />}
 
@@ -124,7 +130,7 @@ export default function KBeautySection({ products = [] }: KBeautySectionProps) {
                 {/* Termék Infók */}
                 <div className="space-y-3 pt-4 border-t border-slate-100 relative z-20">
                   <div className="text-[10px] font-bold tracking-widest text-slate-500 uppercase">
-                    {product.category || 'K-Beauty'} {product.koreanTitle ? `• ${product.koreanTitle}` : ''}
+                    {germanCategory} {product.koreanTitle ? `• ${product.koreanTitle}` : ''}
                   </div>
 
                   <h3 className="text-lg font-bold text-slate-950 group-hover:text-slate-700 transition-colors line-clamp-1">
