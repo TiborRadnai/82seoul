@@ -1,5 +1,7 @@
 // app/api/generate-invoice/route.ts
 import PDFDocument from 'pdfkit';
+import fs from 'fs';
+import path from 'path';
 
 interface InvoiceItem {
   name: string;
@@ -22,7 +24,7 @@ interface InvoiceData {
   totalAmount: number;
 }
 
-export function generateInvoicePDF(data: InvoiceData, logoBuffer?: Buffer): Promise<Buffer> {
+export function generateInvoicePDF(data: InvoiceData): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     try {
       const doc = new PDFDocument({ size: 'A4', margin: 50 });
@@ -36,10 +38,24 @@ export function generateInvoicePDF(data: InvoiceData, logoBuffer?: Buffer): Prom
       const textColor = '#292524';    
       const lightBg = '#f5f5f4';      
 
+      // --- LOGÓ AUTOMATIKUS BETÖLTÉSE A PUBLIC MAPPÁBÓL ---
+      let logoBuffer: Buffer | undefined = undefined;
+      const possibleLogoPaths = [
+        path.join(process.cwd(), 'public', 'images', 'logo.png'),
+        path.join(process.cwd(), 'public', 'logo.png'),
+      ];
+
+      for (const p of possibleLogoPaths) {
+        if (fs.existsSync(p)) {
+          logoBuffer = fs.readFileSync(p);
+          break;
+        }
+      }
+
       // --- FEJLÉC & LOGÓ ---
       if (logoBuffer) {
-        // Ha átadjuk az átlátszó logó bufferét, beillesztjük balra
-        doc.image(logoBuffer, 50, 40, { width: 45, height: 45 });
+        // Ha van logó, balra tesszük, mellette a márkanév
+        doc.image(logoBuffer, 50, 38, { width: 45, height: 45 });
         doc
           .fontSize(20)
           .fillColor(primaryColor)
@@ -49,6 +65,7 @@ export function generateInvoicePDF(data: InvoiceData, logoBuffer?: Buffer): Prom
           .fillColor(accentColor)
           .text('   KOREAN LIFESTYLE PORTAL & SHOP', { align: 'right' });
       } else {
+        // Fallback, ha a logó fájl még nincs a helyén
         doc
           .fontSize(22)
           .fillColor(primaryColor)
@@ -178,7 +195,7 @@ export function generateInvoicePDF(data: InvoiceData, logoBuffer?: Buffer): Prom
         .fontSize(7.5)
         .fillColor('#78716c')
         .font('Helvetica')
-        .text('82Seoul • Madevix • Steuernummer: 123/260/10535 • support@82seoul.com', 50, footerY + 8, { align: 'center', width: 495 });
+        .text('82Seoul • Madevix • Steuernummer: 123/260/10535 • info@82seoul.de', 50, footerY + 8, { align: 'center', width: 495 });
 
       doc.end();
     } catch (error) {
