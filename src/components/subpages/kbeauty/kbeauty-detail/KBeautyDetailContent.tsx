@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Sparkles, ShoppingBag, ShieldCheck, Truck, RefreshCw, Plus, Minus, ChevronLeft, ChevronRight, X, Maximize2 } from 'lucide-react';
 import { useCart } from '../../../../../context/CartContext';
+// 1. Beimportáljuk a központi fordító függvényeket
+import { translateCategory, translateBadge } from '@/utils/kbeautyTranslations';
 
 interface Variant {
   size: string;
@@ -55,6 +57,10 @@ export default function KBeautyDetailContent({ product }: KBeautyDetailContentPr
 
   const totalPrice = (rawUnitPrice * quantity).toFixed(2);
   const maxStock = currentVariant?.stock !== undefined ? currentVariant.stock : (product.stock !== undefined ? product.stock : 0);
+
+  // 2. Használjuk a központi függvényeket
+  const germanCategory = translateCategory(product.category);
+  const germanBadge = translateBadge(product.badge);
 
   const handleQuantityChange = (delta: number) => {
     setQuantity((prev) => {
@@ -118,9 +124,9 @@ export default function KBeautyDetailContent({ product }: KBeautyDetailContentPr
               onClick={() => setIsLightboxOpen(true)}
               className="relative w-full aspect-square flex items-center justify-center bg-transparent overflow-hidden border border-stone-200/60 rounded-2xl shadow-xs cursor-zoom-in group"
             >
-              {product.badge && (
+              {germanBadge && (
                 <span className="absolute top-6 left-6 z-10 px-3.5 py-1 rounded-full bg-white/90 backdrop-blur-md border border-rose-200 text-rose-800 text-[10px] font-bold tracking-widest uppercase shadow-xs">
-                  {product.badge}
+                  {germanBadge}
                 </span>
               )}
               
@@ -175,7 +181,7 @@ export default function KBeautyDetailContent({ product }: KBeautyDetailContentPr
             <div>
               <div className="flex items-center gap-3 mb-2">
                 <span className="text-[10px] font-bold tracking-widest text-rose-700 uppercase">
-                  {product.category || 'K-Beauty Care'}
+                  {germanCategory}
                 </span>
                 {product.koreanTitle && (
                   <span className="text-xs text-stone-400 font-medium">
@@ -229,7 +235,7 @@ export default function KBeautyDetailContent({ product }: KBeautyDetailContentPr
                             : 'bg-white/80 text-slate-700 border-stone-300 hover:border-slate-900'
                         }`}
                       >
-                        {variant.size} — {vPrice}
+                        {variant.size} — {vPrice} €
                       </button>
                     );
                   })}

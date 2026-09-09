@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { X, Star, ArrowRight, Sparkles, ShieldCheck } from "lucide-react";
 import Link from "next/link";
+// 1. Beimportáljuk a központi fordítót
+import { translateCategory, translateBadge } from "@/utils/kbeautyTranslations";
 
 interface KBeautyDetailModalProps {
   product: any | null;
@@ -40,11 +42,15 @@ export default function KBeautyDetailModal({ product, onClose }: KBeautyDetailMo
 
   const title = product.title || product.name;
   const description = product.description || product.tagline;
-  const badge = product.badge || product.tag;
+  const rawBadge = product.badge || product.tag;
   const rating = product.rating || 5.0;
-  const category = product.category || "K-Beauty";
+  const rawCategory = product.category || "K-Beauty";
   const image = product.image;
   const slug = product.slug || product._id;
+
+  // 2. Használjuk a központi függvényeket
+  const germanCategory = translateCategory(rawCategory);
+  const germanBadge = translateBadge(rawBadge);
 
   const variants = product.variants || [];
   const currentVariant = variants[selectedVariantIndex] || null;
@@ -91,9 +97,9 @@ export default function KBeautyDetailModal({ product, onClose }: KBeautyDetailMo
         {/* Bal oldal: Kép */}
         <div className="w-full md:w-1/2 bg-linear-to-b from-slate-50 via-neutral-100/80 to-slate-100/50 p-8 sm:p-12 flex items-center justify-center relative min-h-70 md:min-h-120">
           <div className="absolute w-48 h-48 bg-rose-200/30 rounded-full blur-3xl pointer-events-none" />
-          {badge && (
+          {germanBadge && (
             <span className="absolute top-6 left-6 px-3.5 py-1.5 rounded-full bg-linear-to-r from-slate-100 to-slate-200/90 text-slate-800 border border-slate-300/80 text-[10px] font-extrabold uppercase tracking-widest shadow-2xs z-20">
-              {badge}
+              {germanBadge}
             </span>
           )}
           <div className="relative z-10 flex flex-col items-center">
@@ -114,7 +120,7 @@ export default function KBeautyDetailModal({ product, onClose }: KBeautyDetailMo
           <div className="space-y-4">
             <div className="flex items-center justify-between gap-4 pr-8 md:pr-0">
               <span className="text-xs font-bold tracking-widest text-slate-400 uppercase">
-                {product.brand || '82.SEOUL'} • {category}
+                {product.brand || '82.SEOUL'} • {germanCategory}
               </span>
               <div className="flex items-center gap-1.5 text-amber-500 text-xs font-bold bg-amber-50/80 border border-amber-200/60 px-3 py-1 rounded-full shadow-2xs shrink-0">
                 <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />

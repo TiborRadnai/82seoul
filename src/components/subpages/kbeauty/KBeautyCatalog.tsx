@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight, Sparkles, Eye } from 'lucide-react';
+// 1. Beimportáljuk a központi fordító függvényeket
+import { translateCategory, translateBadge } from '@/utils/kbeautyTranslations';
 
 interface Variant {
   size: string;
@@ -29,7 +31,8 @@ interface KBeautyCatalogProps {
 export default function KBeautyCatalog({ products = [] }: KBeautyCatalogProps) {
   const [activeCategory, setActiveCategory] = useState<string>('All');
 
-  const categories = ['All', ...Array.from(new Set(products.map((p) => p.category).filter(Boolean)))];
+  // Az eredeti adatbázis kategóriák összegyűjtése
+  const rawCategories = ['All', ...Array.from(new Set(products.map((p) => p.category).filter(Boolean)))];
 
   const filteredProducts = activeCategory === 'All' 
     ? products 
@@ -53,22 +56,25 @@ export default function KBeautyCatalog({ products = [] }: KBeautyCatalogProps) {
           </h2>
         </div>
 
-        {/* Minimalista szöveges kategória-sáv */}
+        {/* Minimalista szöveges kategória-sáv - Német feliratokkal */}
         <div className="flex flex-wrap items-center gap-6 text-xs font-light">
-          {categories.map((cat) => {
-            const categoryName = cat || 'All';
+          {rawCategories.map((cat) => {
+            const rawCatName = cat || 'All';
+            // 2. Használjuk a központi fordítót a kategória gombokhoz is ('All' marad, a többi lefordul)
+            const germanLabel = rawCatName === 'All' ? 'All' : translateCategory(rawCatName);
+            
             return (
               <button
-                key={categoryName}
-                onClick={() => setActiveCategory(categoryName)}
+                key={rawCatName}
+                onClick={() => setActiveCategory(rawCatName)}
                 className={`relative pb-1 transition-colors cursor-pointer uppercase tracking-wider font-medium ${
-                  activeCategory === categoryName 
+                  activeCategory === rawCatName 
                     ? 'text-slate-950 font-bold' 
                     : 'text-stone-500 hover:text-slate-900'
                 }`}
               >
-                {categoryName}
-                {activeCategory === categoryName && (
+                {germanLabel}
+                {activeCategory === rawCatName && (
                   <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-rose-700" />
                 )}
               </button>
@@ -84,6 +90,9 @@ export default function KBeautyCatalog({ products = [] }: KBeautyCatalogProps) {
           const displayPrice = firstVariant?.onSale && firstVariant?.salePrice 
             ? firstVariant.salePrice 
             : firstVariant?.price || '0.00';
+
+          // 3. Használjuk a központi függvényeket a kártyákon
+          const cardBadge = translateBadge(product.badge) || translateCategory(product.category);
 
           return (
             <div key={product._id} className="flex flex-col group">
@@ -106,7 +115,7 @@ export default function KBeautyCatalog({ products = [] }: KBeautyCatalogProps) {
                 <div className="absolute inset-x-0 bottom-0 p-4 bg-linear-to-t from-[#f7f3ef]/95 via-[#f7f3ef]/80 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end justify-between">
                   <div>
                     <span className="text-[9px] font-bold tracking-widest text-rose-700 uppercase block mb-0.5">
-                      {product.badge || product.category || 'K-Beauty'}
+                      {cardBadge}
                     </span>
                     <h3 className="text-sm font-normal text-slate-950 tracking-wide line-clamp-1">
                       {product.title}
@@ -120,11 +129,11 @@ export default function KBeautyCatalog({ products = [] }: KBeautyCatalogProps) {
                 </div>
               </Link>
 
-              {/* Stabil, kompakt tipográfia a kép alatt - Fixált flex elrendezés az ár csúszásának megakadályozására */}
+              {/* Stabil, kompakt tipográfia a kép alatt */}
               <div className="mt-3 pt-2.5 border-t border-stone-200/80 flex items-start justify-between gap-4 px-1">
                 <div className="space-y-0.5 min-w-0 flex-1">
                   <span className="text-[9px] font-bold tracking-widest text-rose-700 uppercase block truncate">
-                    {product.badge || product.category || 'K-Beauty'}
+                    {cardBadge}
                   </span>
                   <h4 className="text-sm font-light text-slate-950 group-hover:text-rose-700 transition-colors line-clamp-1">
                     {product.title}
@@ -134,7 +143,7 @@ export default function KBeautyCatalog({ products = [] }: KBeautyCatalogProps) {
                   </p>
                 </div>
                 <span className="text-xs font-mono font-medium text-slate-900 pt-0.5 shrink-0 whitespace-nowrap">
-                  {displayPrice}
+                  {displayPrice} €
                 </span>
               </div>
 
