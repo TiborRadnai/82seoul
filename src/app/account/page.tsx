@@ -185,15 +185,18 @@ export default function AccountPage() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen pt-36 pb-20 px-5 flex items-center justify-center bg-[#f7f3ef] text-slate-900">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#f7f3ef] text-slate-900">
         <p className="animate-pulse tracking-[0.25em] uppercase text-xs font-semibold">Profil wird geladen...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen pt-32 pb-20 px-4 md:px-12 bg-[#f7f3ef] text-slate-900">
-      <div className="max-w-4xl mx-auto space-y-8">
+    <div className="relative min-h-screen pt-32 pb-20 px-4 md:px-12 bg-[#f7f3ef] text-slate-900">
+      {/* FELSŐ ÉJKÉK ÁTMENET A NAVIGÁCIÓHOZ */}
+      <div className="absolute top-0 left-0 right-0 h-44 bg-linear-to-b from-indigo-950/70 via-indigo-950/20 to-transparent pointer-events-none z-20" />
+
+      <div className="max-w-4xl mx-auto relative z-35 space-y-8">
         
         {error && (
           <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-medium">
@@ -208,7 +211,7 @@ export default function AccountPage() {
         )}
 
         {/* FEJLÉC KÁRTYA */}
-        <div className="bg-white p-8 md:p-10 rounded-3xl border border-stone-200/80 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="bg-white/95 backdrop-blur-md p-8 md:p-10 rounded-3xl border border-stone-200/80 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
             <span className="text-[10px] tracking-[0.3em] uppercase text-rose-700 font-bold mb-1 block">
               82Seoul Kundenportal
@@ -245,7 +248,7 @@ export default function AccountPage() {
 
         {/* SZERKESZTÉSI ŰRLAP VAGY PROFIL KÁRTYÁK */}
         {isEditing ? (
-          <form onSubmit={handleUpdateProfile} className="bg-white p-8 md:p-10 rounded-3xl border border-stone-200/80 shadow-xl space-y-6">
+          <form onSubmit={handleUpdateProfile} className="bg-white/95 backdrop-blur-md p-8 md:p-10 rounded-3xl border border-stone-200/80 shadow-xl space-y-6">
             <h2 className="text-sm font-bold tracking-widest uppercase text-slate-950 border-b border-stone-100 pb-3">
               Profilinformationen bearbeiten
             </h2>
@@ -345,7 +348,7 @@ export default function AccountPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* SZEMÉLYES ADATOK KÁRTYA */}
-            <div className="bg-white p-8 rounded-3xl border border-stone-200/80 shadow-xl space-y-5">
+            <div className="bg-white/95 backdrop-blur-md p-8 rounded-3xl border border-stone-200/80 shadow-xl space-y-5">
               <h2 className="text-xs font-bold tracking-widest uppercase text-slate-950 border-b border-stone-100 pb-3">
                 Persönliche Daten
               </h2>
@@ -377,7 +380,7 @@ export default function AccountPage() {
             </div>
 
             {/* SZÁLLÍTÁSI CÍM KÁRTYA */}
-            <div className="bg-white p-8 rounded-3xl border border-stone-200/80 shadow-xl space-y-5">
+            <div className="bg-white/95 backdrop-blur-md p-8 rounded-3xl border border-stone-200/80 shadow-xl space-y-5">
               <h2 className="text-xs font-bold tracking-widest uppercase text-slate-950 border-b border-stone-100 pb-3">
                 Standard-Lieferadresse
               </h2>
@@ -411,7 +414,7 @@ export default function AccountPage() {
         )}
 
         {/* KORÁBBI RENDELÉSEK SZEKCIÓ */}
-        <div className="bg-white p-8 md:p-10 rounded-3xl border border-stone-200/80 shadow-xl space-y-6">
+        <div className="bg-white/95 backdrop-blur-md p-8 md:p-10 rounded-3xl border border-stone-200/80 shadow-xl space-y-6">
           <div className="flex items-center gap-3 border-b border-stone-100 pb-4">
             <Package className="w-5 h-5 text-rose-700" />
             <h2 className="text-sm font-bold tracking-widest uppercase text-slate-950">

@@ -1,3 +1,4 @@
+// app/api/generate-invoice/route.ts
 import PDFDocument from 'pdfkit';
 
 interface InvoiceItem {
@@ -21,7 +22,7 @@ interface InvoiceData {
   totalAmount: number;
 }
 
-export function generateInvoicePDF(data: InvoiceData): Promise<Buffer> {
+export function generateInvoicePDF(data: InvoiceData, logoBuffer?: Buffer): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     try {
       const doc = new PDFDocument({ size: 'A4', margin: 50 });
@@ -35,34 +36,48 @@ export function generateInvoicePDF(data: InvoiceData): Promise<Buffer> {
       const textColor = '#292524';    
       const lightBg = '#f5f5f4';      
 
-      // --- FEJLÉC ---
-      doc
-        .fontSize(22)
-        .fillColor(primaryColor)
-        .font('Helvetica-Bold')
-        .text('82SEOUL', 50, 45, { continued: true })
-        .fontSize(9)
-        .fillColor(accentColor)
-        .text('   KOREAN LIFESTYLE PORTAL & SHOP', { align: 'right' });
+      // --- FEJLÉC & LOGÓ ---
+      if (logoBuffer) {
+        // Ha átadjuk az átlátszó logó bufferét, beillesztjük balra
+        doc.image(logoBuffer, 50, 40, { width: 45, height: 45 });
+        doc
+          .fontSize(20)
+          .fillColor(primaryColor)
+          .font('Helvetica-Bold')
+          .text('82SEOUL', 105, 48, { continued: true })
+          .fontSize(8.5)
+          .fillColor(accentColor)
+          .text('   KOREAN LIFESTYLE PORTAL & SHOP', { align: 'right' });
+      } else {
+        doc
+          .fontSize(22)
+          .fillColor(primaryColor)
+          .font('Helvetica-Bold')
+          .text('82SEOUL', 50, 45, { continued: true })
+          .fontSize(9)
+          .fillColor(accentColor)
+          .text('   KOREAN LIFESTYLE PORTAL & SHOP', { align: 'right' });
+      }
 
       doc
-        .moveTo(50, 75)
-        .lineTo(545, 75)
+        .moveTo(50, 92)
+        .lineTo(545, 92)
         .strokeColor('#e7e5e4')
         .lineWidth(1)
         .stroke();
 
-      // --- CÉG / Küldő infó a címablak felett (rövid) ---
+      // --- ELADÓ / CÉG INFORMÁCIÓ ---
       doc
-        .fontSize(7)
-        .fillColor('#a8a29e')
+        .fontSize(7.5)
+        .fillColor('#78716c')
+        .font('Helvetica-Bold')
+        .text('Madevix • 82Seoul', 50, 102)
         .font('Helvetica')
-        .text('82Seoul • Madevix • Deutschland', 50, 85);
+        .text('Inhaber: Tibor Radnai • Deutschland', 50, 112);
 
-      // --- VEVŐ CÍME ÉS METAADATOK (EGY SZINTEN) ---
-      const startY = 110;
+      // --- VEVŐ CÍME ÉS METAADATOK ---
+      const startY = 138;
 
-      // Vevő címe bal oldalon
       doc
         .fontSize(10)
         .fillColor(textColor)
@@ -73,29 +88,29 @@ export function generateInvoicePDF(data: InvoiceData): Promise<Buffer> {
         .text(`${data.shippingAddress.postalCode} ${data.shippingAddress.city}`, 50, startY + 28)
         .text(data.shippingAddress.country, 50, startY + 42);
 
-      // Számla metaadatok jobbra igazítva (szélesebb mezővel, hogy ne törjön az e-mail)
-      const metaX = 320;
+      const metaX = 300;
       let metaY = startY;
 
       const addMetaField = (label: string, value: string) => {
-        doc.fontSize(8).fillColor('#78716c').font('Helvetica').text(label, metaX, metaY, { width: 90 });
-        doc.fontSize(8).fillColor(primaryColor).font('Helvetica-Bold').text(value, metaX + 90, metaY, { width: 135, align: 'right' });
+        doc.fontSize(8).fillColor('#78716c').font('Helvetica').text(label, metaX, metaY, { width: 110 });
+        doc.fontSize(8).fillColor(primaryColor).font('Helvetica-Bold').text(value, metaX + 110, metaY, { width: 135, align: 'right' });
         metaY += 14;
       };
 
       addMetaField('Rechnungsnummer:', data.invoiceNumber);
-      addMetaField('Datum:', data.orderDate);
+      addMetaField('Rechnungsdatum:', data.orderDate);
+      addMetaField('Liefer-/Leistungsdatum:', data.orderDate);
       addMetaField('E-Mail:', data.customerEmail);
 
-      // --- FŐ CÍM (RECHNUNG) ---
+      // --- RECHNUNG CÍM ---
       doc
         .fontSize(18)
         .fillColor(primaryColor)
         .font('Helvetica-Bold')
-        .text('Rechnung', 50, 195);
+        .text('Rechnung', 50, 215);
 
       // --- TÉTELEK TÁBLÁZAT ---
-      const tableTop = 230;
+      const tableTop = 250;
       doc.rect(50, tableTop, 495, 20).fill(lightBg);
 
       doc
@@ -119,7 +134,7 @@ export function generateInvoicePDF(data: InvoiceData): Promise<Buffer> {
           .text(`€${item.price.toFixed(2)}`, 390, rowY, { width: 70, align: 'right' })
           .text(`€${itemTotal.toFixed(2)}`, 470, rowY, { width: 65, align: 'right' });
 
-        rowY += 22;
+        rowY += 24;
 
         doc
           .moveTo(50, rowY - 6)
@@ -129,22 +144,29 @@ export function generateInvoicePDF(data: InvoiceData): Promise<Buffer> {
           .stroke();
       });
 
-      // --- VÉGÖSSZEG DOBOZ ---
+      // --- VÉGÖSSZEG SÁV ---
       rowY += 10;
-      const totalBoxY = rowY;
       doc
-        .rect(340, totalBoxY, 205, 32)
+        .rect(340, rowY, 205, 32)
         .fill(primaryColor);
 
       doc
         .fontSize(9)
         .fillColor('#ffffff')
         .font('Helvetica-Bold')
-        .text('Gesamtbetrag:', 355, totalBoxY + 11)
-        .text(`€${data.totalAmount.toFixed(2)}`, 465, totalBoxY + 11, { width: 70, align: 'right' });
+        .text('Gesamtbetrag:', 355, rowY + 11)
+        .text(`€${data.totalAmount.toFixed(2)}`, 465, rowY + 11, { width: 70, align: 'right' });
 
-      // --- LÁBJEGYZET ---
-      const footerY = 760;
+      // --- JOGI HIVATKOZÁS (§ 19 UStG) ---
+      const legalTextY = rowY + 65;
+      doc
+        .fontSize(8.5)
+        .fillColor(textColor)
+        .font('Helvetica')
+        .text('Gemäß § 19 UStG wird keine Umsatzsteuer berechnet (Kleinunternehmerregelung).', 50, legalTextY, { width: 495 });
+
+      // --- FIX LÁBJEGYZET ALUL ---
+      const footerY = 750;
       doc
         .moveTo(50, footerY)
         .lineTo(545, footerY)
@@ -156,7 +178,7 @@ export function generateInvoicePDF(data: InvoiceData): Promise<Buffer> {
         .fontSize(7.5)
         .fillColor('#78716c')
         .font('Helvetica')
-        .text('82Seoul / Madevix • Steuernummer: [Beispiel-Nr.] • Kleinunternehmerregelung gem. § 19 UStG', 50, footerY + 8, { align: 'center', width: 495 });
+        .text('82Seoul • Madevix • Steuernummer: 123/260/10535 • support@82seoul.com', 50, footerY + 8, { align: 'center', width: 495 });
 
       doc.end();
     } catch (error) {
