@@ -118,15 +118,19 @@ export default function CheckoutPage() {
 
     try {
       const itemsToSend = cart.map((item) => ({
-        name: `${item.title} (${item.size})`,
+        id: item.id,         // <--- ITT KÜLDJÜK A SANITY ID-T
+        title: item.title,   // <--- ITT A NÉV
+        size: item.size,     // <--- ITT A MÉRET
         price: item.price,
         quantity: item.quantity,
         image: item.image,
       }));
 
-      if (shippingCost > 0) {
+    if (shippingCost > 0) {
         itemsToSend.push({
-          name: 'Versandkosten (Standard)',
+          id: 'shipping_fee',
+          title: 'Versandkosten (Standard)',
+          size: 'Standard',
           price: shippingCost,
           quantity: 1,
           image: '',

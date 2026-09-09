@@ -24,7 +24,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'A kosár üres.' }, { status: 400 });
     }
 
-    // DINAMIKUS ORIGIN MEGHATÁROZÁS (Automatikusan felismeri a Vercel éles domaint vagy a localhostot)
     const host = request.headers.get('host') || 'localhost:3000';
     const protocol = host.includes('localhost') ? 'http' : 'https';
     const origin = `${protocol}://${host}`;
@@ -69,21 +68,39 @@ export async function POST(request: Request) {
       }
     }
 
-    const lineItems = items.map((item: any) => ({
-      price_data: {
-        currency: 'eur',
-        product_data: {
-          name: `${item.title} (${item.size})`,
-          images: item.image ? [item.image] : [],
-          metadata: {
-            sanityProductId: item.id,
-            size: item.size,
+    // Itt most már helyesen olvassuk ki az item.title-t, item.size-ot és item.id-t!
+    const lineItems = items
+      .filter((item: any) => !item.name?.includes('Versandkosten')) // A szállítási költséget külön kezeli a Stripe ha kell, vagy hagyhatjuk
+      .map((item: any) => ({
+        price_data: {
+          currency: 'eur',
+          product_data: {
+            name: `${item.title} (${item.size})`,
+            images: item.image ? [item.image] : [],
+            metadata: {
+              sanityProductId: item.id, // <--- EZ KELL A WEBHOOKNAK A KÉSZLETCSÖKKENTÉSHEZ!
+              size: item.size,         // <--- EZ IS!
+            },
           },
+          unit_amount: Math.round(item.price * 100),
         },
-        unit_amount: Math.round(item.price * 100),
-      },
-      quantity: item.quantity || 1,
-    }));
+        quantity: item.quantity || 1,
+      }));
+
+    // Ha van szállítási költség, hozzáadjuk külön tétellé
+    const shippingCostItem = items.find((item: any) => item.name?.includes('Versandkosten'));
+    if (shippingCostItem) {
+      lineItems.push({
+        price_data: {
+          currency: 'eur',
+          product_data: {
+            name: shippingCostItem.name,
+          },
+          unit_amount: Math.round(shippingCostItem.price * 100),
+        },
+        quantity: 1,
+      });
+    }
 
     const isNewRegistration = registerNewAccount && password && customerEmail ? 'true' : 'false';
     
