@@ -53,6 +53,7 @@ export default function KPopGroupList({ initialArtists }: KPopGroupListProps) {
     }
   }, []);
 
+  // Ez a lista a főoldali szűrt kártyákhoz tartozik
   const artistIndexData = useMemo(() => {
     return initialArtists.map((item) => ({
       id: item.id,
@@ -65,11 +66,22 @@ export default function KPopGroupList({ initialArtists }: KPopGroupListProps) {
     }));
   }, [initialArtists]);
 
-  const handleSelectArtist = (id: string) => {
-    const element = document.getElementById(`artist-${id}`);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+  // ---> ITT A MEGOLDÁS: A TELJES LISTA A SCHNELLINDEX DRAWERNEK <---
+  const completeArtistsList = useMemo(() => {
+    return initialArtists.map((item) => ({
+      id: item.id,
+      name: item.name,
+      category: item.category,
+      themeColor: item.themeColor,
+      filterAgency: item.filterAgency,
+      generation: item.generation,
+      imageUrl: item.image,
+    }));
+  }, [initialArtists]);
+
+const handleSelectArtist = (id: string) => {
+    // Navigáció az előadó saját aloldalára
+    router.push(`/kpop/${id}`);
   };
 
   const filteredGroups = useMemo(() => {
@@ -137,6 +149,7 @@ export default function KPopGroupList({ initialArtists }: KPopGroupListProps) {
         onSearchChange={setSearchQuery}
         totalCount={displayedGroups.length}
         artists={artistIndexData}
+        allArtists={completeArtistsList}  // <-- ITT ADJUK ÁT A TELJES LISTÁT A DRAWERNEK
         onSelectArtist={handleSelectArtist}
       />
 

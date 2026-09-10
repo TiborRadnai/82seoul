@@ -14,7 +14,7 @@ export interface ArtistIndexItem {
   themeColor?: string;
   filterAgency: AgencyCategory;
   generation?: string;
-  imageUrl?: string; // <--- Helyesen opcionális stringként definiálva
+  imageUrl?: string; 
 }
 
 interface KPopFilterProps {
@@ -28,6 +28,7 @@ interface KPopFilterProps {
   onSearchChange: (query: string) => void;
   totalCount: number;
   artists: ArtistIndexItem[];
+  allArtists?: ArtistIndexItem[];
   onSelectArtist: (id: string) => void;
 }
 
@@ -59,10 +60,14 @@ export default function KPopFilter({
   onSearchChange,
   totalCount,
   artists,
+  allArtists,
   onSelectArtist,
 }: KPopFilterProps) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [drawerSearch, setDrawerSearch] = useState('');
+  const drawerSourceArtists = allArtists || artists;
+
+  
 
   const uniqueGenerations = Array.from(new Set(artists.map(a => a.generation).filter(Boolean)))
     .sort() as string[];
@@ -86,7 +91,7 @@ export default function KPopFilter({
     };
   }, [isDrawerOpen]);
 
-  const filteredArtists = artists.filter((artist) => {
+  const filteredArtists = drawerSourceArtists.filter((artist) => {
     const searchLower = drawerSearch.toLowerCase();
     return (
       artist.name.toLowerCase().includes(searchLower) ||
