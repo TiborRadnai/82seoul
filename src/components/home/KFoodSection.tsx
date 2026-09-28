@@ -21,18 +21,29 @@ interface KFoodSectionProps {
 }
 
 export default function KFoodSection({ items = [] }: KFoodSectionProps) {
-  const featuredItem = items.find((item) => item.subCategory === "Főételek" && item.featured) || items.find((item) => item.subCategory === "Főételek") || items[0];
-  
-  const streetFoodItem = items.find((item) => item.subCategory === "Street Food" && item._id !== featuredItem?._id) || items.find((item) => item.subCategory === "Street Food");
-  
-  const soupItem = items.find((item) => item.subCategory === "Levesek & Egytálételek" && item._id !== featuredItem?._id) || items.find((item) => item.subCategory === "Levesek & Egytálételek");
-  
-  const dessertItem = items.find((item) => item.subCategory === "Desszertek & Sütemények" && item._id !== featuredItem?._id) || items.find((item) => item.subCategory === "Desszertek & Sütemények");
+  if (!items || items.length === 0) return null;
 
-  const mediumItem = streetFoodItem || items[1];
-  const smallItems = [soupItem, dessertItem].filter(Boolean) as KFoodItem[];
+  // 1. Keresünk elemeket kategória és kiemeltség alapján
+  const mainDish = items.find(i => i.subCategory === "Főételek" && i.featured) || items.find(i => i.subCategory === "Főételek") || items[0];
+  
+  const streetFood = items.find(i => i.subCategory === "Street Food" && i.featured && i._id !== mainDish?._id) 
+    || items.find(i => i.subCategory === "Street Food" && i._id !== mainDish?._id) 
+    || items.find(i => i._id !== mainDish?._id) 
+    || items[1];
 
-  if (!featuredItem) return null;
+  const soup = items.find(i => i.subCategory === "Levesek & Egytálételek" && i.featured && i._id !== mainDish?._id && i._id !== streetFood?._id) 
+    || items.find(i => i.subCategory === "Levesek & Egytálételek" && i._id !== mainDish?._id && i._id !== streetFood?._id) 
+    || items.find(i => i._id !== mainDish?._id && i._id !== streetFood?._id) 
+    || items[2];
+
+  const dessert = items.find(i => (i.subCategory === "Desszertek & Sütemények" || i.subCategory === "Italok") && i.featured && i._id !== mainDish?._id && i._id !== streetFood?._id && i._id !== soup?._id) 
+    || items.find(i => (i.subCategory === "Desszertek & Sütemények" || i.subCategory === "Italok") && i._id !== mainDish?._id && i._id !== streetFood?._id && i._id !== soup?._id) 
+    || items.find(i => i._id !== mainDish?._id && i._id !== streetFood?._id && i._id !== soup?._id) 
+    || items[3];
+
+  const featuredItem = mainDish || items[0];
+  const mediumItem = streetFood || items[1] || featuredItem;
+  const smallItems = [soup, dessert].filter(Boolean) as KFoodItem[];
 
   // Biztosíték az ID kinyerésére, függetlenül a Sanity formátumától
   const getItemId = (item: KFoodItem) => {
@@ -56,7 +67,7 @@ export default function KFoodSection({ items = [] }: KFoodSectionProps) {
   };
 
   return (
-    <section className="w-full py-24 md:py-36 bg-neutral-950 text-white relative overflow-hidden border-t border-neutral-800/60">
+    <section className="w-full py-24 md:py-36 bg-neutral-950 text-white relative overflow-hidden border-t border-neutral-800/60 font-sans">
       
       <div className="absolute top-0 inset-x-0 h-32 bg-linear-to-b from-slate-50 via-neutral-950/80 to-neutral-950 pointer-events-none z-1 opacity-20" />
 
@@ -83,7 +94,7 @@ export default function KFoodSection({ items = [] }: KFoodSectionProps) {
       </div>
 
       {/* BENTO GRID */}
-      <div className="max-w-7xl mx-auto px-6 z-10 relative">
+      <div className="max-w-[1600px] mx-auto px-6 md:px-12 z-10 relative">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           
           {/* 1. KIEMELT FŐKÁRTYA (LARGE HERO BENTO) */}
