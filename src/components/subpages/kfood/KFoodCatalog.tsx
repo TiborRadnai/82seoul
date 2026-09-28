@@ -28,6 +28,29 @@ interface KFoodCatalogProps {
   initialCategory?: string;
 }
 
+// Kategóriák leképezése magyar adatbázis-értékekről német UI feliratokra
+const CATEGORY_MAP: Record<string, string> = {
+  // Recept kategóriák
+  'Minden': 'Alle',
+  'Főételek': 'Hauptgerichte',
+  'Levesek & Egytálételek': 'Suppen & Eintöpfe',
+  'Street Food': 'Street Food',
+  'Desszertek & Sütemények': 'Desserts & Gebäck',
+
+  // Bolti termék kategóriák
+  'Italok & Soju': 'Getränke & Erfrischungen',
+  'Italok & Frissítők': 'Getränke & Erfrischungen',
+  'Nassolnivalók & Snackek': 'Snacks & Knabbereien',
+  'Alapanyagok': 'Zutaten & Grundnahrungsmittel',
+  'Szószok, Fűszerek & Tészták': 'Würzsaucen, Gewürze & Nudeln',
+  'Édességek & Desszertek': 'Süßwaren & Desserts',
+};
+
+const formatCategory = (cat?: string) => {
+  if (!cat) return 'Sonstiges';
+  return CATEGORY_MAP[cat] || cat;
+};
+
 function EmblaCategoryRow({ items, getItemId, renderSpiceBadge }: { 
   items: KFoodItem[]; 
   getItemId: (item: KFoodItem) => string; 
@@ -48,7 +71,7 @@ function EmblaCategoryRow({ items, getItemId, renderSpiceBadge }: {
         <div className="flex items-center gap-3">
           <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
           <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white uppercase">
-            {items[0]?.subCategory || 'Egyéb'}
+            {formatCategory(items[0]?.subCategory)}
           </h2>
         </div>
 
@@ -91,7 +114,7 @@ function EmblaCategoryRow({ items, getItemId, renderSpiceBadge }: {
 
                 <div className="absolute top-5 left-5 right-5 flex items-center justify-between z-10">
                   <span className="px-3.5 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold tracking-wider uppercase shadow-xs">
-                    {item.subCategory}
+                    {formatCategory(item.subCategory)}
                   </span>
                   
                   <div className="flex items-center gap-2">
@@ -216,10 +239,10 @@ export default function KFoodCatalog({ recipes = [], products = [], initialTab =
       
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-amber-600/5 blur-[140px] pointer-events-none rounded-full" />
 
-      <div className="relative z-10 max-w-7xl mx-auto space-y-12">
+      <div className="relative z-10 max-w-7xl mx-auto space-y-10">
 
         {/* FŐ FÜLVÁLASZTÓ ÉS KERESŐ */}
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-6 pb-8 border-b border-neutral-800/80">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-6 pb-6 border-b border-neutral-800/80">
           
           <div className="flex items-center gap-2 p-1.5 rounded-full bg-neutral-900/90 border border-neutral-800 shadow-inner">
             <button
@@ -231,7 +254,7 @@ export default function KFoodCatalog({ recipes = [], products = [], initialTab =
               }`}
             >
               <Utensils className="w-4 h-4" />
-              <span>Autentikus Receptek</span>
+              <span>Authentische Rezepte</span>
             </button>
 
             <button
@@ -243,81 +266,85 @@ export default function KFoodCatalog({ recipes = [], products = [], initialTab =
               }`}
             >
               <ShoppingBag className="w-4 h-4" />
-              <span>Bolti Termékek & Kisokos</span>
+              <span>Supermarkt-Produkte & Guide</span>
             </button>
           </div>
 
-          <div className="relative w-full lg:w-80">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={activeTab === 'recipes' ? 'Keresés receptek között...' : 'Keresés termékek között...'}
-              className="w-full pl-11 pr-4 py-3 rounded-full bg-neutral-900/90 border border-neutral-800 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-amber-500/60 focus:ring-1 focus:ring-amber-500/60 transition-all"
-            />
+          <div className="flex items-center gap-4 w-full lg:w-auto">
+            {/* Keresőmező */}
+            <div className="relative flex-1 lg:w-80">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={activeTab === 'recipes' ? 'Rezepte suchen...' : 'Produkte suchen...'}
+                className="w-full pl-11 pr-4 py-3 rounded-full bg-neutral-900/90 border border-neutral-800 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-amber-500/60 focus:ring-1 focus:ring-amber-500/60 transition-all"
+              />
+            </div>
+
+            {/* Nézetváltó gombok felköltöztetve a felső sávba szűrt állapotban */}
+            {isFilteredState && (
+              <div className="flex items-center gap-1 p-1 rounded-full bg-neutral-900/90 border border-neutral-800 shrink-0">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                    viewMode === 'grid'
+                      ? 'bg-amber-500 text-black font-bold shadow-xs'
+                      : 'text-neutral-400 hover:text-white'
+                  }`}
+                  title="Kartenansicht"
+                >
+                  <LayoutGrid className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Karten</span>
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                    viewMode === 'list'
+                      ? 'bg-amber-500 text-black font-bold shadow-xs'
+                      : 'text-neutral-400 hover:text-white'
+                  }`}
+                  title="Listenansicht"
+                >
+                  <List className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Liste</span>
+                </button>
+              </div>
+            )}
           </div>
 
         </div>
 
-        {/* ALKATEGÓRIA PILLE-SZŰRŐK ÉS NÉZETVÁLTÓ */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-2.5 overflow-x-auto pb-2 scrollbar-none max-w-full">
+        {/* ALKATEGÓRIA PILLE-SZŰRŐK SÁVJA (Teljes szélességben, akadálymentesen görgethető) */}
+        <div className="w-full overflow-hidden">
+          <div className="flex items-center gap-2.5 overflow-x-auto pb-3 pt-1 scrollbar-none w-full">
             {subCategories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => handleCategoryChange(cat)}
-                className={`px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase whitespace-nowrap transition-all duration-300 cursor-pointer ${
+                className={`px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase whitespace-nowrap transition-all duration-300 cursor-pointer shrink-0 ${
                   selectedSubCategory === cat
                     ? 'bg-amber-500 text-black shadow-md shadow-amber-500/20 font-bold'
                     : 'bg-neutral-900/90 text-neutral-300 border border-neutral-800 hover:border-neutral-700 hover:bg-neutral-800'
                 }`}
               >
-                {cat}
+                {formatCategory(cat)}
               </button>
             ))}
           </div>
-
-          {isFilteredState && (
-            <div className="flex items-center gap-1.5 p-1 rounded-full bg-neutral-900/90 border border-neutral-800 shrink-0 self-end sm:self-auto">
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                  viewMode === 'grid'
-                    ? 'bg-amber-500 text-black font-bold shadow-xs'
-                    : 'text-neutral-400 hover:text-white'
-                }`}
-                title="Kártya nézet"
-              >
-                <LayoutGrid className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Kártya</span>
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                  viewMode === 'list'
-                    ? 'bg-amber-500 text-black font-bold shadow-xs'
-                    : 'text-neutral-400 hover:text-white'
-                }`}
-                title="Lista nézet"
-              >
-                <List className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Lista</span>
-              </button>
-            </div>
-          )}
         </div>
 
         {/* TARTALOM */}
         {filteredItems.length === 0 ? (
           <div className="text-center py-24 space-y-3">
             <Flame className="w-10 h-10 text-amber-500/50 mx-auto animate-pulse" />
-            <p className="text-neutral-400 text-lg">Nincs találat a megadott feltételekkel.</p>
+            <p className="text-neutral-400 text-lg">Keine Ergebnisse für die angegebenen Kriterien gefunden.</p>
             <button
               onClick={() => { handleCategoryChange('Minden'); setSearchQuery(''); }}
               className="text-xs text-amber-400 hover:underline uppercase tracking-wider font-bold cursor-pointer"
             >
-              Szűrők törlése
+              Filter zurücksetzen
             </button>
           </div>
         ) : groupedByCategory ? (
@@ -350,7 +377,7 @@ export default function KFoodCatalog({ recipes = [], products = [], initialTab =
 
                   <div className="absolute top-5 left-5 right-5 flex items-center justify-between z-10">
                     <span className="px-3.5 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold tracking-wider uppercase shadow-xs">
-                      {item.subCategory}
+                      {formatCategory(item.subCategory)}
                     </span>
 
                     <div className="flex items-center gap-2">
@@ -408,7 +435,7 @@ export default function KFoodCatalog({ recipes = [], products = [], initialTab =
                     <div className="space-y-1.5">
                       <div className="flex items-center gap-2">
                         <span className="px-2.5 py-0.5 rounded-full bg-neutral-800 text-amber-400 text-[10px] font-bold tracking-wider uppercase">
-                          {item.subCategory}
+                          {formatCategory(item.subCategory)}
                         </span>
                         {item.prepTime && (
                           <span className="flex items-center gap-1 text-xs text-neutral-400">
@@ -439,7 +466,7 @@ export default function KFoodCatalog({ recipes = [], products = [], initialTab =
                   </div>
 
                   <div className="w-full sm:w-auto flex items-center justify-between sm:justify-end gap-4 border-t sm:border-t-0 pt-3 sm:pt-0 border-neutral-800">
-                    <span className="text-xs font-semibold text-amber-400 group-hover:underline">Megtekintés</span>
+                    <span className="text-xs font-semibold text-amber-400 group-hover:underline">Ansehen</span>
                     <div className="w-9 h-9 rounded-full bg-neutral-800 border border-neutral-700 text-white flex items-center justify-center transition-all group-hover:bg-amber-500 group-hover:text-black">
                       <ArrowUpRight className="w-4 h-4" />
                     </div>

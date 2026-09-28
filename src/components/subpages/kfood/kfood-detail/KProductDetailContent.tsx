@@ -17,11 +17,31 @@ interface KProductDetailContentProps {
   };
 }
 
+// Kategóriák leképezése német feliratokra
+const CATEGORY_MAP: Record<string, string> = {
+  'Minden': 'Alle',
+  'Főételek': 'Hauptgerichte',
+  'Levesek & Egytálételek': 'Suppen & Eintöpfe',
+  'Street Food': 'Street Food',
+  'Desszertek & Sütemények': 'Desserts & Gebäck',
+  'Italok & Soju': 'Getränke & Erfrischungen',
+  'Italok & Frissítők': 'Getränke & Erfrischungen',
+  'Nassolnivalók & Snackek': 'Snacks & Knabbereien',
+  'Alapanyagok': 'Zutaten & Grundnahrungsmittel',
+  'Szószok, Fűszerek & Tészták': 'Würzsaucen, Gewürze & Nudeln',
+  'Édességek & Desszertek': 'Süßwaren & Desserts',
+};
+
+const formatCategory = (cat?: string) => {
+  if (!cat) return 'Sonstiges';
+  return CATEGORY_MAP[cat] || cat;
+};
+
 export default function KProductDetailContent({ item }: KProductDetailContentProps) {
   const getSpiceText = (level?: '1' | '2' | '3') => {
-    if (level === '1') return 'Enyhén csípős';
-    if (level === '2') return 'Közepesen csípős';
-    if (level === '3') return 'Extrém erős (Tüzes)';
+    if (level === '1') return 'Mild würzig';
+    if (level === '2') return 'Mittelscharf';
+    if (level === '3') return 'Extrem scharf (Feurig)';
     return null;
   };
 
@@ -38,38 +58,38 @@ export default function KProductDetailContent({ item }: KProductDetailContentPro
           className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-neutral-400 hover:text-amber-400 transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Vissza a Bolti Termékekhez</span>
+          <span>Zurück zu Supermarkt-Produkten</span>
         </Link>
 
         {/* Aszimmetrikus rács */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
           {/* Bal oldal: Fekvő kép */}
           {item.image && (
-            <div className="lg:col-span-7 rounded-3xl overflow-hidden border border-neutral-800 shadow-2xl bg-neutral-900">
+            <div className="lg:col-span-7 rounded-3xl overflow-hidden border border-neutral-800 shadow-2xl bg-neutral-900 sticky top-32">
               <img
                 src={item.image}
-                alt={item.title || 'Termék'}
+                alt={item.title || 'Produkt'}
                 className="w-full h-auto object-cover aspect-16/10"
               />
             </div>
           )}
 
-          {/* Jobb oldal: Erősen sötétített, nagy fedésű háttér-pára a garantált olvashatóságért */}
-          <div className={`${item.image ? 'lg:col-span-5' : 'lg:col-span-12 max-w-4xl mx-auto'} relative space-y-8 py-8 px-6 md:px-8`}>
+          {/* Jobb oldal: Az eredeti lebegő, pára-hátterű egyedi megoldás kibővített területtel */}
+          <div className={`${item.image ? 'lg:col-span-5' : 'lg:col-span-12 max-w-4xl mx-auto'} relative space-y-8 pt-6 pb-16 px-6 md:px-8`}>
             
-            {/* Drasztikusan sötétebb és vastagabb réteg, ami teljesen blokkolja az oldal háttérátmenetét */}
-            <div className="absolute inset-0 bg-neutral-950/90 mask-[radial-gradient(ellipse_at_center,black_65%,transparent_95%)] blur-2xl pointer-events-none -z-10" />
+            {/* Finomított, lejjebb nyúló sötétítő pára-háttér, ami nem vágja el a szöveg alját */}
+            <div className="absolute -inset-x-4 -inset-y-6 bg-neutral-950/95 mask-[radial-gradient(ellipse_at_center,black_75%,transparent_100%)] blur-2xl pointer-events-none -z-10" />
 
             {/* Fejléc rész */}
             <div className="space-y-3">
               {item.subCategory && (
-                <span className="inline-block px-4 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-amber-400 text-xs font-bold tracking-widest uppercase">
-                  {item.subCategory}
+                <span className="inline-block px-4 py-1 rounded-full bg-neutral-900/90 border border-neutral-800 text-amber-400 text-xs font-bold tracking-widest uppercase">
+                  {formatCategory(item.subCategory)}
                 </span>
               )}
 
-              <h1 className="text-3xl sm:text-4xl font-light tracking-tight text-white leading-tight">
+              <h1 className="text-3xl sm:text-4xl font-light tracking-tight text-white leading-tight drop-shadow-md">
                 {item.title}
               </h1>
 
@@ -88,7 +108,7 @@ export default function KProductDetailContent({ item }: KProductDetailContentPro
                     <Tag className="w-4 h-4" />
                   </div>
                   <div>
-                    <span className="block text-[10px] uppercase tracking-wider text-neutral-400 font-semibold">Ár</span>
+                    <span className="block text-[10px] uppercase tracking-wider text-neutral-400 font-semibold">Preis</span>
                     <span className="text-base font-bold text-white">{item.price}</span>
                   </div>
                 </div>
@@ -100,7 +120,7 @@ export default function KProductDetailContent({ item }: KProductDetailContentPro
                     <MapPin className="w-4 h-4" />
                   </div>
                   <div>
-                    <span className="block text-[10px] uppercase tracking-wider text-neutral-400 font-semibold">Hol kapható</span>
+                    <span className="block text-[10px] uppercase tracking-wider text-neutral-400 font-semibold">Erhältlich bei</span>
                     <span className="text-sm font-bold text-white leading-snug">{item.location}</span>
                   </div>
                 </div>
@@ -112,20 +132,20 @@ export default function KProductDetailContent({ item }: KProductDetailContentPro
                     <Flame className="w-4 h-4" />
                   </div>
                   <div>
-                    <span className="block text-[10px] uppercase tracking-wider text-neutral-400 font-semibold">Karakter</span>
+                    <span className="block text-[10px] uppercase tracking-wider text-neutral-400 font-semibold">Schärfegrad</span>
                     <span className="text-sm font-bold text-rose-300">{spiceLabel}</span>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Részletes leírás */}
+            {/* Részletes leírás tiszta kontraszttal és elegendő alsó helyiértékkel */}
             {item.description && (
-              <div className="space-y-3 pt-4 border-t border-neutral-800/60">
+              <div className="space-y-3 pt-6 border-t border-neutral-800/60">
                 <h3 className="text-lg font-light tracking-tight text-white">
-                  Részletes termékismertető
+                  Detaillierte Produktbeschreibung
                 </h3>
-                <div className="text-neutral-100 leading-relaxed text-sm md:text-base font-light space-y-3 whitespace-pre-line">
+                <div className="text-neutral-200 leading-relaxed text-sm md:text-base font-normal space-y-3 whitespace-pre-line drop-shadow-sm pb-4">
                   {item.description}
                 </div>
               </div>

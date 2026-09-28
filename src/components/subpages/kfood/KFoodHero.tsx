@@ -23,7 +23,7 @@ export default function KFoodHero() {
   return (
     <section className="relative w-full min-h-137.5 lg:min-h-162.5 flex items-center justify-center py-28 lg:py-36 px-6 md:px-12 lg:px-16 text-center overflow-hidden bg-neutral-950 text-white border-b border-neutral-800/60">
       
-{/* HÁTTÉR SLIDER & HÁTTÉRFÉNYEK */}
+      {/* HÁTTÉR SLIDER & HÁTTÉRFÉNYEK */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         {BACKGROUND_IMAGES.map((img, index) => (
           <div
@@ -59,28 +59,28 @@ export default function KFoodHero() {
         
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-neutral-900/90 border border-neutral-700/60 text-amber-400 text-xs font-bold tracking-widest uppercase shadow-xl backdrop-blur-md mx-auto">
           <Utensils className="w-3.5 h-3.5 stroke-[1.75] text-amber-500" />
-          <span>K-FOOD & GASZTRONÓMIA KISOKOS</span>
+          <span>K-FOOD & GASTRONOMIE-GUIDE</span>
         </div>
 
         <h1 className="text-4xl sm:text-6xl lg:text-7xl font-light tracking-tight text-white leading-[1.1] drop-shadow-lg">
-          A Koreai Konyha{" "}
+          Die Kunst der{" "}
           <span className="font-semibold text-transparent bg-clip-text bg-linear-to-r from-amber-400 via-orange-300 to-amber-200">
-            Művészete.
+            koreanischen Küche.
           </span>
         </h1>
 
         <p className="text-neutral-200 text-base md:text-xl font-normal max-w-2xl mx-auto leading-relaxed drop-shadow-md">
-          A gőzölgő utcai ételektől a tradicionális fermentált fogásokig. Ízek, amelyek mögött évszázados történetek és kultúra rejlik.
+          Von dampfendem Streetfood bis hin zu traditionellen fermentierten Gerichten. Geschmäcker, hinter denen jahrhundertealte Geschichten und Kultur stecken.
         </p>
 
         <div className="pt-4 flex flex-wrap items-center justify-center gap-4 text-xs text-neutral-200 font-medium">
           <div className="flex items-center gap-2 bg-neutral-900/80 border border-neutral-700/60 px-5 py-2.5 rounded-full backdrop-blur-md shadow-lg">
             <Flame className="w-4 h-4 text-orange-500" />
-            <span>Autentikus receptek & street food</span>
+            <span>Authentische Rezepte & Streetfood</span>
           </div>
           <div className="flex items-center gap-2 bg-neutral-900/80 border border-neutral-700/60 px-5 py-2.5 rounded-full backdrop-blur-md shadow-lg">
             <Sparkles className="w-4 h-4 text-amber-400" />
-            <span>Lépésről lépésre útmutatók</span>
+            <span>Schritt-für-Schritt-Anleitungen</span>
           </div>
         </div>
 
