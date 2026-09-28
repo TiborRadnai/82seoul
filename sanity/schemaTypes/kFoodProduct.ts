@@ -27,10 +27,11 @@ export default {
       type: 'string',
       options: {
         list: [
-          { title: 'Italok & Soju', value: 'Italok & Soju' },
-          { title: 'Nassolnivalók & Snackek', value: 'Nassolnivalók & Snackek' },
-          { title: 'Alapanyagok', value: 'Alapanyagok' },
-          { title: 'Édességek & Desszertek', value: 'Édességek & Desszertek' },
+          { title: 'Italok & Soju', value: 'Getränke & Erfrischungen' },
+          { title: 'Nassolnivalók & Snackek', value: 'Snacks & Knabbereien' },
+          { title: 'Alapanyagok', value: 'Zutaten & Grundnahrungsmittel' },
+          { title: 'Szószok, Fűszerek & Tészták', value: 'Würzsaucen, Gewürze & Nudeln' },
+          { title: 'Édességek & Desszertek', value: 'Süßwaren & Desserts' },
         ],
         layout: 'dropdown',
       },
@@ -91,9 +92,8 @@ export default {
           { title: '🌶️🌶️ Közepesen csípős', value: '2' },
           { title: '🌶️🌶️🌶️ Extrém erős', value: '3' },
         ],
-        layout: 'dropdown', // vagy 'radio'
+        layout: 'dropdown',
       },
-      // Mivel nem kötelező, ezt nem teszjük bele a validation-be
     }
   ],
 };

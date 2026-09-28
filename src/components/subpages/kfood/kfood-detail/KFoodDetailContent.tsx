@@ -6,7 +6,7 @@ import { Info, ShoppingBag, Check, Tag, MapPin } from 'lucide-react';
 interface KFoodDetailContentProps {
   item: {
     title?: string;
-    koreanTitle?: string; // <-- Koreai név támogatása
+    koreanTitle?: string;
     description?: string;
     ingredients?: string[];
     instructions?: string[];
@@ -34,7 +34,7 @@ export default function KFoodDetailContent({ item }: KFoodDetailContentProps) {
       
       <div className="w-full max-w-350 mx-auto space-y-12">
 
-        {/* HA VAN KOREAI NÉV (Hangsúlyosabb megjelenítés) */}
+        {/* HA VAN KOREAI NÉV */}
         {item.koreanTitle && (
           <div className="text-center -mt-6">
             <span className="inline-block px-5 py-1.5 rounded-full bg-neutral-900/80 border border-neutral-800 text-amber-400 text-lg md:text-xl font-medium tracking-wide shadow-inner">
@@ -43,11 +43,11 @@ export default function KFoodDetailContent({ item }: KFoodDetailContentProps) {
           </div>
         )}
 
-        {/* CSÍPŐSSÉGI JELÖLÉS (Ha ki van töltve) */}
+        {/* CSÍPŐSSÉGI JELÖLÉS */}
         {item.spiceLevel && (
           <div className="flex items-center justify-center">
             <div className="inline-flex items-center gap-2 bg-[#141418]/90 border border-neutral-700/60 px-6 py-3 rounded-2xl shadow-xl">
-              <span className="text-sm font-medium text-neutral-400 uppercase tracking-wider">Csípősségi szint:</span>
+              <span className="text-sm font-medium text-neutral-400 uppercase tracking-wider">Schärfegrad:</span>
               <div className="flex items-center gap-1 text-base">
                 {Array.from({ length: Number(item.spiceLevel) }).map((_, i) => (
                   <span key={i}>🌶️</span>
@@ -57,7 +57,7 @@ export default function KFoodDetailContent({ item }: KFoodDetailContentProps) {
           </div>
         )}
 
-        {/* HA TERMÉK: ÁR ÉS BESZERZÉSI HELY KÁRTYÁK (Nagykereskedelmi zsargon nélkül) */}
+        {/* HA TERMÉK: ÁR ÉS BESZERZÉSI HELY KÁRTYÁK */}
         {isProduct && (item.price || item.storeLocation) && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {item.price && (
@@ -66,7 +66,7 @@ export default function KFoodDetailContent({ item }: KFoodDetailContentProps) {
                   <Tag className="w-6 h-6" />
                 </div>
                 <div>
-                  <span className="text-xs text-neutral-400 uppercase tracking-wider font-semibold">Becsült ár / kiszerelés</span>
+                  <span className="text-xs text-neutral-400 uppercase tracking-wider font-semibold">Geschätzter Preis / Verpackung</span>
                   <div className="text-2xl font-bold text-white mt-0.5">{item.price}</div>
                 </div>
               </div>
@@ -78,7 +78,7 @@ export default function KFoodDetailContent({ item }: KFoodDetailContentProps) {
                   <MapPin className="w-6 h-6" />
                 </div>
                 <div>
-                  <span className="text-xs text-neutral-400 uppercase tracking-wider font-semibold">Hol kapható</span>
+                  <span className="text-xs text-neutral-400 uppercase tracking-wider font-semibold">Erhältlich bei</span>
                   <div className="text-base font-bold text-white mt-0.5">{item.storeLocation}</div>
                 </div>
               </div>
@@ -86,16 +86,16 @@ export default function KFoodDetailContent({ item }: KFoodDetailContentProps) {
           </div>
         )}
 
-        {/* 1. HOZZÁVALÓK / BEVÁSÁRLÓLISTA (Receptekhez) */}
+        {/* 1. HOZZÁVALÓK / BEVÁSÁRLÓLISTA */}
         {item.ingredients && item.ingredients.length > 0 && (
           <div className="w-full max-w-3xl mx-auto space-y-6">
             <div className="flex items-center justify-between border-b border-neutral-700/50 pb-4">
               <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white flex items-center gap-3">
                 <span className="w-3 h-3 rounded-full bg-amber-500 shadow-sm shadow-amber-500/50" />
-                <span>Hozzávalók bevásárlólistája</span>
+                <span>Einkaufsliste für Zutaten</span>
               </h2>
               <span className="text-xs font-medium text-neutral-400 uppercase tracking-wider">
-                Kattints a pipáláshoz
+                Zum Abhaken anklicken
               </span>
             </div>
             
@@ -131,12 +131,12 @@ export default function KFoodDetailContent({ item }: KFoodDetailContentProps) {
           </div>
         )}
 
-        {/* 2. RÉSZLETES ELKÉSZÍTÉS LÉPÉSRŐL LÉPÉSRE (Receptekhez) */}
+        {/* 2. RÉSZLETES ELKÉSZÍTÉS LÉPÉSRŐL LÉPÉSRE */}
         {item.instructions && item.instructions.length > 0 && (
           <div className="space-y-6 pt-4">
             <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white flex items-center gap-3 border-b border-neutral-700/50 pb-4">
               <span className="w-3 h-3 rounded-full bg-orange-500 shadow-sm shadow-orange-500/50" />
-              <span>Elkészítés lépésről lépésre</span>
+              <span>Schritt-für-Schritt-Zubereitung</span>
             </h2>
 
             <div className="space-y-4">
@@ -164,7 +164,7 @@ export default function KFoodDetailContent({ item }: KFoodDetailContentProps) {
           <div className={`p-8 md:p-10 rounded-3xl bg-[#141418]/90 border border-neutral-700/60 shadow-2xl space-y-6 ${isProduct ? 'max-w-4xl mx-auto' : ''}`}>
             <h2 className="text-xl md:text-2xl font-bold tracking-tight text-amber-400 flex items-center gap-3 border-b border-neutral-700/40 pb-4">
               <Info className="w-6 h-6 text-amber-400" />
-              <span>{isProduct ? 'Részletes Termékismertető & Kultúra' : 'Elkészítés'}</span>
+              <span>{isProduct ? 'Detaillierte Produktbeschreibung & Kultur' : 'Zubereitung'}</span>
             </h2>
             
             <div className="text-neutral-200 leading-relaxed text-base md:text-lg font-light space-y-4 whitespace-pre-line">

@@ -27,10 +27,10 @@ export default {
       type: 'string',
       options: {
         list: [
-          { title: 'Főételek', value: 'Főételek' },
-          { title: 'Levesek & Egytálételek', value: 'Levesek & Egytálételek' },
+          { title: 'Főételek', value: 'Hauptgerichte' },
+          { title: 'Levesek & Egytálételek', value: 'Suppen & Eintöpfe' },
           { title: 'Street Food', value: 'Street Food' },
-          { title: 'Desszertek & Sütemények', value: 'Desszertek & Sütemények' },
+          { title: 'Desszertek & Sütemények', value: 'Desserts & Gebäck' },
         ],
         layout: 'dropdown',
       },
@@ -54,7 +54,7 @@ export default {
       name: 'prepTime',
       title: 'Elkészítési idő',
       type: 'string',
-      placeholder: 'pl. 25 perc',
+      placeholder: 'pl. 25 Min.',
     },
     {
       name: 'difficulty',
@@ -62,9 +62,9 @@ export default {
       type: 'string',
       options: {
         list: [
-          { title: 'Könnyű', value: 'Könnyű' },
-          { title: 'Közepes', value: 'Közepes' },
-          { title: 'Nehéz', value: 'Nehéz' },
+          { title: 'Könnyű', value: 'Einfach' },
+          { title: 'Közepes', value: 'Mittel' },
+          { title: 'Nehéz', value: 'Schwer' },
         ],
         layout: 'radio',
       },
@@ -93,7 +93,7 @@ export default {
       name: 'order',
       title: 'Sorrend (Index)',
       type: 'number',
-      hidden: true, // A háttérben kezeli a rendszer a húzogatáshoz
+      hidden: true,
     },
     {
       name: 'spiceLevel',
@@ -105,9 +105,8 @@ export default {
           { title: '🌶️🌶️ Közepesen csípős', value: '2' },
           { title: '🌶️🌶️🌶️ Extrém erős', value: '3' },
         ],
-        layout: 'dropdown', // vagy 'radio'
+        layout: 'dropdown',
       },
-      // Mivel nem kötelező, ezt nem teszjük bele a validation-be
     }
   ],
 };

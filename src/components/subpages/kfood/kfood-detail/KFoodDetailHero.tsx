@@ -17,6 +17,38 @@ interface KFoodDetailHeroProps {
   };
 }
 
+// Kategóriák leképezése német feliratokra
+const CATEGORY_MAP: Record<string, string> = {
+  'Minden': 'Alle',
+  'Főételek': 'Hauptgerichte',
+  'Levesek & Egytálételek': 'Suppen & Eintöpfe',
+  'Street Food': 'Street Food',
+  'Desszertek & Sütemények': 'Desserts & Gebäck',
+  'Italok & Soju': 'Getränke & Erfrischungen',
+  'Italok & Frissítők': 'Getränke & Erfrischungen',
+  'Nassolnivalók & Snackek': 'Snacks & Knabbereien',
+  'Alapanyagok': 'Zutaten & Grundnahrungsmittel',
+  'Szószok, Fűszerek & Tészták': 'Würzsaucen, Gewürze & Nudeln',
+  'Édességek & Desszertek': 'Süßwaren & Desserts',
+};
+
+// Nehézségi szintek leképezése
+const DIFFICULTY_MAP: Record<string, string> = {
+  'Könnyű': 'Einfach',
+  'Közepes': 'Mittel',
+  'Nehéz': 'Schwer',
+};
+
+const formatCategory = (cat?: string) => {
+  if (!cat) return 'Sonstiges';
+  return CATEGORY_MAP[cat] || cat;
+};
+
+const formatDifficulty = (diff?: string) => {
+  if (!diff) return '';
+  return DIFFICULTY_MAP[diff] || diff;
+};
+
 export default function KFoodDetailHero({ item }: KFoodDetailHeroProps) {
   const router = useRouter();
 
@@ -52,13 +84,13 @@ export default function KFoodDetailHero({ item }: KFoodDetailHeroProps) {
           className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-neutral-400 hover:text-amber-400 transition-colors cursor-pointer bg-transparent border-none p-0"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Vissza a katalógushoz</span>
+          <span>Zurück zum Katalog</span>
         </button>
 
         {/* Alkategória badge */}
         <div className="flex flex-wrap items-center gap-3">
           <span className="px-4 py-1.5 rounded-full bg-neutral-900 border border-neutral-800 text-amber-400 text-xs font-bold tracking-widest uppercase shadow-md">
-            {item.subCategory}
+            {formatCategory(item.subCategory)}
           </span>
           {item.koreanTitle && (
             <span className="text-neutral-400 font-light text-sm tracking-wide">
@@ -82,21 +114,21 @@ export default function KFoodDetailHero({ item }: KFoodDetailHeroProps) {
           {item.prepTime && (
             <div className="flex items-center gap-2 bg-neutral-900/90 border border-neutral-800 px-4 py-2 rounded-full shadow-xs">
               <Clock className="w-4 h-4 text-amber-400" />
-              <span>Elkészítés: {item.prepTime}</span>
+              <span>Zubereitung: {item.prepTime}</span>
             </div>
           )}
 
           {item.servings && (
             <div className="flex items-center gap-2 bg-neutral-900/90 border border-neutral-800 px-4 py-2 rounded-full shadow-xs">
               <Users className="w-4 h-4 text-amber-400" />
-              <span>Adag: {item.servings}</span>
+              <span>Portionen: {item.servings}</span>
             </div>
           )}
 
           {item.difficulty && (
             <div className="flex items-center gap-2 bg-neutral-900/90 border border-neutral-800 px-4 py-2 rounded-full shadow-xs">
               <ChefHat className="w-4 h-4 text-amber-400" />
-              <span>Szint: {item.difficulty}</span>
+              <span>Schwierigkeit: {formatDifficulty(item.difficulty)}</span>
             </div>
           )}
         </div>
