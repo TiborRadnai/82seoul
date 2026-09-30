@@ -27,6 +27,13 @@ export default function ArtistMembers({ membersList, onMemberClick, themeColor =
   const [selectedIndex, setSelectedIndex] = useState(0);
   const activeMember = membersList[selectedIndex];
 
+  // Segédfüggvény a szöveg vágásához, ha túl hosszú
+  const truncateBio = (text?: string, maxLength: number = 220) => {
+    if (!text) return 'Klicke auf das Bild für das Detailprofil!';
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength).trim() + '...';
+  };
+
   return (
     <section className="w-full py-16 sm:py-28 px-4 sm:px-6 lg:px-12 max-w-6xl mx-auto">
       {/* Szekció cím */}
@@ -97,7 +104,7 @@ export default function ArtistMembers({ membersList, onMemberClick, themeColor =
           </div>
           
           <h3 className="text-3xl sm:text-5xl font-black text-white mb-1 tracking-tighter drop-shadow-lg">
-            {activeMember.name}
+            {activeNameFormat(activeMember.name)}
           </h3>
 
           {activeMember.fullName && (
@@ -121,9 +128,20 @@ export default function ArtistMembers({ membersList, onMemberClick, themeColor =
             </div>
           )}
 
-          <p className="text-zinc-300 text-sm sm:text-base leading-relaxed border-t border-white/10 pt-3 sm:pt-4">
-            {activeMember.shortBio || 'Klicke auf das Bild für das Detailprofil!'}
-          </p>
+          {/* Meghívható/kattintható szövegdoboz, ami jelzi, hogy van még tartalom */}
+          <div 
+            onClick={() => onMemberClick && onMemberClick(activeMember)}
+            className="border-t border-white/10 pt-3 sm:pt-4 cursor-pointer group/bio"
+          >
+            <p className="text-zinc-300 text-sm sm:text-base leading-relaxed group-hover/bio:text-white transition-colors">
+              {truncateBio(activeMember.shortBio)}
+            </p>
+            {activeMember.shortBio && activeMember.shortBio.length > 220 && (
+              <span className="inline-block mt-2 text-xs font-semibold tracking-wide uppercase" style={{ color: themeColor }}>
+                Mehr lesen →
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
@@ -138,7 +156,7 @@ export default function ArtistMembers({ membersList, onMemberClick, themeColor =
               className={`group relative px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm tracking-wide transition-all duration-300 flex items-center gap-2.5 sm:gap-3 border ${
                 isActive
                   ? 'text-white scale-105 shadow-xl'
-                  : 'bg-white/3 text-zinc-400 border-white/10 hover:bg-white/8 hover:text-white hover:border-white/20'
+                  : 'bg-white/3 text-zinc-400 border-white/10 hover:bg-white/8 hover:text-white hover:border-white/25'
               }`}
               style={
                 isActive
@@ -162,4 +180,9 @@ export default function ArtistMembers({ membersList, onMemberClick, themeColor =
       </div>
     </section>
   );
+}
+
+// Segédfüggvény név kiíratáshoz, ha szükséges
+function activeNameFormat(name: string) {
+  return name;
 }
