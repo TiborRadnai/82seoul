@@ -7,6 +7,7 @@ import BackToTop from "@/components/core/BackToTop";
 import { CartProvider } from "../../context/CartContext";
 import { AuthProvider } from "../../context/AuthContext"; 
 import CartDrawer from "@/components/CartDrawer";
+import CookieBanner from '@/components/CookieBanner';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,6 +51,7 @@ export default function RootLayout({
             <BackToTop />
           </CartProvider>
         </AuthProvider>
+        <CookieBanner />
       </body>
     </html>
   );

@@ -58,6 +58,9 @@ export default function AuthPage() {
   const [city, setCity] = useState('');
   const [postalCode, setPostalCode] = useState('');
   const [country, setCountry] = useState('Deutschland');
+  
+  // Hírlevél checkbox állapota
+  const [subscribeNewsletter, setSubscribeNewsletter] = useState(false);
 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -92,6 +95,19 @@ export default function AuthPage() {
           },
         });
 
+        // Ha bepipálta a hírlevelet, elküldjük a saját API-nknak vagy mentjük a Sanitybe
+        if (subscribeNewsletter) {
+          try {
+            await fetch('/api/newsletter', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email }),
+            });
+          } catch (nlErr) {
+            console.error('Hírlevél feliratkozási hiba:', nlErr);
+          }
+        }
+
         router.push('/');
       }
     } catch (err: any) {
@@ -104,7 +120,6 @@ export default function AuthPage() {
 
   return (
     <div className="relative min-h-screen pt-32 pb-20 px-4 md:px-12 bg-[#f7f3ef] text-slate-900 flex items-center justify-center">
-      {/* FELSŐ ÉJKÉK ÁTMENET A NAVIGÁCIÓHOZ */}
       <div className="absolute top-0 left-0 right-0 h-44 bg-linear-to-b from-indigo-950/70 via-indigo-950/20 to-transparent pointer-events-none z-20" />
 
       <div className="w-full max-w-xl bg-white/95 backdrop-blur-md p-8 md:p-12 rounded-3xl border border-stone-200/85 shadow-xl relative z-35">
@@ -141,7 +156,7 @@ export default function AuthPage() {
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   className="w-full px-4 py-3.5 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900 placeholder:text-stone-400"
-                  placeholder="Kovács"
+                  placeholder="Mustermann"
                 />
               </div>
               <div>
@@ -154,7 +169,7 @@ export default function AuthPage() {
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   className="w-full px-4 py-3.5 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900 placeholder:text-stone-400"
-                  placeholder="Péter"
+                  placeholder="Maximilian"
                 />
               </div>
             </div>
@@ -170,7 +185,7 @@ export default function AuthPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3.5 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900 placeholder:text-stone-400"
-              placeholder="beispiel@email.com"
+              placeholder="max.mustermann@example.com"
             />
           </div>
 
@@ -192,16 +207,7 @@ export default function AuthPage() {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-stone-500 hover:text-slate-950 transition-colors cursor-pointer"
               >
-                {showPassword ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
-                  </svg>
-                ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                )}
+                {showPassword ? 'Verbergen' : 'Anzeigen'}
               </button>
             </div>
           </div>
@@ -283,6 +289,21 @@ export default function AuthPage() {
                     </select>
                   </div>
                 </div>
+              </div>
+
+              {/* Hírlevél Checkbox a sima regisztrációnál */}
+              <div className="pt-2 flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  id="authNewsletter"
+                  checked={subscribeNewsletter}
+                  onChange={(e) => setSubscribeNewsletter(e.target.checked)}
+                  className="mt-1 w-4 h-4 rounded border-stone-300 text-slate-950 focus:ring-slate-950 cursor-pointer"
+                />
+                <label htmlFor="authNewsletter" className="text-xs text-stone-600 cursor-pointer">
+                  <span className="font-bold text-slate-900 block">Für den 82.Seoul Newsletter anmelden</span>
+                  Erhalten Sie exklusive K-Pop News, Rabatte und Updates direkt in Ihr Postfach.
+                </label>
               </div>
             </>
           )}

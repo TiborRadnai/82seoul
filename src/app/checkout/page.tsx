@@ -209,7 +209,7 @@ export default function CheckoutPage() {
                     required
                     value={formData.firstName}
                     onChange={handleChange}
-                    placeholder="Tibor"
+                    placeholder="Maximilian"
                     className="w-full px-4 py-3 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900 transition-colors"
                   />
                 </div>
@@ -221,7 +221,7 @@ export default function CheckoutPage() {
                     required
                     value={formData.lastName}
                     onChange={handleChange}
-                    placeholder="Radnai"
+                    placeholder="Mustermann"
                     className="w-full px-4 py-3 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900 transition-colors"
                   />
                 </div>
@@ -236,7 +236,7 @@ export default function CheckoutPage() {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder="max@example.com"
+                    placeholder="max.mustermann@example.com"
                     className="w-full px-4 py-3 rounded-xl bg-stone-50 border border-stone-200 text-xs text-slate-900 focus:outline-none focus:border-slate-900 transition-colors"
                   />
                 </div>

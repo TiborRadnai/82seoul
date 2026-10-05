@@ -1,17 +1,51 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { 
   Sparkles, 
   Send, 
   Music2, 
   Globe,
-  ArrowUpRight,
-  Heart
+  ArrowUpRight
 } from "lucide-react";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+
+  // Hírlevél állapotok
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !email.includes("@")) return;
+
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setMessage("Vielen Dank! Sie sind angemeldet.");
+        setEmail("");
+      } else {
+        setMessage(data.error || "Ein Fehler ist aufgetreten.");
+      }
+    } catch (err) {
+      setMessage("Verbindungsfehler. Bitte später erneut versuchen.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <footer className="w-full bg-neutral-950 text-slate-400 relative overflow-hidden border-t border-neutral-800/80 font-sans">
@@ -48,7 +82,6 @@ export default function Footer() {
 
             {/* Social ikonok (Csak TikTok & Instagram) */}
             <div className="flex items-center gap-3 pt-2">
-              {/* Instagram */}
               <a
                 href="https://instagram.com"
                 target="_blank"
@@ -61,7 +94,6 @@ export default function Footer() {
                 </svg>
               </a>
 
-              {/* TikTok */}
               <a
                 href="https://tiktok.com"
                 target="_blank"
@@ -91,28 +123,39 @@ export default function Footer() {
               </p>
             </div>
 
-            <form onSubmit={(e) => e.preventDefault()} className="mt-6 flex flex-col sm:flex-row gap-3 z-10">
-              <input
-                type="email"
-                placeholder="Deine E-Mail-Adresse..."
-                className="grow px-5 py-3.5 rounded-full bg-neutral-950/80 border border-neutral-800 text-white placeholder:text-slate-500 text-sm focus:outline-none focus:border-rose-400/50 transition-colors"
-              />
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white hover:bg-slate-200 text-neutral-950 font-bold text-xs tracking-wider uppercase rounded-full transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer shrink-0 shadow"
-              >
-                <span>Anmelden</span>
-                <Send className="w-3.5 h-3.5 text-neutral-950" />
-              </button>
+            <form onSubmit={handleNewsletterSubmit} className="mt-6 flex flex-col gap-3 z-10">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Deine E-Mail-Adresse..."
+                  className="grow px-5 py-3.5 rounded-full bg-neutral-950/80 border border-neutral-800 text-white placeholder:text-slate-500 text-sm focus:outline-none focus:border-rose-400/50 transition-colors"
+                />
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white hover:bg-slate-200 text-neutral-950 font-bold text-xs tracking-wider uppercase rounded-full transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer shrink-0 shadow disabled:opacity-50"
+                >
+                  <span>{loading ? "Wird gesendet..." : "Anmelden"}</span>
+                  <Send className="w-3.5 h-3.5 text-neutral-950" />
+                </button>
+              </div>
+
+              {message && (
+                <p className={`text-xs font-medium px-4 ${message.includes("Vielen") ? "text-emerald-400" : "text-rose-400"}`}>
+                  {message}
+                </p>
+              )}
             </form>
           </div>
 
         </div>
 
-        {/* KÖZÉPSŐ RÉSZ: Valós Navigációs Linkek (Grid - 3 oszlop a tisztább elrendezésért) */}
+        {/* KÖZÉPSŐ RÉSZ: Navigációs Linkek */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 py-12 border-b border-neutral-800/60">
           
-          {/* 1. K-BEAUTY SHOP */}
           <div className="space-y-4">
             <h4 className="text-xs font-bold tracking-[0.2em] text-white uppercase">
               K-Beauty Shop
@@ -134,7 +177,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* 2. K-CULTURE & ENTDECKEN */}
           <div className="space-y-4">
             <h4 className="text-xs font-bold tracking-[0.2em] text-white uppercase">
               K-Culture
@@ -155,7 +197,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* 3. RECHTLICHES (Kötelező webshop elemek) */}
           <div className="space-y-4">
             <h4 className="text-xs font-bold tracking-[0.2em] text-white uppercase">
               Rechtliches
