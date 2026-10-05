@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Sparkles, ShoppingBag, Star, ArrowUpRight } from "lucide-react";
+import { Sparkles, ShoppingBag, Star, ArrowUpRight, Eye } from "lucide-react";
 import KBeautyDetailModal from "@/components/modals/KBeautyDetailModal";
-// 1. Beimportáljuk a központi fordító függvényeket
 import { translateCategory, translateBadge } from "@/utils/kbeautyTranslations";
 
 interface KBundleSectionProps {
@@ -13,36 +12,27 @@ interface KBundleSectionProps {
 export default function KBeautySection({ products = [] }: KBundleSectionProps) {
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
 
-  // Közvetlen kosárba helyezés funkció
-  const handleAddToCart = (e: React.MouseEvent, product: any) => {
-    e.stopPropagation(); // Megakadályozza, hogy a kártyára kattintás (modal megnyitása) is lefusson
-    console.log("Zum Warenkorb hinzugefügt:", product.title);
-  };
-
   return (
     <section id="kbeauty" className="w-full py-24 md:py-36 bg-linear-to-b from-neutral-950 via-slate-100 to-slate-50 text-neutral-900 relative overflow-hidden border-t border-neutral-800/60">
       
-      {/* 1. SELYEM-ÁTMENET KÖD: Feketéből észrevétlenül simul bele a világos háttérbe */}
+      {/* SELYEM-ÁTMENET KÖD */}
       <div className="absolute top-0 inset-x-0 h-64 bg-linear-to-b from-neutral-950 via-neutral-950/60 to-transparent pointer-events-none z-0" />
 
-      {/* Finom rózsaszínes-ezüstös háttérfények a prémium összhatáshoz */}
+      {/* Háttérfények */}
       <div className="absolute top-1/3 right-10 w-125 h-125 bg-linear-to-br from-rose-200/20 via-slate-200/20 to-transparent rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-10 -left-32 w-112.5 h-112.5 bg-linear-to-tl from-amber-200/20 via-rose-200/10 to-transparent rounded-full blur-[140px] pointer-events-none" />
 
-      {/* Tágas, 1600px-es konténer */}
       <div className="max-w-[1600px] w-full mx-auto px-6 md:px-12 relative z-10 pt-6">
         
-        {/* FEJLÉC - RAGYOGÓ VILÁGOS SZÖVEGEKKEL A SÖTÉT KÖDBEN */}
+        {/* FEJLÉC */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 md:mb-20 gap-8">
           <div className="space-y-4 max-w-2xl text-center md:text-left">
             
-            {/* Rose-Gold / Ezüst Pill Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-neutral-900/80 backdrop-blur-md border border-rose-500/30 text-rose-200 text-xs font-bold tracking-widest uppercase shadow-md">
               <Sparkles className="w-3.5 h-3.5 stroke-[1.75] text-rose-400" />
               <span>82SEOUL BEAUTY SHOP</span>
             </div>
 
-            {/* Hófehér főcím rose-gold / champagner átmenettel */}
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-light tracking-tight leading-[1.1] text-white drop-shadow-md">
               Die neue Dimension <br className="hidden sm:block" />
               <span className="font-semibold text-transparent bg-clip-text bg-linear-to-r from-rose-200 via-pink-200 to-amber-200">
@@ -50,13 +40,11 @@ export default function KBeautySection({ products = [] }: KBundleSectionProps) {
               </span>
             </h2>
 
-            {/* Tisztán olvasható világos leíró szöveg */}
             <p className="text-slate-300 text-base md:text-lg font-normal leading-relaxed drop-shadow-sm">
               Entdecke die angesagtesten Original K-Beauty-Kosmetika! Wir bringen dir die heißesten Glass Skin Trends direkt aus Seoul.
             </p>
           </div>
 
-          {/* FŐ EZÜST GOMB A WEBSHOPBA */}
           <div className="flex justify-center md:justify-end">
             <a 
               href="kbeauty"
@@ -72,13 +60,11 @@ export default function KBeautySection({ products = [] }: KBundleSectionProps) {
         {/* TERMÉK KÁRTYÁK GRID */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {products.map((product: any) => {
-            // Kivesszük az első kiszerelés adatait a Sanity variánsokból
             const firstVariant = product.variants?.[0];
             const isOnSale = firstVariant?.onSale;
             const currentPrice = isOnSale ? firstVariant?.salePrice : firstVariant?.price;
             const originalPrice = isOnSale ? firstVariant?.price : null;
 
-            // 2. Használjuk a központi fordító függvényeket
             const germanCategory = translateCategory(product.category);
             const germanBadge = translateBadge(product.badge);
 
@@ -86,7 +72,7 @@ export default function KBeautySection({ products = [] }: KBundleSectionProps) {
               <div
                 key={product._id}
                 onClick={() => setSelectedProduct(product)}
-                className="group relative bg-white border border-slate-200/90 rounded-3xl p-7 transition-all duration-500 hover:-translate-y-2 hover:border-slate-400 hover:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.12)] flex flex-col justify-between cursor-pointer"
+                className="group relative bg-white border border-slate-200/90 rounded-3xl p-7 transition-all duration-300 hover:-translate-y-2 hover:border-slate-400 hover:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.12)] flex flex-col justify-between cursor-pointer"
               >
                 
                 {/* Kártya Teteje: Tag & Értékelés & Lebegő ikon */}
@@ -103,24 +89,21 @@ export default function KBeautySection({ products = [] }: KBundleSectionProps) {
                       <span>{product.rating || 5.0}</span>
                     </div>
 
-                    {/* Ezüst nyilacska kör */}
+                    {/* Javított, finomabb animációjú nyíl kör */}
                     <div className="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-slate-900 border border-slate-200 text-slate-700 group-hover:text-white flex items-center justify-center transition-all duration-300 shadow-2xs">
-                      <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      <ArrowUpRight className="w-4 h-4 transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </div>
                   </div>
                 </div>
 
                 {/* LEBEGŐ TERMÉK KÉP TERÜLET */}
                 <div className="relative my-8 h-52 w-full flex items-center justify-center">
-                  
-                  {/* Lágy ezüstös-szürke árnyék a lebegéshez */}
-                  <div className="absolute bottom-1 w-32 h-5 bg-slate-400/25 rounded-full blur-md transition-all duration-500 group-hover:w-40 group-hover:bg-slate-500/35 group-hover:blur-lg" />
+                  <div className="absolute bottom-1 w-32 h-5 bg-slate-400/25 rounded-full blur-md transition-all duration-300 group-hover:w-40 group-hover:bg-slate-500/35 group-hover:blur-lg" />
 
-                  {/* Termék Kép */}
                   <img
                     src={product.image}
                     alt={product.title}
-                    className="relative z-10 max-h-48 object-contain transition-all duration-500 group-hover:scale-108 group-hover:-translate-y-2 drop-shadow-[0_12px_20px_rgba(0,0,0,0.12)]"
+                    className="relative z-10 max-h-48 object-contain transition-all duration-300 ease-out group-hover:scale-105 group-hover:-translate-y-2 drop-shadow-[0_12px_20px_rgba(0,0,0,0.12)]"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600";
                     }}
@@ -141,7 +124,7 @@ export default function KBeautySection({ products = [] }: KBundleSectionProps) {
                     {product.tagline}
                   </p>
 
-                  {/* Árak & Ezüst Kosár Gomb */}
+                  {/* Árak & Új Details Gomb */}
                   <div className="pt-3 flex items-center justify-between">
                     <div className="flex items-baseline gap-2">
                       <span className="text-xl font-extrabold text-slate-950">
@@ -156,13 +139,17 @@ export default function KBeautySection({ products = [] }: KBundleSectionProps) {
                       )}
                     </div>
 
-                    {/* Kis Ezüst Kerek Kosár Gomb - Azonnali kosárba helyezés */}
+                    {/* Részletek gomb Eye ikonnal németül */}
                     <button
-                      onClick={(e) => handleAddToCart(e, product)}
-                      title="In den Warenkorb"
-                      className="w-10 h-10 rounded-full bg-linear-to-b from-slate-100 via-slate-200 to-slate-300 hover:from-slate-900 hover:to-black text-slate-800 hover:text-white flex items-center justify-center transition-all duration-300 border border-slate-300/80 shadow-2xs hover:scale-110 active:scale-95 cursor-pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedProduct(product);
+                      }}
+                      title="Details ansehen"
+                      className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-900 text-slate-800 hover:text-white font-bold text-[11px] tracking-wider uppercase flex items-center gap-1.5 transition-all duration-300 border border-slate-200 hover:border-slate-900 shadow-2xs cursor-pointer"
                     >
-                      <ShoppingBag className="w-4 h-4 stroke-[1.75]" />
+                      <span>Details</span>
+                      <Eye className="w-3.5 h-3.5 stroke-[1.75]" />
                     </button>
                   </div>
                 </div>
