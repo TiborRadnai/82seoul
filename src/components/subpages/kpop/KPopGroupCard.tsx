@@ -49,6 +49,21 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
   const isEven = index % 2 === 0;
   const rankBadge = getRankBadgeStyle(band.rank);
 
+  // Intelligens segédfüggvény a tagok vagy a nemhelyes szóló státusz megjelenítésére
+  const renderMemberInfo = () => {
+    if (band.membersList?.length) {
+      return `${band.membersList.length} Mitglieder`;
+    }
+    if (band.members) {
+      return `${band.members} Mitglieder`;
+    }
+    // Ha szóló előadó, a Sanity-ben megadott gender alapján döntsük el:
+    if (band.gender === 'female') {
+      return 'Solo-Künstlerin';
+    }
+    return 'Solo-Künstler';
+  };
+
   const textUnrollVariant: Variants = {
     hidden: { 
       opacity: 0,
@@ -112,13 +127,13 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
           }`}
         >
           <div className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2 z-10">
-            <span>{band.filterAgency || band.agency}</span>
+            <span>{band.agency || band.filterAgency}</span>
             <span className="text-zinc-700">•</span>
             <span className="inline-flex items-center gap-1.5 text-zinc-400 font-medium">
               <svg className="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
               </svg>
-              <span>{band.membersList?.length ? `${band.membersList.length} Mitglieder` : (band.members ? `${band.members} Mitglieder` : '0 Mitglieder')}</span>
+              <span>{renderMemberInfo()}</span>
             </span>
           </div>
 

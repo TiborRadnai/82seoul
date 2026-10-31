@@ -1,74 +1,125 @@
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+'use client';
 
-export default function PrivacyPage() {
+import { useRouter } from "next/navigation";
+import { Sparkles, ArrowLeft, ShieldCheck, Database, Server, UserCheck, Lock } from "lucide-react";
+
+export default function DatenschutzPage() {
+  const router = useRouter();
+
   return (
-    <main className="min-h-screen bg-neutral-950 text-slate-300 pt-32 pb-20 px-6 md:px-12">
-      <div className="max-w-4xl mx-auto space-y-10">
-        
-        {/* Vissza a főoldalra */}
-        <Link 
-          href="/" 
-          className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-amber-300 hover:text-white transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Zurück zur Startseite</span>
-        </Link>
+    <main className="min-h-screen bg-neutral-50 text-slate-900 font-sans antialiased selection:bg-rose-500/20 selection:text-slate-900 relative overflow-hidden">
+      
+      {/* FELSŐ SÖTÉT/ÁTMENETES SÁV */}
+      <div className="absolute top-0 left-0 right-0 h-64 bg-linear-to-b from-neutral-900 via-neutral-950/40 to-transparent pointer-events-none" />
 
-        {/* Címsor */}
-        <div className="space-y-3 border-b border-neutral-800 pb-8">
-          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white">
-            Datenschutz&shy;erklärung
+      {/* Dekoratív háttér effektek */}
+      <div className="absolute top-32 left-1/4 w-96 h-96 bg-rose-500/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-64 right-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-[120px] pointer-events-none" />
+
+      <div className="max-w-4xl mx-auto px-6 pt-28 pb-24 relative z-10">
+        
+        {/* Vissza gomb */}
+        <div className="mb-12">
+          <button 
+            onClick={() => router.back()}
+            className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-slate-600 hover:text-slate-900 bg-white border border-slate-200 px-4 py-2.5 rounded-full transition-all duration-300 hover:border-slate-300 shadow-xs cursor-pointer"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Zurück</span>
+          </button>
+        </div>
+
+        {/* Fejléc / Kategória badge */}
+        <div className="space-y-4 mb-12">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-600 text-[10px] font-bold tracking-widest uppercase">
+            <Sparkles className="w-3 h-3 text-rose-500" />
+            <span>Datenschutz • DSGVO Konform</span>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+            Datenschutzerklärung
           </h1>
-          <p className="text-xs tracking-[0.2em] text-slate-400 uppercase">
-            DSGVO-konforme Informationen zum Datenschutz
+          <p className="text-slate-600 text-base md:text-lg">
+            Transparenz und Schutz deiner personenbezogenen Daten nach den Vorgaben der Datenschutz-Grundverordnung (DSGVO).
           </p>
         </div>
 
-        {/* Tartalom */}
-        <div className="space-y-8 text-sm md:text-base leading-relaxed text-slate-300">
+        {/* Tartalmi kártyák */}
+        <div className="space-y-8">
           
-          <div className="space-y-2">
-            <h2 className="text-lg font-bold text-white tracking-wide">1. Datenschutz auf einen Blick</h2>
-            <h3 className="text-sm font-semibold text-white">Allgemeine Hinweise</h3>
-            <p>
-              Die folgenden Hinweise geben einen einfachen Überblick darüber, என்ன mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können.
+          {/* 1. Szekció */}
+          <section className="bg-white border border-slate-200/80 rounded-3xl p-8 md:p-10 relative overflow-hidden space-y-4 shadow-xs">
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-3">
+              <span className="w-2 h-2 rounded-full bg-rose-500" />
+              1. Datenschutz auf einen Blick
+            </h2>
+            <p className="text-slate-700 text-sm md:text-base leading-relaxed">
+              Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit deinen personenbezogenen Daten passiert, wenn du unsere Website <strong>82.SEOUL</strong> besuchst. Personenbezogene Daten sind alle Daten, mit denen du persönlich identifiziert werden kannst.
             </p>
-          </div>
+          </section>
 
-          <div className="space-y-2">
-            <h2 className="text-lg font-bold text-white tracking-wide">2. Hosting und Content Delivery Networks (CDN)</h2>
-            <p>
-              Wir hosten die Inhalte unserer Website bei externen Anbietern (z.B. Vercel). Die personenbezogenen Daten, die auf dieser Website erfasst werden, werden auf den Servern des Hosters gespeichert. Hierbei kann es sich v.a. um IP-Adressen, Kontaktanfragen, Meta- und Kommunikationsdaten handeln.
+          {/* 2. Szekció */}
+          <section className="bg-white border border-slate-200/80 rounded-3xl p-8 md:p-10 relative overflow-hidden space-y-4 shadow-xs">
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-3">
+              <span className="w-2 h-2 rounded-full bg-amber-500" />
+              2. Hosting & Content Delivery (Vercel & Sanity)
+            </h2>
+            <p className="text-slate-700 text-sm md:text-base leading-relaxed">
+              Wir hosten die Inhalte unserer Website bei externen Anbietern (z. B. Vercel). Die personenbezogenen Daten, die auf dieser Website erfasst werden, werden auf den Servern des Hosters gespeichert. Hierbei kann es sich v. a. um IP-Adressen, Kontaktanfragen, Meta- und Kommunikationsdaten handeln. Zudem nutzen wir Sanity CMS zur Verwaltung unserer redaktionellen Inhalte.
             </p>
-          </div>
+          </section>
 
-          <div className="space-y-2">
-            <h2 className="text-lg font-bold text-white tracking-wide">3. Allgemeine Hinweise und Pflichtinformationen</h2>
-            <h3 className="text-sm font-semibold text-white">Verantwortliche Stelle</h3>
-            <p>
-              Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:<br />
-              <strong>82.SEOUL</strong><br />
-              [Dein Name / Firmenname, z.B. Tibor Radnai]<br />
-              [Deine Anschrift in Oberstaufen]<br />
-              E-Mail: <span className="text-amber-300">[Deine E-Mail-Adresse]</span>
-            </p>
-          </div>
+          {/* 3. Szekció: Verantwortung */}
+          <section className="bg-white border border-slate-200/80 rounded-3xl p-8 md:p-10 relative overflow-hidden space-y-4 shadow-xs">
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-3">
+              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              3. Verantwortliche Stelle
+            </h2>
+            <div className="text-slate-700 text-sm md:text-base leading-relaxed space-y-1">
+              <p className="font-bold text-slate-900">82.SEOUL (über Madevix)</p>
+              <p>Tibor Radnai</p>
+              <p>Am Schwedenkreuz 5.</p>
+              <p>87534 Oberstaufen (Steibis)</p>
+              <p>E-Mail: <a href="mailto:info@82seoul.de" className="text-rose-600 font-medium hover:underline">info@82seoul.de</a></p>
+            </div>
+          </section>
 
-          <div className="space-y-2">
-            <h2 className="text-lg font-bold text-white tracking-wide">4. Datenerfassung auf unserer Website</h2>
-            <h3 className="text-sm font-semibold text-white">Newsletter</h3>
-            <p>
-              Wenn Sie den auf der Website angebotenen Newsletter empfangen möchten, benötigen wir von Ihnen eine E-Mail-Adresse sowie Informationen, die uns die Überprüfung gestatten, dass Sie der Inhaber der angegebenen E-Mail-Adresse sind und mit dem Empfang des Newsletters einverstanden sind.
+          {/* 4. Szekció: Regisztráció és törlési logika (Kiemelten fontos nálad!) */}
+          <section className="bg-white border border-slate-200/80 rounded-3xl p-8 md:p-10 relative overflow-hidden space-y-6 shadow-xs">
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-3">
+              <span className="w-2 h-2 rounded-full bg-purple-500" />
+              4. Registrierung & Benutzerkonten (Löschlogik)
+            </h2>
+            <p className="text-slate-700 text-sm md:text-base leading-relaxed">
+              Wenn du dich auf unserer Plattform registrierst, erheben wir Bestandsdaten. Für die Aufbewahrung und Löschung gilt eine strenge, DSGVO-konforme Regelung:
             </p>
-          </div>
 
-          <div className="space-y-2">
-            <h2 className="text-lg font-bold text-white tracking-wide">5. Analyse-Tools und Werbung</h2>
-            <p>
-              Diese Website verwendet derzeit keine datenschutzrechtlich problematischen Tracking-Tools ohne Einwilligung. Sobald Cookies oder Analysetools eingesetzt werden, erfolgt dies im Einklang mit den DSGVO-Vorgaben über unser Cookie-Consent-Management.
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+              <div className="bg-slate-50 border border-slate-200 p-5 rounded-2xl space-y-2 shadow-xs">
+                <h3 className="text-slate-900 font-bold text-sm tracking-wide uppercase text-emerald-600">Ohne Käufe (Löschung)</h3>
+                <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
+                    Löscht ein Nutzer sein Konto und hat bisher keine kostenpflichtigen Transaktionen getätigt, werden sämtliche personenbezogenen Daten <strong>vollständig und unwiderruflich gelöscht</strong>.
+                </p>
+              </div>
+
+              <div className="bg-slate-50 border border-slate-200 p-5 rounded-2xl space-y-2 shadow-xs">
+                <h3 className="text-slate-900 font-bold text-sm tracking-wide uppercase text-rose-600">Mit Käufen (Aufbewahrung)</h3>
+                <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
+                  Wurden Käufe getätigt, sind wir aufgrund gesetzlicher handels- und steuerrechtlicher Aufbewahrungspflichten (z. B. 10 Jahre für Rechnungen) verpflichtet, die Rechnungsdaten zu speichern.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* 5. Szekció: Analytics */}
+          <section className="bg-white border border-slate-200/80 rounded-3xl p-8 md:p-10 relative overflow-hidden space-y-4 shadow-xs">
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-3">
+              <span className="w-2 h-2 rounded-full bg-rose-500" />
+              5. Analyse-Tools & Consent Management
+            </h2>
+            <p className="text-slate-700 text-sm md:text-base leading-relaxed">
+              Diese Website verwendet Analysetools (wie Google Analytics) und Cookies ausschließlich im Einklang mit den DSGVO-Vorgaben. Die Datenerfassung und das Tracking erfolgen erst nach deiner ausdrücklichen Einwilligung über unser Cookie-Consent-Management.
             </p>
-          </div>
+          </section>
 
         </div>
 

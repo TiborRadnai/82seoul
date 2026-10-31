@@ -71,19 +71,19 @@ export default function Footer() {
                   82.SEOUL
                 </span>
                 <span className="text-[10px] tracking-[0.25em] text-slate-400 uppercase font-bold">
-                  Original K-Beauty & Culture
+                  Original K-Culture Portal
                 </span>
               </div>
             </Link>
 
             <p className="text-sm text-slate-400 font-normal leading-relaxed max-w-sm">
-              Dein direkter Weg nach Südkorea. Entdecke authentische Glass Skin Kosmetik, angesagte K-Beauty Trends und faszinierende K-Culture Highlights direkt aus Seoul.
+              Dein direkter Weg nach Südkorea. Entdecke faszinierende K-Pop Charts, angesagte K-Movies & Dramen und authentische Kultur-Highlights direkt aus Seoul.
             </p>
 
             {/* Social ikonok (Csak TikTok & Instagram) */}
             <div className="flex items-center gap-3 pt-2">
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/82seoul_official/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
@@ -95,7 +95,7 @@ export default function Footer() {
               </a>
 
               <a
-                href="https://tiktok.com"
+                href="https://www.tiktok.com/@82seoul_official"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="TikTok"
@@ -116,10 +116,10 @@ export default function Footer() {
                 <span>82SEOUL VIP NEWSLETTER</span>
               </div>
               <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
-                Verpasse keine K-Beauty Trends mehr!
+                Verpasse keine K-Culture Highlights mehr!
               </h3>
               <p className="text-xs md:text-sm text-slate-400">
-                Abonniere unseren Newsletter und erhalte exklusive Rabatte, Neuheiten und die heißesten Glass Skin Tipps direkt in dein Postfach.
+                Abonniere unseren Newsletter und erhalte die neuesten K-Pop Charts, Serien-Tipps und exklusive Einblicke direkt in dein Postfach.
               </p>
             </div>
 
@@ -158,14 +158,14 @@ export default function Footer() {
           
           <div className="space-y-4">
             <h4 className="text-xs font-bold tracking-[0.2em] text-white uppercase">
-              K-Beauty Shop
+              Entdecken
             </h4>
             <ul className="space-y-2.5 text-sm">
               {[
-                { name: "Glass Skin Kollektion", href: "/kbeauty" },
-                { name: "Skincare & Bestseller", href: "/kbeauty" },
-                { name: "Originalitäts-Garantie", href: "/kbeauty" },
-                { name: "Warenkorb & Bestellung", href: "/cart" }
+                { name: "K-Pop Top Charts", href: "/kpop" },
+                { name: "K-Movies & Dramen", href: "/kdrama" },
+                { name: "K-Food & Rezepte", href: "/kfood" },
+                { name: "Webshop (Demnächst)", href: "#" }
               ].map((item, i) => (
                 <li key={i}>
                   <Link href={item.href} className="hover:text-white transition-colors flex items-center gap-1 group">
@@ -220,31 +220,33 @@ export default function Footer() {
 
         </div>
 
-        {/* ALSÓ RÉSZ: Copyright, Madevix & Nyelv */}
-        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <div className="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
-            <span>© {currentYear} 82.SEOUL. Alle Rechte vorbehalten.</span>
-            <span className="hidden sm:inline">•</span>
-            <span>
-              Developed by{" "}
-              <a 
-                href="https://madevix.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-slate-400 hover:text-white transition-colors font-medium underline underline-offset-4"
-              >
-                Madevix
-              </a>
-            </span>
-          </div>
+      {/* ALSÓ RÉSZ: Copyright, Madevix & Nyelv */}
+      <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <div className="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
+          <span>© {currentYear} <strong className="font-semibold text-slate-400">82.SEOUL</strong></span>
+          <span className="hidden sm:inline text-slate-700">•</span>
+          <span>Alle Rechte vorbehalten.</span>
+          <span className="hidden sm:inline text-slate-700">•</span>
+          <span>
+            Developed by{" "}
+            <a 
+              href="https://madevix.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-slate-400 hover:text-white transition-colors font-medium underline underline-offset-4"
+            >
+              Madevix
+            </a>
+          </span>
+        </div>
 
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-1.5 text-slate-300 font-semibold bg-neutral-900 px-3 py-1 rounded-full border border-neutral-800">
-              <Globe className="w-3.5 h-3.5 text-amber-300" />
-              <span>DE (Deutschland)</span>
-            </div>
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-1.5 text-slate-300 font-semibold bg-neutral-900 px-3 py-1 rounded-full border border-neutral-800">
+            <Globe className="w-3.5 h-3.5 text-amber-300" />
+            <span>DE (Deutschland)</span>
           </div>
         </div>
+      </div>
 
       </div>
     </footer>

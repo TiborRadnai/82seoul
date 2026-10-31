@@ -25,13 +25,19 @@ export default async function Home() {
     console.error("Hiba a főoldali adatok lekérdezésekor:", err);
   }
 
-  // Kiemelt termékek kiválogatása a teljes shopProducts listából (így minden adat megmarad a modalhoz)
+  // Top 3 K-Pop előadó kiválogatása (ha van rank mezőjük, az alapján rendezve, különben az első 3-at veszi)
+  const topArtists = [...artists]
+    .sort((a: any, b: any) => (a.rank || 99) - (b.rank || 99))
+    .slice(0, 3);
+
+  // Kiemelt termékek kiválogatása a teljes shopProducts listából
   const featuredProducts = shopProducts
     .filter((item: any) => item.featured === true)
     .slice(0, 4);
 
   return (
     <HomeContent 
+      topArtists={topArtists}
       featuredProducts={featuredProducts}
       shopProducts={shopProducts}
       artists={artists}
