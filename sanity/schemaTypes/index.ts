@@ -7,6 +7,8 @@ import shopProduct from './shopProduct';
 import newsletterSubscriber from './newsletterSubscriber';
 import customer from './customer';
 import order from './order';
+import travelArticle from './travelArticle';
+import travelGuideItem from './travelGuideItem';
 
 export const schemaTypes = [
     artist, 
@@ -17,5 +19,7 @@ export const schemaTypes = [
     shopProduct, 
     newsletterSubscriber,
     customer,
-    order
+    order,
+    travelArticle,
+    travelGuideItem,
 ];

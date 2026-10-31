@@ -303,3 +303,54 @@ export const getOrdersByUserIdOrEmailQuery = `
     createdAt
   }
 `;
+
+// --- KOREA TRAVEL LEKÉRDEZÉSEK ---
+
+// 1. Lekérdezi az adott pillér (kategória) kiemelt elemeit a főoldalra (sorrend szerint)
+export const getTravelArticlesByCategoryQuery = `*[_type == "travelArticle" && category == $category && isFeaturedOnSection == true] | order(orderRank asc) {
+  _id,
+  title,
+  "slug": slug.current,
+  category,
+  tag,
+  description,
+  "image": image.asset->url,
+  isFeaturedOnSection,
+  orderRank
+}`;
+
+// 2. Lekérdezi az összes elemet egy adott pillérhez (pl. a részletes / overview aloldalra)
+export const getAllTravelArticlesByCategoryQuery = `*[_type == "travelArticle" && category == $category] | order(orderRank asc) {
+  _id,
+  title,
+  "slug": slug.current,
+  category,
+  tag,
+  description,
+  "image": image.asset->url,
+  isFeaturedOnSection,
+  orderRank
+}`;
+
+// 3. Lekérdezi egyedi cikk adatait slug alapján (a részletes cikk oldalakhoz)
+export const getTravelArticleBySlugQuery = `*[_type == "travelArticle" && slug.current == $slug][0]{
+  _id,
+  title,
+  "slug": slug.current,
+  category,
+  tag,
+  description,
+  "image": image.asset->url,
+  isFeaturedOnSection,
+  orderRank
+}`;
+
+// 4. Lekérdezi a Travel Guide (Kisokos) elemeit sorrendben
+export const getTravelGuideItemsQuery = `*[_type == "travelGuideItem"] | order(orderRank asc) {
+  _id,
+  title,
+  "slug": slug.current,
+  tag,
+  description,
+  orderRank
+}`;

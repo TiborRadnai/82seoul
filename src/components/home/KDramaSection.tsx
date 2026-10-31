@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from "react";
 import { Film, ChevronLeft, ChevronRight, Star, ArrowUpRight, Play, Sparkles } from "lucide-react";
@@ -219,7 +219,6 @@ export default function KDramaSection() {
           {/* RECHTE SEITE: WIDE IMAGE SLIDER */}
           <div className="lg:col-span-7 flex flex-col items-center lg:items-end gap-6">
             <div className="relative group w-full max-w-2xl">
-              {/* ITT LETT LEVÉVE A NAGY RÁDIUSZ: rounded-xl helyett a korábbi 44px */}
               <div 
                 onClick={() => handleCardClick(currentSlide)}
                 className="relative rounded-xl overflow-hidden border border-neutral-700/50 bg-black shadow-2xl transition-all duration-500 hover:border-neutral-500 hover:-translate-y-1 h-135 sm:h-150 md:h-160 cursor-pointer ring-1 ring-white/10"
