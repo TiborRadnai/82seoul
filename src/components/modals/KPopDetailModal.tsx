@@ -30,7 +30,8 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
 
   const handleShare = async () => {
     if (!group) return;
-    const shareUrl = `${window.location.origin}#${group.id}`;
+    // A közvetlen aloldal/profil linkjét generáljuk a főoldali horgony helyett
+    const shareUrl = `${window.location.origin}/kpop/${group.id}`;
     try {
       await navigator.clipboard.writeText(shareUrl);
       setCopied(true);
@@ -43,6 +44,9 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
   if (!group) return null;
 
   const isSolo = group.category === 'solo' || !group.members || group.members === '';
+  
+  // Az igazi, szöveges ügynökség vagy fallback a filterre
+  const agencyName = group.agency || group.filterAgency || "N/A";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-8 animate-fade-in">
@@ -123,8 +127,9 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
 
           <div className="space-y-5">
             <div>
+              {/* Fent a kis címke is a valós ügynökséget mutatja */}
               <span className="text-xs font-bold tracking-widest text-pink-400 uppercase">
-                {group.filterAgency || group.agency || ""}
+                {agencyName}
               </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mt-0.5">
                 {group.name}
@@ -141,16 +146,17 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
                   {isSolo ? "Status" : "Mitglieder"}
                 </div>
                 <div className="text-xs font-semibold text-white mt-0.5">
-                  {isSolo ? "Solo Artist" : (group.members || "N/A")}
+                  {isSolo ? (group.gender === 'female' ? "Solo-Künstlerin" : "Solo-Künstler") : (group.members || "N/A")}
                 </div>
               </div>
 
-              <div className="p-3 rounded-2xl bg-white/5 border border-white/10">
+              {/* AGENTÚRA KAPSZULA: Reszponzív, hosszú név esetén is tökéletes */}
+              <div className="p-3 rounded-2xl bg-white/5 border border-white/10 overflow-hidden" title={agencyName}>
                 <div className="text-[10px] font-bold tracking-wider uppercase text-neutral-400">
                   Agentur
                 </div>
-                <div className="text-xs font-semibold text-white mt-0.5 line-clamp-1">
-                  {group.filterAgency || group.agency || "N/A"}
+                <div className="text-[11px] sm:text-xs font-semibold text-white mt-0.5 truncate w-full">
+                  {agencyName}
                 </div>
               </div>
 
@@ -159,7 +165,7 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
                   <Heart className="w-3 h-3 text-pink-400 fill-pink-400/30" />
                   <span>Fandom</span>
                 </div>
-                <div className="text-xs font-bold text-pink-200 mt-0.5 line-clamp-1">
+                <div className="text-xs font-bold text-pink-200 mt-0.5 truncate" title={group.fandom || "Keine Angabe"}>
                   {group.fandom || "Keine Angabe"}
                 </div>
               </div>
@@ -182,12 +188,13 @@ export default function KPopDetailModal({ group, onClose }: KPopDetailModalProps
                         onMouseLeave={() => setHoveredMember(null)}
                         className="w-full px-3 py-2.5 rounded-xl bg-white/10 border border-white/10 hover:bg-white/20 hover:border-white/30 transition-all cursor-pointer flex items-center justify-between text-xs gap-2 min-w-0"
                       >
-                        <span className="font-semibold text-white/90 shrink-0">
+                        <span className="font-semibold text-white/90 shrink-0 truncate">
                           {member?.name || "Member"}
                         </span>
                         
                         {primaryRole && (
                           <span 
+                            text-xs
                             className="text-[10px] text-pink-300 font-medium bg-pink-500/15 border border-pink-500/20 px-2 py-0.5 rounded-md truncate min-w-0 max-w-27.5"
                             title={primaryRole}
                           >

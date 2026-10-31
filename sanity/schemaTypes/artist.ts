@@ -33,6 +33,19 @@ export const artist = {
       },
     },
     {
+      name: 'gender',
+      title: 'Előadó Neme (Csak szólóknál: Férfi / Nő)',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Férfi (männlich)', value: 'male' },
+        { title: 'Nő (weiblich)', value: 'female' },
+      ],
+        layout: 'radio',
+      },
+      hidden: ({ document }: { document: any }) => document?.category !== 'solo',
+    },
+    {
       name: 'filterAgency',
       title: 'Kiadó Ügynökség (Szűrőhöz)',
       type: 'string',

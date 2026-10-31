@@ -122,7 +122,7 @@ export default function KDramaSection() {
   };
 
   return (
-    <section className="w-full py-24 md:py-36 bg-neutral-950 text-white relative overflow-hidden border-t border-neutral-800/60">
+    <section id="kdrama" className="w-full py-24 md:py-36 bg-neutral-950 text-white relative overflow-hidden border-t border-neutral-800/60">
       
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-125 h-125 bg-linear-to-br from-rose-950/20 via-neutral-900/40 to-transparent rounded-full blur-[150px] pointer-events-none" />
       <div className="absolute bottom-0 right-10 w-100 h-100 bg-linear-to-tl from-amber-950/15 via-slate-900/30 to-transparent rounded-full blur-[130px] pointer-events-none" />

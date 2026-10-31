@@ -3,13 +3,11 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ShoppingBag, User as UserIcon } from 'lucide-react'; // <--- Új ikon importálva
-import { useCart } from '../../../context/CartContext';
-import { useAuth } from '../../../context/AuthContext'; // <--- Auth context importálása
+import { User as UserIcon } from 'lucide-react';
+import { useAuth } from '../../../context/AuthContext';
 
 export default function Navbar() {
-  const { totalItems, setIsCartOpen } = useCart();
-  const { user } = useAuth(); // <-- Lekérjük az aktuális usert
+  const { user } = useAuth();
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -58,12 +56,11 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* ASZTALI MENÜ ÉS IKONOK */}
+          {/* ASZTALI MENÜ ÉS FIÓK IKON */}
           <div className="hidden md:flex items-center space-x-10">
             <div className="flex items-center space-x-10 text-xs font-semibold tracking-widest uppercase text-slate-300">
-              <Link href="/kbeauty" className="hover:text-white transition-colors duration-300 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all">
-                K-Beauty
-              </Link>
+              
+              {/* Aktív kulturális menüpontok */}
               <Link href="/kpop" className="hover:text-white transition-colors duration-300 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all">
                 K-Pop
               </Link>
@@ -73,15 +70,33 @@ export default function Navbar() {
               <Link href="/kfood" className="hover:text-white transition-colors duration-300 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all">
                 K-Food
               </Link>
-              <Link href="/kbeauty" className="hover:text-white transition-colors duration-300 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all">
-                Webshop
-              </Link>
+
+              {/* INAKTÍV / HAMAROSAN ÉRKEZŐ: Webshop */}
+              <div className="relative group/tooltip cursor-not-allowed">
+                <span className="text-slate-500 hover:text-slate-500 select-none py-1 flex items-center gap-1">
+                  Webshop <span className="text-[9px] text-amber-400 font-normal">SOON</span>
+                </span>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-3 py-1.5 bg-black/90 border border-white/10 text-white text-[10px] tracking-wider uppercase rounded-lg opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap shadow-xl z-50">
+                  Demnächst verfügbar
+                </div>
+              </div>
+
+              {/* INAKTÍV / HAMAROSAN ÉRKEZŐ: K-Travel */}
+              <div className="relative group/tooltip cursor-not-allowed">
+                <span className="text-slate-500 hover:text-slate-500 select-none py-1 flex items-center gap-1">
+                  K-Travel <span className="text-[9px] text-amber-400 font-normal">SOON</span>
+                </span>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-3 py-1.5 bg-black/90 border border-white/10 text-white text-[10px] tracking-wider uppercase rounded-lg opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap shadow-xl z-50">
+                  Demnächst verfügbar
+                </div>
+              </div>
+
             </div>
 
-            <div className="flex items-center gap-3">
-              {/* Felhasználó / Fiók Ikon (Asztali) */}
+            {/* Fiók Ikon (Asztali) */}
+            <div className="flex items-center">
               <Link
-                href={user ? "/account" : "/auth"} // Ha be van lépve, fiók oldal; ha nincs, auth oldal
+                href={user ? "/account" : "/auth"}
                 className="relative p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer flex items-center justify-center"
                 aria-label="Fiók"
               >
@@ -90,26 +105,11 @@ export default function Navbar() {
                   <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-slate-950" />
                 )}
               </Link>
-
-              {/* Kosár Ikon Gomb (Asztali) */}
-              <button
-                onClick={() => setIsCartOpen(true)}
-                className="relative p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer flex items-center justify-center"
-                aria-label="Warenkorb"
-              >
-                <ShoppingBag className="w-4 h-4 text-rose-300" />
-                {totalItems > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-rose-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-md animate-pulse">
-                    {totalItems}
-                  </span>
-                )}
-              </button>
             </div>
           </div>
 
-          {/* MOBIL JOBB OLDALI GOMBOK (User + Kosár + Hamburger) */}
+          {/* MOBIL JOBB OLDALI GOMBOK (User + Hamburger) */}
           <div className="flex items-center gap-2 md:hidden z-50">
-            {/* Felhasználó Ikon (Mobil) */}
             <Link
               href={user ? "/account" : "/auth"}
               className="relative p-2 rounded-full bg-white/10 text-white flex items-center justify-center cursor-pointer"
@@ -120,19 +120,6 @@ export default function Navbar() {
                 <span className="absolute top-0 right-0 w-2 h-2 bg-emerald-500 rounded-full border border-slate-950" />
               )}
             </Link>
-
-            <button
-              onClick={() => setIsCartOpen(true)}
-              className="relative p-2 rounded-full bg-white/10 text-white flex items-center justify-center cursor-pointer"
-              aria-label="Warenkorb"
-            >
-              <ShoppingBag className="w-4 h-4 text-rose-300" />
-              {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-rose-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
-                  {totalItems}
-                </span>
-              )}
-            </button>
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -155,9 +142,6 @@ export default function Navbar() {
       {/* MOBIL MENÜ OVERLAY */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-40 bg-slate-950/85 backdrop-blur-2xl md:hidden flex flex-col justify-center items-center space-y-8 animate-fadeIn px-6">
-          <Link href="/kbeauty" onClick={() => setMobileMenuOpen(false)} className="text-lg font-semibold tracking-[0.25em] uppercase text-slate-200 hover:text-white transition-all">
-            K-Beauty
-          </Link>
           <Link href="/kpop" onClick={() => setMobileMenuOpen(false)} className="text-lg font-semibold tracking-[0.25em] uppercase text-slate-200 hover:text-white transition-all">
             K-Pop
           </Link>
@@ -166,9 +150,6 @@ export default function Navbar() {
           </Link>
           <Link href="/kfood" onClick={() => setMobileMenuOpen(false)} className="text-lg font-semibold tracking-[0.25em] uppercase text-slate-200 hover:text-white transition-all">
             K-Food
-          </Link>
-          <Link href="/kbeauty" onClick={() => setMobileMenuOpen(false)} className="text-lg font-semibold tracking-[0.25em] uppercase text-slate-200 hover:text-white transition-all">
-            Webshop
           </Link>
         </div>
       )}

@@ -165,12 +165,24 @@ export default function ArtistMemberModal({ member, isOpen, onClose, themeColor 
 
               {/* Fő leírás */}
               {member.shortBio && (
-                <div 
-                  className="mb-4 p-4 rounded-2xl bg-[#141419]"
-                  style={{ border: `1px solid ${themeColor}30`, boxShadow: `inset 0 0 15px ${themeColor}10` }}
-                >
-                  <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
-                    {member.shortBio}
+                <div
+                className="
+                  mb-4
+                  p-4
+                  rounded-2xl
+                  bg-[#141419]
+                  overflow-y-auto
+                  h-48
+                  sm:h-56
+                  lg:h-72
+                  "
+                  style={{
+                    border: `1px solid ${themeColor}30`,
+                    boxShadow: `inset 0 0 15px ${themeColor}10`
+                  }}
+                  >
+                  <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed pr-2">
+                  {member.shortBio}
                   </p>
                 </div>
               )}
