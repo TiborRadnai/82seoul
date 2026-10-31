@@ -1,8 +1,14 @@
 import HomeContent from "@/components/home/HomeContent";
+import KoreaSection from "@/components/home/KoreaSection";
+import Footer from "@/components/core/Footer";
 
 // Sanity importok
 import { client } from "../../sanity/lib/client";
-import { getArtistsQuery, getRecipesQuery, getShopProductsQuery } from "../../sanity/queries";
+import { 
+  getArtistsQuery, 
+  getRecipesQuery, 
+  getShopProductsQuery
+} from "../../sanity/queries";
 
 export const dynamic = 'force-dynamic';
 
@@ -25,7 +31,7 @@ export default async function Home() {
     console.error("Hiba a főoldali adatok lekérdezésekor:", err);
   }
 
-  // Top 3 K-Pop előadó kiválogatása (ha van rank mezőjük, az alapján rendezve, különben az első 3-at veszi)
+  // Top 3 K-Pop előadó kiválogatása
   const topArtists = [...artists]
     .sort((a: any, b: any) => (a.rank || 99) - (b.rank || 99))
     .slice(0, 3);
@@ -36,12 +42,17 @@ export default async function Home() {
     .slice(0, 4);
 
   return (
-    <HomeContent 
-      topArtists={topArtists}
-      featuredProducts={featuredProducts}
-      shopProducts={shopProducts}
-      artists={artists}
-      recipes={recipes}
-    />
+    <>
+      <HomeContent 
+        topArtists={topArtists}
+        featuredProducts={featuredProducts}
+        shopProducts={shopProducts}
+        artists={artists}
+        recipes={recipes}
+      />
+      {/* A KoreaSection itt tisztán szerver oldalon fut, nem okoz többé hydration ütközést! */}
+      <KoreaSection />
+      <Footer />
+    </>
   );
 }

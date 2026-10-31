@@ -40,6 +40,59 @@ export const structure = (S: StructureBuilder) =>
             ])
         ),
 
+      // K-TRAVEL Mappa
+      S.listItem()
+        .title('Korea Travel Portál')
+        .child(
+          S.list()
+            .title('Utazási Szekciók')
+            .items([
+              // 1. Metropolis kategória
+              S.listItem()
+                .title('Metropolis & City Life')
+                .child(
+                  S.documentList()
+                    .title('Metropolis Cikkek')
+                    .schemaType('travelArticle')
+                    .filter('_type == "travelArticle" && category == "city"')
+                    .apiVersion('2023-05-03')
+                ),
+
+              // 2. Kultur kategória
+              S.listItem()
+                .title('Kultur & Tradition')
+                .child(
+                  S.documentList()
+                    .title('Kultur Cikkek')
+                    .schemaType('travelArticle')
+                    .filter('_type == "travelArticle" && category == "culture"')
+                    .apiVersion('2023-05-03')
+                ),
+
+              // 3. Natur kategória
+              S.listItem()
+                .title('Natur & Jeju')
+                .child(
+                  S.documentList()
+                    .title('Natur Cikkek')
+                    .schemaType('travelArticle')
+                    .filter('_type == "travelArticle" && category == "nature"')
+                    .apiVersion('2023-05-03')
+                ),
+
+              // 4. Guide kategória (az új sémát használva)
+              S.listItem()
+                .title('Travel Guide & Essentials')
+                .child(
+                  S.documentList()
+                    .title('Kisokos Elemek')
+                    .schemaType('travelGuideItem')
+                    .filter('_type == "travelGuideItem"')
+                    .apiVersion('2023-05-03')
+                ),
+            ])
+        ),
+
       // WEBSHOP Mappa (Kategóriákra bontva)
       S.listItem()
         .title('Webshop (K-Beauty)')
