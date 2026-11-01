@@ -15,7 +15,7 @@ export default async function CultureSection() {
     <section id="culture" className="w-full pb-16 md:pb-24 bg-slate-100 text-neutral-900 relative overflow-hidden border-t border-slate-200/60">
       
       {/* Finom meleg háttérfény a hagyományok hangulatához */}
-      <div className="absolute top-1/3 -left-40 w-[600px] h-[600px] bg-amber-500/5 rounded-full blur-[160px] pointer-events-none" />
+      <div className="absolute top-1/3 -left-40 w-150 h-150 bg-amber-500/5 rounded-full blur-[160px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 z-10 relative space-y-24">
         
@@ -51,7 +51,7 @@ export default async function CultureSection() {
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-103"
                 />
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/80 via-neutral-950/20 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-neutral-950/80 via-neutral-950/20 to-transparent" />
               
               <div className="absolute top-6 left-6">
                 <span className="px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md text-xs font-mono tracking-widest text-neutral-900 uppercase shadow-md">
@@ -125,7 +125,7 @@ export default async function CultureSection() {
         {/* Lezáró link */}
         <div className="pt-8 text-center">
           <Link
-            href="/korea-travel/culture-overview"
+            href="/ktravel/culture"
             className="inline-flex items-center gap-2 text-sm font-mono tracking-widest uppercase text-neutral-900 hover:text-amber-700 transition-colors group cursor-pointer"
           >
             <span>Alle Kultur- & Traditionsthemen erkunden</span>

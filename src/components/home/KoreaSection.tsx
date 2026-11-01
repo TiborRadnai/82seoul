@@ -47,10 +47,10 @@ export default async function KoreaSection() {
       <div className="w-full max-w-[1600px] mx-auto px-6 md:px-12 z-10 relative">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
           
-          {/* 1. KARTE: Metropolen & City Life */}
+      {/* 1. KARTE: Metropolen & City Life */}
           <Link
-            href={`/korea-travel/${city.slug || 'metropolis-seoul'}`}
-            className="lg:col-span-7 group relative h-[480px] md:h-[560px] rounded-3xl overflow-hidden bg-neutral-900 border border-slate-200/70 shadow-2xl transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[0_25px_50px_-12px_rgba(14,165,233,0.25)] hover:border-sky-300 block cursor-pointer"
+            href={city.slug ? `/ktravel/${city.slug}` : '#'}
+            className="lg:col-span-7 group relative h-120 md:h-140 rounded-3xl overflow-hidden bg-neutral-900 border border-slate-200/70 shadow-2xl transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[0_25px_50px_-12px_rgba(14,165,233,0.25)] hover:border-sky-300 block cursor-pointer"
           >
             {city.image && (
               <img
@@ -90,8 +90,8 @@ export default async function KoreaSection() {
 
           {/* 2. KARTE: Kultur & Tradition */}
           <Link
-            href={`/korea-travel/${culture.slug || 'culture-palaces'}`}
-            className="lg:col-span-5 group relative h-[480px] md:h-[560px] rounded-3xl overflow-hidden bg-neutral-900 border border-slate-200/70 shadow-2xl transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[0_25px_50px_-12px_rgba(14,165,233,0.25)] hover:border-sky-300 block cursor-pointer"
+            href={culture.slug ? `/ktravel/${culture.slug}` : '#'}
+            className="lg:col-span-5 group relative h-120 md:h-140 rounded-3xl overflow-hidden bg-neutral-900 border border-slate-200/70 shadow-2xl transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[0_25px_50px_-12px_rgba(14,165,233,0.25)] hover:border-sky-300 block cursor-pointer"
           >
             {culture.image && (
               <img
@@ -123,7 +123,7 @@ export default async function KoreaSection() {
 
           {/* 3. KARTE: Natur & Inseln */}
           <Link
-            href={`/korea-travel/${nature.slug || 'nature-jeju'}`}
+            href={nature.slug ? `/ktravel/${nature.slug}` : '#'}
             className="lg:col-span-6 group relative h-80 md:h-96 rounded-3xl overflow-hidden bg-neutral-900 border border-slate-200/70 shadow-xl transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-12px_rgba(14,165,233,0.2)] hover:border-sky-300 block cursor-pointer"
           >
             {nature.image && (
@@ -152,7 +152,7 @@ export default async function KoreaSection() {
 
           {/* 4. KARTE: Travel Guide & Essentials */}
           <Link
-            href="/korea-travel#guide"
+            href="/ktravel/guide"
             className="lg:col-span-6 group relative h-80 md:h-96 rounded-3xl overflow-hidden bg-linear-to-br from-slate-900 via-slate-800 to-indigo-950 border border-slate-700/80 shadow-xl transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-12px_rgba(14,165,233,0.2)] hover:border-sky-400/60 cursor-pointer p-8 md:p-10 flex flex-col justify-between"
           >
             <div className="flex items-center justify-between z-10">

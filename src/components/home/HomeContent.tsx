@@ -9,14 +9,16 @@ import KFoodSection from "@/components/home/KFoodSection";
 import KBeautyDetailModal from "@/components/modals/KBeautyDetailModal";
 
 interface HomeContentProps {
-  topArtists: any[];        
-  featuredProducts: any[];  
-  shopProducts: any[];      
-  artists: any[];           
-  recipes: any[];           
+  readonly topArtists: any[];        
+  readonly artists: any[];           
+  readonly recipes: any[];           
 }
 
-export default function HomeContent({ topArtists, artists, recipes }: HomeContentProps) {
+export default function HomeContent({ 
+  topArtists, 
+  artists, 
+  recipes 
+}: HomeContentProps) {
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
 
   return (

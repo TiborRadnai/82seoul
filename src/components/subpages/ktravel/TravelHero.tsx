@@ -1,6 +1,7 @@
 'use client';
 
 import { Compass, ArrowDown } from "lucide-react";
+import Link from "next/link";
 
 export default function TravelHero() {
   return (
@@ -14,11 +15,11 @@ export default function TravelHero() {
           className="w-full h-full object-cover scale-105"
         />
         {/* Többrétegű sötétítő gradiens a tökéletes olvashatóságért és prémium hatásért */}
-        <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/60 to-black/50" />
+        <div className="absolute inset-0 bg-linear-to-t from-neutral-950 via-neutral-950/60 to-black/50" />
       </div>
 
       {/* 2. HÁTTÉR FÉNYEK (Finom égszínkék ragyogás a hangulathoz) */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-sky-500/20 rounded-full blur-[140px] pointer-events-none z-1" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 bg-sky-500/20 rounded-full blur-[140px] pointer-events-none z-1" />
 
       {/* 3. TARTALOM */}
       <div className="max-w-4xl mx-auto px-6 text-center relative z-10 space-y-8 pt-20">
@@ -32,7 +33,7 @@ export default function TravelHero() {
         {/* Lehengerlő Főcím */}
         <h1 className="text-4xl sm:text-6xl md:text-7xl font-light tracking-tight text-white leading-[1.1] drop-shadow-md">
           Wo Vergangenheit und Zukunft{" "}
-          <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-sky-200 to-indigo-200">
+          <span className="font-semibold text-transparent bg-clip-text bg-linear-to-r from-sky-300 via-sky-200 to-indigo-200">
             Hand in Hand gehen.
           </span>
         </h1>
@@ -44,18 +45,18 @@ export default function TravelHero() {
 
         {/* Gyors navigációs gombok / kategória tagek a Heroban */}
         <div className="pt-4 flex flex-wrap items-center justify-center gap-3 text-xs md:text-sm">
-          <a href="#city" className="px-4 py-2 rounded-full bg-neutral-900/80 backdrop-blur-md border border-neutral-700/80 text-white hover:border-sky-400 transition-all shadow-md">
+          <Link href="/ktravel/city" className="px-4 py-2 rounded-full bg-neutral-900/80 backdrop-blur-md border border-neutral-700/80 text-white hover:border-sky-400 transition-all shadow-md">
             🏙️ Metropolen & City Life
-          </a>
-          <a href="#culture" className="px-4 py-2 rounded-full bg-neutral-900/80 backdrop-blur-md border border-neutral-700/80 text-white hover:border-sky-400 transition-all shadow-md">
+          </Link>
+          <Link href="/ktravel/culture" className="px-4 py-2 rounded-full bg-neutral-900/80 backdrop-blur-md border border-neutral-700/80 text-white hover:border-sky-400 transition-all shadow-md">
             🏛️ Kultur & Tradition
-          </a>
-          <a href="#nature" className="px-4 py-2 rounded-full bg-neutral-900/80 backdrop-blur-md border border-neutral-700/80 text-white hover:border-sky-400 transition-all shadow-md">
+          </Link>
+          <Link href="/ktravel/nature" className="px-4 py-2 rounded-full bg-neutral-900/80 backdrop-blur-md border border-neutral-700/80 text-white hover:border-sky-400 transition-all shadow-md">
             🌿 Natur & Jeju
-          </a>
-          <a href="#guide" className="px-4 py-2 rounded-full bg-neutral-900/80 backdrop-blur-md border border-neutral-700/80 text-white hover:border-sky-400 transition-all shadow-md">
+          </Link>
+          <Link href="/ktravel/guide" className="px-4 py-2 rounded-full bg-neutral-900/80 backdrop-blur-md border border-neutral-700/80 text-white hover:border-sky-400 transition-all shadow-md">
             ✈️ Travel Guide
-          </a>
+          </Link>
         </div>
 
       </div>

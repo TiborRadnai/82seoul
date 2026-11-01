@@ -42,7 +42,7 @@ export default function KDramaSection() {
           "originalTitle": koreanTitle,
           "category": type,
           rating,
-          "image": coalesce(poster.asset->url, image.asset->url),      
+          "image": coalesce(poster.asset->url, image.asset->url),       
           "wideImage": coalesce(wideImage.asset->url, image.asset->url), 
           description,
           platform,
@@ -176,8 +176,16 @@ export default function KDramaSection() {
               </div>
               
               <div 
+                role="button"
+                tabIndex={0}
                 onClick={() => handleCardClick(currentSlide)}
-                className="group/mini relative overflow-hidden bg-neutral-900/90 backdrop-blur-xl rounded-xl p-3.5 border border-rose-500/20 hover:border-rose-500/50 transition-all duration-300 shadow-md cursor-pointer text-left flex items-center gap-3.5"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleCardClick(currentSlide);
+                  }
+                }}
+                className="group/mini relative overflow-hidden bg-neutral-900/90 backdrop-blur-xl rounded-xl p-3.5 border border-rose-500/20 hover:border-rose-500/50 transition-all duration-300 shadow-md cursor-pointer text-left flex items-center gap-3.5 outline-none focus-visible:ring-2 focus-visible:ring-rose-500"
               >
                 <div className="relative w-14 h-14 rounded-md overflow-hidden shrink-0 border border-neutral-700/50">
                   {currentSlide?.wideImage ? (
@@ -220,8 +228,16 @@ export default function KDramaSection() {
           <div className="lg:col-span-7 flex flex-col items-center lg:items-end gap-6">
             <div className="relative group w-full max-w-2xl">
               <div 
+                role="button"
+                tabIndex={0}
                 onClick={() => handleCardClick(currentSlide)}
-                className="relative rounded-xl overflow-hidden border border-neutral-700/50 bg-black shadow-2xl transition-all duration-500 hover:border-neutral-500 hover:-translate-y-1 h-135 sm:h-150 md:h-160 cursor-pointer ring-1 ring-white/10"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleCardClick(currentSlide);
+                  }
+                }}
+                className="relative rounded-xl overflow-hidden border border-neutral-700/50 bg-black shadow-2xl transition-all duration-500 hover:border-neutral-500 hover:-translate-y-1 h-135 sm:h-150 md:h-160 cursor-pointer ring-1 ring-white/10 outline-none focus-visible:ring-2 focus-visible:ring-rose-500"
               >
                 {dramas.map((slide: KDramaItem, idx: number) => (
                   <div
