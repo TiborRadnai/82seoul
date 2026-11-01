@@ -41,6 +41,7 @@ export default function Footer() {
         setMessage(data.error || "Ein Fehler ist aufgetreten.");
       }
     } catch (err) {
+        console.error(err);
       setMessage("Verbindungsfehler. Bitte später erneut versuchen.");
     } finally {
       setLoading(false);
@@ -77,10 +78,10 @@ export default function Footer() {
             </Link>
 
             <p className="text-sm text-slate-400 font-normal leading-relaxed max-w-sm">
-              Dein direkter Weg nach Südkorea. Entdecke faszinierende K-Pop Charts, angesagte K-Movies & Dramen und authentische Kultur-Highlights direkt aus Seoul.
+              Dein direkter Weg nach Südkorea. Entdecke K-Pop Charts, K-Dramen, authentische Kulinarik und faszinierende Reisetipps direkt aus Seoul.
             </p>
 
-            {/* Social ikonok (Csak TikTok & Instagram) */}
+            {/* Social ikonok */}
             <div className="flex items-center gap-3 pt-2">
               <a
                 href="https://www.instagram.com/82seoul_official/"
@@ -119,7 +120,7 @@ export default function Footer() {
                 Verpasse keine K-Culture Highlights mehr!
               </h3>
               <p className="text-xs md:text-sm text-slate-400">
-                Abonniere unseren Newsletter und erhalte die neuesten K-Pop Charts, Serien-Tipps und exklusive Einblicke direkt in dein Postfach.
+                Abonniere unseren Newsletter und erhalte die neuesten K-Pop Charts, Serien-Tipps, Kulinarik und Reise-Guides direkt in dein Postfach.
               </p>
             </div>
 
@@ -163,7 +164,8 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm">
               {[
                 { name: "K-Pop Top Charts", href: "/kpop" },
-                { name: "K-Movies & Dramen", href: "/kdrama" },
+                { name: "K-Dramen & Movies", href: "/kdrama" },
+                { name: "Südkorea Travel Guides", href: "/ktravel" },
                 { name: "K-Food & Rezepte", href: "/kfood" },
                 { name: "Webshop (Demnächst)", href: "#" }
               ].map((item, i) => (
@@ -184,7 +186,8 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm">
               {[
                 { name: "K-Pop Highlights", href: "/kpop" },
-                { name: "K-Movies & Dramen", href: "/kdrama" },
+                { name: "K-Dramen Highlights", href: "/kdrama" },
+                { name: "Travel Highlights", href: "/ktravel" },
                 { name: "Über 82.SEOUL", href: "/about" }
               ].map((item, i) => (
                 <li key={i}>
@@ -220,33 +223,33 @@ export default function Footer() {
 
         </div>
 
-      {/* ALSÓ RÉSZ: Copyright, Madevix & Nyelv */}
-      <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-        <div className="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
-          <span>© {currentYear} <strong className="font-semibold text-slate-400">82.SEOUL</strong></span>
-          <span className="hidden sm:inline text-slate-700">•</span>
-          <span>Alle Rechte vorbehalten.</span>
-          <span className="hidden sm:inline text-slate-700">•</span>
-          <span>
-            Developed by{" "}
-            <a 
-              href="https://madevix.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-slate-400 hover:text-white transition-colors font-medium underline underline-offset-4"
-            >
-              Madevix
-            </a>
-          </span>
-        </div>
+        {/* ALSÓ RÉSZ: Copyright, Madevix & Nyelv */}
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <div className="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
+            <span>© {currentYear} <strong className="font-semibold text-slate-400">82.SEOUL</strong></span>
+            <span className="hidden sm:inline text-slate-700">•</span>
+            <span>Alle Rechte vorbehalten.</span>
+            <span className="hidden sm:inline text-slate-700">•</span>
+            <span>
+              Developed by{" "}
+              <a 
+                href="https://madevix.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-slate-400 hover:text-white transition-colors font-medium underline underline-offset-4"
+              >
+                Madevix
+              </a>
+            </span>
+          </div>
 
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-1.5 text-slate-300 font-semibold bg-neutral-900 px-3 py-1 rounded-full border border-neutral-800">
-            <Globe className="w-3.5 h-3.5 text-amber-300" />
-            <span>DE (Deutschland)</span>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-1.5 text-slate-300 font-semibold bg-neutral-900 px-3 py-1 rounded-full border border-neutral-800">
+              <Globe className="w-3.5 h-3.5 text-amber-300" />
+              <span>DE (Deutschland)</span>
+            </div>
           </div>
         </div>
-      </div>
 
       </div>
     </footer>

@@ -15,7 +15,7 @@ export default async function NatureSection() {
     <section id="nature" className="w-full pb-16 md:pb-24 bg-slate-100 text-neutral-900 relative overflow-hidden border-t border-slate-200/60">
       
       {/* Finom természetes, zöldes háttérfény */}
-      <div className="absolute top-1/3 right-10 w-[700px] h-[700px] bg-emerald-500/5 rounded-full blur-[180px] pointer-events-none" />
+      <div className="absolute top-1/3 right-10 w-175 h-175 bg-emerald-500/5 rounded-full blur-[180px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 z-10 relative space-y-24">
         
@@ -61,7 +61,7 @@ export default async function NatureSection() {
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-103"
               />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/80 via-transparent to-transparent opacity-80" />
+            <div className="absolute inset-0 bg-linear-to-t from-neutral-950/80 via-transparent to-transparent opacity-80" />
             
             <div className="absolute bottom-8 left-8 md:bottom-12 md:left-12 max-w-xl text-white">
               <h3 className="text-2xl md:text-4xl font-light tracking-tight mb-2">
@@ -117,7 +117,7 @@ export default async function NatureSection() {
         {/* Lezáró link */}
         <div className="pt-8 text-center">
           <Link
-            href="/korea-travel/nature-overview"
+            href="/ktravel/nature"
             className="inline-flex items-center gap-2 text-sm font-mono tracking-widest uppercase text-neutral-900 hover:text-emerald-700 transition-colors group cursor-pointer"
           >
             <span>Alle Naturthemen erkunden</span>

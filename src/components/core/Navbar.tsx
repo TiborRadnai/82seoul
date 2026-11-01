@@ -65,10 +65,13 @@ export default function Navbar() {
                 K-Pop
               </Link>
               <Link href="/kdrama" className="hover:text-white transition-colors duration-300 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all">
-                K-Movies
+                K-Drama
               </Link>
               <Link href="/kfood" className="hover:text-white transition-colors duration-300 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all">
-                K-Food
+                Food
+              </Link>
+              <Link href="/ktravel" className="hover:text-white transition-colors duration-300 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all">
+                Travel
               </Link>
 
               {/* INAKTÍV / HAMAROSAN ÉRKEZŐ: Webshop */}
@@ -80,17 +83,6 @@ export default function Navbar() {
                   Demnächst verfügbar
                 </div>
               </div>
-
-              {/* INAKTÍV / HAMAROSAN ÉRKEZŐ: K-Travel */}
-              <div className="relative group/tooltip cursor-not-allowed">
-                <span className="text-slate-500 hover:text-slate-500 select-none py-1 flex items-center gap-1">
-                  K-Travel <span className="text-[9px] text-amber-400 font-normal">SOON</span>
-                </span>
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-3 py-1.5 bg-black/90 border border-white/10 text-white text-[10px] tracking-wider uppercase rounded-lg opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap shadow-xl z-50">
-                  Demnächst verfügbar
-                </div>
-              </div>
-
             </div>
 
             {/* Fiók Ikon (Asztali) */}
@@ -141,16 +133,27 @@ export default function Navbar() {
 
       {/* MOBIL MENÜ OVERLAY */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-slate-950/85 backdrop-blur-2xl md:hidden flex flex-col justify-center items-center space-y-8 animate-fadeIn px-6">
+        <div className="fixed inset-0 z-40 bg-slate-950/85 backdrop-blur-2xl md:hidden flex flex-col justify-center items-center space-y-6 animate-fadeIn px-6">
           <Link href="/kpop" onClick={() => setMobileMenuOpen(false)} className="text-lg font-semibold tracking-[0.25em] uppercase text-slate-200 hover:text-white transition-all">
             K-Pop
           </Link>
           <Link href="/kdrama" onClick={() => setMobileMenuOpen(false)} className="text-lg font-semibold tracking-[0.25em] uppercase text-slate-200 hover:text-white transition-all">
-            K-Movies
+            K-Drama
           </Link>
           <Link href="/kfood" onClick={() => setMobileMenuOpen(false)} className="text-lg font-semibold tracking-[0.25em] uppercase text-slate-200 hover:text-white transition-all">
-            K-Food
+            Food
           </Link>
+          <Link href="/ktravel" onClick={() => setMobileMenuOpen(false)} className="text-lg font-semibold tracking-[0.25em] uppercase text-slate-200 hover:text-white transition-all">
+            Travel
+          </Link>
+
+          {/* INAKTÍV / HAMAROSAN ÉRKEZŐ: Webshop (Mobil verzió) */}
+          <div className="flex flex-col items-center select-none pt-2 cursor-not-allowed">
+            <span className="text-lg font-semibold tracking-[0.25em] uppercase text-slate-600 flex items-center gap-2">
+              Webshop <span className="text-[10px] text-amber-400 font-normal px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">SOON</span>
+            </span>
+            <span className="text-[10px] text-slate-500 tracking-wider uppercase mt-1">Demnächst verfügbar</span>
+          </div>
         </div>
       )}
     </>

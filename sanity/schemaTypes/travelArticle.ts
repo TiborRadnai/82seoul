@@ -1,3 +1,4 @@
+// sanity/schemas/travelArticle.ts
 export default {
   name: 'travelArticle',
   title: 'Korea Utazási Cikk',
@@ -43,10 +44,26 @@ export default {
     },
     {
       name: 'image',
-      title: 'Kiemelt Kép',
+      title: 'Kiemelt Kép (Borító)',
       type: 'image',
       options: { hotspot: true },
       validation: (Rule: any) => Rule.required(),
+    },
+    // << ÚJ MEZŐ: Többképes galéria (opcionális, tetszőleges számú extra fotó) >>
+    {
+      name: 'gallery',
+      title: 'Képgaléria (Opcionális)',
+      type: 'array',
+      of: [{ type: 'image', options: { hotspot: true } }],
+      description: 'További képek a helyszínről a magazinoldalhoz.',
+    },
+    // << ÚJ MEZŐ: Hosszú, formázott cikk szöveg (Portable Text) >>
+    {
+      name: 'body',
+      title: 'Részletes Cikk Tartalom (Magazin szöveg)',
+      type: 'array',
+      of: [{ type: 'block' }],
+      description: 'A cikk teljes, formázott kifejtése alcímekkel és bekezdésekkel.',
     },
     {
       name: 'isFeaturedOnSection',

@@ -36,21 +36,13 @@ export default async function Home() {
     .sort((a: any, b: any) => (a.rank || 99) - (b.rank || 99))
     .slice(0, 3);
 
-  // Kiemelt termékek kiválogatása a teljes shopProducts listából
-  const featuredProducts = shopProducts
-    .filter((item: any) => item.featured === true)
-    .slice(0, 4);
-
   return (
     <>
       <HomeContent 
         topArtists={topArtists}
-        featuredProducts={featuredProducts}
-        shopProducts={shopProducts}
         artists={artists}
         recipes={recipes}
       />
-      {/* A KoreaSection itt tisztán szerver oldalon fut, nem okoz többé hydration ütközést! */}
       <KoreaSection />
       <Footer />
     </>

@@ -332,7 +332,7 @@ export const getAllTravelArticlesByCategoryQuery = `*[_type == "travelArticle" &
   orderRank
 }`;
 
-// 3. Lekérdezi egyedi cikk adatait slug alapján (a részletes cikk oldalakhoz)
+// 3. Lekérdezi egyedi cikk adatait slug alapján (a részletes cikk oldalakhoz - BŐVÍTVE galériával és body-val!)
 export const getTravelArticleBySlugQuery = `*[_type == "travelArticle" && slug.current == $slug][0]{
   _id,
   title,
@@ -341,6 +341,8 @@ export const getTravelArticleBySlugQuery = `*[_type == "travelArticle" && slug.c
   tag,
   description,
   "image": image.asset->url,
+  "gallery": gallery[].asset->url,
+  body,
   isFeaturedOnSection,
   orderRank
 }`;
