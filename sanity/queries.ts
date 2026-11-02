@@ -350,8 +350,8 @@ export const getTravelArticleBySlugQuery = `*[_type == "travelArticle" && slug.c
   orderRank
 }`;
 
-// 4. Lekérdezi a Travel Guide (Kisokos) elemeit
-export const getTravelGuideItemsQuery = `*[_type == "travelGuideItem"] | order(coalesce(orderRank, _createdAt) asc) {
+// 4. Lekérdezi a Travel Guide (Kisokos) elemeit az új mezőkkel
+export const getTravelGuideItemsQuery = `*[_type == "travelGuideItem" || _type == "travelGuideEssentials"] | order(coalesce(orderRank, _createdAt) asc) {
   _id,
   title,
   "slug": slug.current,
@@ -359,7 +359,8 @@ export const getTravelGuideItemsQuery = `*[_type == "travelGuideItem"] | order(c
   description,
   body,
   appLinks[]{
-    platformName,
+    platformType,
+    buttonText,
     url
   }
 }`;

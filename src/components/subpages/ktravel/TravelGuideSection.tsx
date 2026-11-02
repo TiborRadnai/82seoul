@@ -5,10 +5,10 @@ import { ArrowUpRight, Compass, Train, MapPin, ShieldCheck } from "lucide-react"
 import GuideDetailModal from "@/components/subpages/ktravel/details/GuideDetailModal";
 
 interface TravelGuideSectionProps {
-  initialGuideItems: any[]; // A szerverről kapott elemek
+  initialGuideItems: any[];
 }
 
-// Segéd-függvény az ikonok hozzárendeléséhez
+// Segéd-függvény az ikonokhoz
 function getGuideIcon(index: number) {
   switch (index) {
     case 0:
@@ -22,18 +22,17 @@ function getGuideIcon(index: number) {
 }
 
 export default function TravelGuideSection({ initialGuideItems }: TravelGuideSectionProps) {
-  // State a modális ablak kezeléséhez
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
 
   return (
     <section id="guide" className="w-full py-24 md:py-36 bg-linear-to-b from-slate-100 via-neutral-900 to-neutral-950 text-white relative overflow-hidden">
       
-      {/* Finom, semleges háttérfény az átmenethez */}
+      {/* Finom háttérfény */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-225 h-125 bg-neutral-500/10 rounded-full blur-[180px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 z-10 relative space-y-24">
         
-        {/* --- EDITORIAL FEJLÉC --- */}
+        {/* EDITORIAL FEJLÉC */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 pb-4">
           <div className="space-y-4 max-w-2xl">
             <div className="inline-flex items-center gap-2 text-neutral-200 text-xs font-mono tracking-widest uppercase bg-black/40 px-3 py-1 border border-white/10">
@@ -49,13 +48,12 @@ export default function TravelGuideSection({ initialGuideItems }: TravelGuideSec
           </p>
         </div>
 
-        {/* --- 3 KÁRTYA (Kattintásra megnyitja a modalt) --- */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          
+        {/* 4 ELEMES RÁCS */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {initialGuideItems && initialGuideItems.map((item: any, index: number) => (
             <div 
               key={item._id || index}
-              onClick={() => setSelectedItem(item)} // Kattintásra betölti az adatot a modalba
+              onClick={() => setSelectedItem(item)}
               className="p-8 rounded-2xl bg-neutral-900/90 border border-neutral-700 space-y-6 flex flex-col justify-between group hover:border-neutral-400 transition-colors shadow-xl cursor-pointer"
             >
               <div className="space-y-4">
@@ -76,12 +74,11 @@ export default function TravelGuideSection({ initialGuideItems }: TravelGuideSec
               </div>
             </div>
           ))}
-
         </div>
 
       </div>
 
-      {/* --- ITT UGRIK FEL A MODAL, HA KATTINTOTTÁK --- */}
+      {/* MODAL */}
       <GuideDetailModal 
         item={selectedItem} 
         onClose={() => setSelectedItem(null)} 
