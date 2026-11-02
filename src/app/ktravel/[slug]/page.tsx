@@ -2,8 +2,8 @@ import { notFound } from "next/navigation";
 import { client } from "../../../../sanity/lib/client";
 import { getTravelArticleBySlugQuery } from "../../../../sanity/queries";
 import CityDetailView from "@/components/subpages/ktravel/details/CityDetailView";
-// import CultureDetailView from "@/components/subpages/ktravel/details/CultureDetailView";
-// import NatureDetailView from "@/components/subpages/ktravel/details/NatureDetailView";
+import CultureDetailView from "@/components/subpages/ktravel/details/CultureDetailView";
+import NatureDetailView from "@/components/subpages/ktravel/details/NatureDetailView";
 // import GuideDetailView from "@/components/subpages/ktravel/details/GuideDetailView";
 
 interface PageProps {
@@ -27,10 +27,10 @@ export default async function TravelArticlePage({ params }: PageProps) {
     case "city":
       return <CityDetailView article={article} />;
     case "culture":
-    //   return <CultureDetailView article={article} />;
-    // case "nature":
-    //   return <NatureDetailView article={article} />;
-    // case "guide":
+      return <CultureDetailView article={article} />;
+    case "nature":
+      return <NatureDetailView article={article} />;
+    case "guide":
     //   return <GuideDetailView article={article} />;
     default:
       return <CityDetailView article={article} />;
