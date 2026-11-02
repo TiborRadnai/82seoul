@@ -4,7 +4,7 @@ import Link from "next/link";
 interface Article {
   _id: string;
   title: string;
-  slug: { current: string };
+  slug: string;
   image?: string;
   excerpt?: string;
   publishedAt?: string;
@@ -42,7 +42,7 @@ export default function NatureArticleGrid({ articles }: NatureArticleGridProps) 
           {articles.map((article, index) => (
             <Link
               key={article._id || index}
-              href={`/ktravel/nature/${article.slug?.current || ""}`}
+              href={`/ktravel/${article.slug || ""}`}
               className="group block"
             >
               <div className="relative w-full h-110 sm:h-125 bg-neutral-900 overflow-hidden mb-6 border border-neutral-300 transition-all duration-700 group-hover:border-[#059669]/60 shadow-[0_20px_50px_rgba(0,0,0,0.15)]">

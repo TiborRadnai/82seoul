@@ -49,13 +49,34 @@ export default {
       options: { hotspot: true },
       validation: (Rule: any) => Rule.required(),
     },
-    // << ÚJ MEZŐ: Többképes galéria (opcionális, tetszőleges számú extra fotó) >>
+    // << BŐVÍTETT GALÉRIA: Kép + Képaláírás (caption) >>
     {
       name: 'gallery',
-      title: 'Képgaléria (Opcionális)',
+      title: 'Képgaléria & Feliratok',
       type: 'array',
-      of: [{ type: 'image', options: { hotspot: true } }],
-      description: 'További képek a helyszínről a magazinoldalhoz.',
+      of: [
+        {
+          type: 'object',
+          name: 'galleryItem',
+          title: 'Galéria Kép',
+          fields: [
+            {
+              name: 'image',
+              title: 'Kép',
+              type: 'image',
+              options: { hotspot: true },
+              validation: (Rule: any) => Rule.required(),
+            },
+            {
+              name: 'caption',
+              title: 'Képaláírás / Magyarázat',
+              type: 'string',
+              description: 'Opcionális leírás a kép alatt vagy a nagyítón (pl. Gyeongbokgung palota este).',
+            },
+          ],
+        },
+      ],
+      description: 'További képek a helyszínről a magazinoldalhoz, saját feliratokkal.',
     },
     // << ÚJ MEZŐ: Hosszú, formázott cikk szöveg (Portable Text) >>
     {
