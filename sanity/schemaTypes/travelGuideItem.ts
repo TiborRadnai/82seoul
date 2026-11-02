@@ -36,30 +36,40 @@ export default {
       of: [{ type: 'block' }],
       description: 'Itt adhatsz meg hosszabb infókat, listákat, tippeket (pl. nyitvatartások, jogsival kapcsolatos tudnivalók).',
     },
+
     {
       name: 'appLinks',
-      title: 'Letöltési linkek / Külső hivatkozások (Opcionális)',
+      title: 'Relevante Links & Downloads',
       type: 'array',
       of: [
         {
           type: 'object',
-          name: 'appLink',
-          title: 'Link elem',
           fields: [
             {
-              name: 'platformName',
-              title: 'Platform neve (pl. Google Play, App Store, Hivatalos oldal)',
+              name: 'platformType',
+              title: 'Platform Típusa',
               type: 'string',
+              options: {
+                list: [
+                  { title: 'Apple App Store', value: 'appStore' },
+                  { title: 'Google Play Store', value: 'playStore' },
+                  { title: 'Hivatalos Weboldal / Egyéb', value: 'web' }
+                ]
+              }
+            },
+            {
+              name: 'buttonText',
+              title: 'Gomb felirata (pl. Naver Map iOS)',
+              type: 'string'
             },
             {
               name: 'url',
-              title: 'URL Link',
-              type: 'url',
-            },
-          ],
-        },
-      ],
-      description: 'Csak akkor töltsd ki, ha az adott témához (pl. appokhoz, hivatalos oldalakhoz) tartoznak külső linkek.',
+              title: 'Direkt Link (App Store / Play Store / Web)',
+              type: 'url'
+            }
+          ]
+        }
+      ]
     },
     {
       name: 'orderRank',
