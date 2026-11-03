@@ -41,7 +41,7 @@ export default async function CultureSection() {
           {/* 1. SZTORI BLOKK: Paloták & Hanbok (vagy az 1. elem) */}
           <div className="lg:col-span-7 space-y-8">
             <Link
-              href={`/korea-travel/${palaces.slug || 'culture-palaces'}`}
+              href={`/ktravel/${palaces.slug || 'culture-palaces'}`}
               className="block relative w-full h-[55vh] md:h-[65vh] overflow-hidden group cursor-pointer rounded-2xl shadow-xl"
             >
               {palaces.image && (
@@ -72,7 +72,7 @@ export default async function CultureSection() {
             <div className="flex items-center justify-between pt-2">
               <span className="text-xs font-mono text-neutral-500 uppercase tracking-widest">Fokus // Architektur & Zeremonie</span>
               <Link
-                href={`/korea-travel/${palaces.slug || 'culture-palaces'}`}
+                href={`/ktravel/${palaces.slug || 'culture-palaces'}`}
                 className="inline-flex items-center gap-2 text-sm font-medium text-neutral-900 hover:text-amber-700 transition-colors group"
               >
                 <span>Kapitel lesen</span>
@@ -95,7 +95,7 @@ export default async function CultureSection() {
             </div>
 
             <Link
-              href={`/korea-travel/${gyeongju.slug || 'culture-gyeongju'}`}
+              href={`/ktravel/${gyeongju.slug || 'culture-gyeongju'}`}
               className="block relative w-full h-[40vh] md:h-[45vh] overflow-hidden group cursor-pointer rounded-2xl shadow-xl"
             >
               {gyeongju.image && (
@@ -110,7 +110,7 @@ export default async function CultureSection() {
 
             <div className="pt-2">
               <Link
-                href={`/korea-travel/${gyeongju.slug || 'culture-gyeongju'}`}
+                href={`/ktravel/${gyeongju.slug || 'culture-gyeongju'}`}
                 className="inline-flex items-center gap-2 text-sm font-medium text-neutral-900 hover:text-amber-700 transition-colors group"
               >
                 <span>Gyeongju erkunden</span>

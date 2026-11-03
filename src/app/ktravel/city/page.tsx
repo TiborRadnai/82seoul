@@ -5,7 +5,6 @@ import CityTickerDivider from "@/components/subpages/ktravel/city/CityTickerDivi
 import CityArticleGrid from "@/components/subpages/ktravel/city/CityArticleGrid";
 import Footer from "@/components/core/Footer";
 
-
 export default async function CityCategoryPage() {
   const articles = await client.fetch(getAllTravelArticlesByCategoryQuery, { category: "city" });
 
@@ -14,7 +13,6 @@ export default async function CityCategoryPage() {
       <CityHeader />
       <CityTickerDivider />
       <CityArticleGrid articles={articles} /> 
-
       <Footer />
     </main>
   );

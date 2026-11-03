@@ -42,7 +42,7 @@ export default async function NatureSection() {
               <span className="text-xs font-mono text-emerald-700 tracking-widest uppercase">{jeju.tag || '01 // Jeju Island'}</span>
             </div>
             <Link
-              href={`/korea-travel/${jeju.slug || 'nature-jeju'}`}
+              href={`/ktravel/${jeju.slug || 'nature-jeju'}`}
               className="inline-flex items-center gap-2 text-sm font-medium text-neutral-900 hover:text-emerald-700 transition-colors group"
             >
               <span>Artikel lesen</span>
@@ -51,7 +51,7 @@ export default async function NatureSection() {
           </div>
 
           <Link
-            href={`/korea-travel/${jeju.slug || 'nature-jeju'}`}
+            href={`/ktravel/${jeju.slug || 'nature-jeju'}`}
             className="block relative w-full h-[60vh] md:h-[75vh] overflow-hidden group cursor-pointer rounded-2xl shadow-xl"
           >
             {jeju.image && (
@@ -87,7 +87,7 @@ export default async function NatureSection() {
             </p>
             <div className="pt-2">
               <Link
-                href={`/korea-travel/${seoraksan.slug || 'nature-seoraksan'}`}
+                href={`/ktravel/${seoraksan.slug || 'nature-seoraksan'}`}
                 className="inline-flex items-center gap-2 text-sm font-medium text-neutral-900 hover:text-emerald-700 transition-colors group"
               >
                 <span>Artikel lesen</span>
@@ -98,7 +98,7 @@ export default async function NatureSection() {
 
           <div className="lg:col-span-7">
             <Link
-              href={`/korea-travel/${seoraksan.slug || 'nature-seoraksan'}`}
+              href={`/ktravel/${seoraksan.slug || 'nature-seoraksan'}`}
               className="block relative w-full h-[50vh] md:h-[65vh] overflow-hidden group cursor-pointer rounded-2xl shadow-xl"
             >
               {seoraksan.image && (

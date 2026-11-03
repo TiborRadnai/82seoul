@@ -78,13 +78,41 @@ export default {
       ],
       description: 'További képek a helyszínről a magazinoldalhoz, saját feliratokkal.',
     },
-    // << ÚJ MEZŐ: Hosszú, formázott cikk szöveg (Portable Text) >>
+    // << RÉSZLETES CIKK TARTALOM (Portable Text) >>
     {
       name: 'body',
       title: 'Részletes Cikk Tartalom (Magazin szöveg)',
       type: 'array',
       of: [{ type: 'block' }],
       description: 'A cikk teljes, formázott kifejtése alcímekkel és bekezdésekkel.',
+    },
+    // << ÚJ MEZŐ: Dinamikus Quick Facts & Essentials >>
+    {
+      name: 'quickFacts',
+      title: 'Quick Facts & Essentials',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          name: 'quickFactItem',
+          title: 'Gyors Infó Elem',
+          fields: [
+            {
+              name: 'label',
+              title: 'Címke (pl. Beste Reisezeit)',
+              type: 'string',
+              validation: (Rule: any) => Rule.required(),
+            },
+            {
+              name: 'value',
+              title: 'Érték / Leírás (pl. Frühling und Herbst)',
+              type: 'text',
+              validation: (Rule: any) => Rule.required(),
+            },
+          ],
+        },
+      ],
+      description: 'A cikkhez tartozó gyors információk (pl. Legjobb utazási idő, közlekedés, navigáció).',
     },
     {
       name: 'isFeaturedOnSection',

@@ -11,6 +11,11 @@ interface GalleryItem {
   caption?: string;
 }
 
+interface QuickFactItem {
+  label: string;
+  value: string;
+}
+
 interface DetailViewProps {
   article: {
     title: string;
@@ -20,6 +25,7 @@ interface DetailViewProps {
     image?: any;
     gallery?: GalleryItem[];
     body?: any;
+    quickFacts?: QuickFactItem[]; // <-- Dinamikus quickFacts mező
   };
 }
 
@@ -27,6 +33,7 @@ export default function CultureDetailView({ article }: DetailViewProps) {
   const [currentIndex, setCurrentIndex] = useState<number | null>(null);
 
   const gallery = article.gallery || [];
+  const quickFacts = article.quickFacts || [];
 
   const nextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -132,28 +139,25 @@ export default function CultureDetailView({ article }: DetailViewProps) {
           </div>
         )}
 
-        {/* Quick Facts Doboz */}
-        <div className="max-w-5xl mt-16 p-8 md:p-10 rounded-3xl bg-white/70 border border-neutral-300/80 backdrop-blur-md space-y-6 shadow-xl">
-          <h4 className="text-xs font-mono tracking-[0.2em] uppercase text-orange-600">
-            // Quick Facts & Essentials
-          </h4>
-          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-neutral-800 font-light">
-            <li className="flex items-start gap-3 bg-white/80 p-4 rounded-xl border border-neutral-200">
-              <span className="text-orange-600 font-bold">▪</span>
-              <div>
-                <strong className="text-neutral-950 block mb-1">Beste Reisezeit</strong>
-                <span>Frühling und Herbst (angenehmes Wetter für Tempelbesuche).</span>
-              </div>
-            </li>
-            <li className="flex items-start gap-3 bg-white/80 p-4 rounded-xl border border-neutral-200">
-              <span className="text-orange-600 font-bold">▪</span>
-              <div>
-                <strong className="text-neutral-950 block mb-1">Kultur-Tipp</strong>
-                <span>Traditioneller Hanbok-Verleih für den Einlass in die Paläste.</span>
-              </div>
-            </li>
-          </ul>
-        </div>
+        {/* Dinamikus Quick Facts Doboz (Teljes szélességű & Reszponzív 3 oszlopos rács) */}
+        {quickFacts.length > 0 && (
+          <div className="w-full mt-16 p-8 md:p-10 rounded-3xl bg-white/70 border border-neutral-300/80 backdrop-blur-md space-y-6 shadow-xl">
+            <h4 className="text-xs font-mono tracking-[0.2em] uppercase text-orange-600">
+              // Quick Facts & Essentials
+            </h4>
+            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-sm text-neutral-800 font-light">
+              {quickFacts.map((fact, index) => (
+                <li key={index} className="flex items-start gap-3 bg-white/80 p-5 rounded-xl border border-neutral-200 shadow-sm h-full">
+                  <span className="text-orange-600 font-bold mt-0.5">▪</span>
+                  <div className="space-y-1">
+                    <strong className="text-neutral-950 block">{fact.label}</strong>
+                    <span className="text-neutral-700 leading-relaxed">{fact.value}</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
       </article>
 

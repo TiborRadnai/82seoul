@@ -2,6 +2,7 @@ import TravelHero from "@/components/subpages/ktravel/TravelHero";
 import MetropolisSection from "@/components/subpages/ktravel/MetropolisSection";
 import CultureSection from "@/components/subpages/ktravel/CultureSection";
 import NatureSection from "@/components/subpages/ktravel/NatureSection";
+import TravelGuideSection from "@/components/subpages/ktravel/TravelGuideSection";
 import GuideArticleGrid from "@/components/subpages/ktravel/guide/GuideArticleGrid";
 import Footer from "@/components/core/Footer";
 
@@ -21,9 +22,10 @@ export default async function KoreaTravelPage() {
       <MetropolisSection />
       <CultureSection />
       <NatureSection />
+      <TravelGuideSection initialGuideItems={guideItems} />
       
       {/* Itt kapja meg a sávos grid a Sanity-s adatokat */}
-      <GuideArticleGrid articles={guideItems} />
+      {/* <GuideArticleGrid articles={guideItems} /> */}
 
       <Footer />
     </main>

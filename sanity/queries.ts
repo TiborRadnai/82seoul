@@ -346,6 +346,10 @@ export const getTravelArticleBySlugQuery = `*[_type == "travelArticle" && slug.c
     caption
   },
   body,
+  quickFacts[]{
+    label,
+    value
+  },
   isFeaturedOnSection,
   orderRank
 }`;
