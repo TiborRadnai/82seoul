@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Utensils, ShoppingBag, Search, Clock, ArrowUpRight, Flame, ChevronLeft, ChevronRight, LayoutGrid, List } from 'lucide-react';
@@ -28,16 +28,13 @@ interface KFoodCatalogProps {
   initialCategory?: string;
 }
 
-// Kategóriák leképezése magyar adatbázis-értékekről német UI feliratokra
+// Kategóriák leképezése magyar DB értékekről német UI feliratokra
 const CATEGORY_MAP: Record<string, string> = {
-  // Recept kategóriák
   'Minden': 'Alle',
   'Főételek': 'Hauptgerichte',
   'Levesek & Egytálételek': 'Suppen & Eintöpfe',
   'Street Food': 'Street Food',
   'Desszertek & Sütemények': 'Desserts & Gebäck',
-
-  // Bolti termék kategóriák
   'Italok & Soju': 'Getränke & Erfrischungen',
   'Italok & Frissítők': 'Getränke & Erfrischungen',
   'Nassolnivalók & Snackek': 'Snacks & Knabbereien',
@@ -102,7 +99,7 @@ function EmblaCategoryRow({ items, getItemId, renderSpiceBadge }: {
               <Link
                 key={uniqueKey}
                 href={`/kfood/${getItemId(item)}`}
-                className="group relative min-w-75 sm:min-w-90 h-96 rounded-3xl overflow-hidden bg-neutral-900 border border-neutral-800 shadow-xl transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-12px_rgba(234,88,12,0.25)] hover:border-amber-500/50 shrink-0 block cursor-pointer"
+                className="group relative min-w-[300px] sm:min-w-[360px] lg:min-w-[400px] h-96 rounded-3xl overflow-hidden bg-neutral-900 border border-neutral-800 shadow-xl transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-12px_rgba(234,88,12,0.25)] hover:border-amber-500/50 shrink-0 block cursor-pointer"
               >
                 <img
                   src={item.image || ""}
@@ -156,12 +153,23 @@ function EmblaCategoryRow({ items, getItemId, renderSpiceBadge }: {
   );
 }
 
-export default function KFoodCatalog({ recipes = [], products = [], initialTab = 'recipes', initialCategory = 'Minden' }: KFoodCatalogProps) {
+export default function KFoodCatalog({ 
+  recipes = [], 
+  products = [], 
+  initialTab = 'recipes', 
+  initialCategory = 'Alle' 
+}: KFoodCatalogProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const categoryScrollRef = useRef<HTMLDivElement>(null);
 
   const activeTab = (searchParams.get('tab') as 'recipes' | 'products') || initialTab;
-  const selectedSubCategory = searchParams.get('category') || initialCategory;
+  
+  // URL kategória beolvasása és átalakítása német megnevezésre
+  const rawCategoryParam = searchParams.get('category');
+  const selectedSubCategory = rawCategoryParam 
+    ? (rawCategoryParam === 'Minden' ? 'Alle' : formatCategory(rawCategoryParam))
+    : (initialCategory === 'Minden' ? 'Alle' : initialCategory);
   
   const [searchQuery, setSearchQuery] = React.useState<string>('');
   const [viewMode, setViewMode] = React.useState<'grid' | 'list'>('grid');
@@ -175,14 +183,16 @@ export default function KFoodCatalog({ recipes = [], products = [], initialTab =
     router.replace(`/kfood?${params.toString()}`, { scroll: false });
   };
 
+  // Kizárólag Német kategórianevek generálása
   const subCategories = useMemo(() => {
-    const cats = new Set(currentItems.map((item) => item.subCategory).filter(Boolean));
-    return ['Minden', ...Array.from(cats)];
+    const cats = new Set(currentItems.map((item) => formatCategory(item.subCategory)).filter(Boolean));
+    return ['Alle', ...Array.from(cats)];
   }, [currentItems]);
 
   const filteredItems = useMemo(() => {
     return currentItems.filter((item) => {
-      const matchesCategory = selectedSubCategory === 'Minden' || item.subCategory === selectedSubCategory;
+      const formattedItemCategory = formatCategory(item.subCategory);
+      const matchesCategory = selectedSubCategory === 'Alle' || formattedItemCategory === selectedSubCategory;
       const matchesSearch = 
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (item.tagline && item.tagline.toLowerCase().includes(searchQuery.toLowerCase())) ||
@@ -193,11 +203,11 @@ export default function KFoodCatalog({ recipes = [], products = [], initialTab =
   }, [currentItems, selectedSubCategory, searchQuery]);
 
   const groupedByCategory = useMemo(() => {
-    if (selectedSubCategory !== 'Minden' || searchQuery.trim() !== '') return null;
+    if (selectedSubCategory !== 'Alle' || searchQuery.trim() !== '') return null;
     
     const groups: { [key: string]: KFoodItem[] } = {};
     currentItems.forEach((item) => {
-      const cat = item.subCategory || 'Egyéb';
+      const cat = item.subCategory || 'Sonstiges';
       if (!groups[cat]) groups[cat] = [];
       groups[cat].push(item);
     });
@@ -207,14 +217,21 @@ export default function KFoodCatalog({ recipes = [], products = [], initialTab =
   const handleTabChange = (tab: 'recipes' | 'products') => {
     setSearchQuery('');
     setViewMode('grid');
-    updateQueryParams(tab, 'Minden');
+    updateQueryParams(tab, 'Alle');
   };
 
   const handleCategoryChange = (cat: string) => {
     updateQueryParams(activeTab, cat);
   };
 
-  const isFilteredState = selectedSubCategory !== 'Minden' || searchQuery.trim() !== '';
+  const scrollCategories = (direction: 'left' | 'right') => {
+    if (categoryScrollRef.current) {
+      const scrollAmount = direction === 'left' ? -300 : 300;
+      categoryScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
+  const isFilteredState = selectedSubCategory !== 'Alle' || searchQuery.trim() !== '';
 
   const getItemId = (item: KFoodItem) => {
     if (typeof item.id === 'string') return item.id;
@@ -235,37 +252,38 @@ export default function KFoodCatalog({ recipes = [], products = [], initialTab =
   };
 
   return (
-    <section className="relative w-full py-16 px-6 md:px-12 lg:px-16 bg-linear-to-b from-[#0a0a0c] via-[#16161a] to-[#f8f9fa] text-white min-h-screen overflow-hidden">
+    <section className="relative w-full py-12 px-4 sm:px-8 lg:px-12 bg-linear-to-b from-[#0a0a0c] via-[#16161a] to-[#f8f9fa] text-white min-h-screen">
       
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-amber-600/5 blur-[140px] pointer-events-none rounded-full" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1700px] h-96 bg-amber-600/5 blur-[140px] pointer-events-none rounded-full" />
 
-      <div className="relative z-10 max-w-7xl mx-auto space-y-10">
+      {/* Szélesített konténer PC-re (max-w-[1700px]) */}
+      <div className="relative z-10 w-full max-w-[1700px] mx-auto space-y-8">
 
         {/* FŐ FÜLVÁLASZTÓ ÉS KERESŐ */}
         <div className="flex flex-col lg:flex-row items-center justify-between gap-6 pb-6 border-b border-neutral-800/80">
           
-          <div className="flex items-center gap-2 p-1.5 rounded-full bg-neutral-900/90 border border-neutral-800 shadow-inner">
+          <div className="flex items-center gap-2 p-1.5 rounded-full bg-neutral-900/90 border border-neutral-800 shadow-inner w-full sm:w-auto justify-center">
             <button
               onClick={() => handleTabChange('recipes')}
-              className={`flex items-center gap-2 px-6 py-3 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer ${
+              className={`flex items-center justify-center gap-2 px-6 py-3 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer flex-1 sm:flex-initial ${
                 activeTab === 'recipes'
                   ? 'bg-linear-to-r from-orange-600 to-amber-600 text-white shadow-lg shadow-orange-600/20'
                   : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50'
               }`}
             >
-              <Utensils className="w-4 h-4" />
+              <Utensils className="w-4 h-4 shrink-0" />
               <span>Authentische Rezepte</span>
             </button>
 
             <button
               onClick={() => handleTabChange('products')}
-              className={`flex items-center gap-2 px-6 py-3 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer ${
+              className={`flex items-center justify-center gap-2 px-6 py-3 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer flex-1 sm:flex-initial ${
                 activeTab === 'products'
                   ? 'bg-linear-to-r from-orange-600 to-amber-600 text-white shadow-lg shadow-orange-600/20'
                   : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50'
               }`}
             >
-              <ShoppingBag className="w-4 h-4" />
+              <ShoppingBag className="w-4 h-4 shrink-0" />
               <span>Supermarkt-Produkte & Guide</span>
             </button>
           </div>
@@ -283,7 +301,7 @@ export default function KFoodCatalog({ recipes = [], products = [], initialTab =
               />
             </div>
 
-            {/* Nézetváltó gombok felköltöztetve a felső sávba szűrt állapotban */}
+            {/* Nézetváltó gombok */}
             {isFilteredState && (
               <div className="flex items-center gap-1 p-1 rounded-full bg-neutral-900/90 border border-neutral-800 shrink-0">
                 <button
@@ -316,23 +334,43 @@ export default function KFoodCatalog({ recipes = [], products = [], initialTab =
 
         </div>
 
-        {/* ALKATEGÓRIA PILLE-SZŰRŐK SÁVJA (Teljes szélességben, akadálymentesen görgethető) */}
-        <div className="w-full overflow-hidden">
-          <div className="flex items-center gap-2.5 overflow-x-auto pb-3 pt-1 scrollbar-none w-full">
+        {/* GÖRGETHETŐ KATEGÓRIA SÁV LÉPTETŐ GOMBOKKAL PC-RE ÉS MOBILRA */}
+        <div className="relative w-full flex items-center gap-2">
+          <button
+            onClick={() => scrollCategories('left')}
+            className="w-8 h-8 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:bg-neutral-800 hover:text-white shrink-0 cursor-pointer z-10"
+            title="Zurück"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+
+          <div
+            ref={categoryScrollRef}
+            className="flex items-center gap-2.5 overflow-x-auto py-2 w-full scrollbar-none scroll-smooth shrink"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
             {subCategories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => handleCategoryChange(cat)}
-                className={`px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase whitespace-nowrap transition-all duration-300 cursor-pointer shrink-0 ${
+                className={`px-5 py-2.5 rounded-full text-xs font-semibold tracking-wider uppercase whitespace-nowrap transition-all duration-300 cursor-pointer shrink-0 ${
                   selectedSubCategory === cat
                     ? 'bg-amber-500 text-black shadow-md shadow-amber-500/20 font-bold'
                     : 'bg-neutral-900/90 text-neutral-300 border border-neutral-800 hover:border-neutral-700 hover:bg-neutral-800'
                 }`}
               >
-                {formatCategory(cat)}
+                {cat}
               </button>
             ))}
           </div>
+
+          <button
+            onClick={() => scrollCategories('right')}
+            className="w-8 h-8 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:bg-neutral-800 hover:text-white shrink-0 cursor-pointer z-10"
+            title="Weiter"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
         </div>
 
         {/* TARTALOM */}
@@ -341,7 +379,7 @@ export default function KFoodCatalog({ recipes = [], products = [], initialTab =
             <Flame className="w-10 h-10 text-amber-500/50 mx-auto animate-pulse" />
             <p className="text-neutral-400 text-lg">Keine Ergebnisse für die angegebenen Kriterien gefunden.</p>
             <button
-              onClick={() => { handleCategoryChange('Minden'); setSearchQuery(''); }}
+              onClick={() => { handleCategoryChange('Alle'); setSearchQuery(''); }}
               className="text-xs text-amber-400 hover:underline uppercase tracking-wider font-bold cursor-pointer"
             >
               Filter zurücksetzen
@@ -359,14 +397,14 @@ export default function KFoodCatalog({ recipes = [], products = [], initialTab =
             ))}
           </div>
         ) : viewMode === 'grid' ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 w-full">
             {filteredItems.map((item, index) => {
               const uniqueKey = item._id || getItemId(item) || `grid-${index}`;
               return (
                 <Link
                   key={uniqueKey}
                   href={`/kfood/${getItemId(item)}`}
-                  className="group relative h-96 rounded-3xl overflow-hidden bg-neutral-900 border border-neutral-800 shadow-xl transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-12px_rgba(234,88,12,0.25)] hover:border-amber-500/50 block cursor-pointer"
+                  className="group relative h-96 rounded-3xl overflow-hidden bg-neutral-900 border border-neutral-800 shadow-xl transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-12px_rgba(234,88,12,0.25)] hover:border-amber-500/50 block cursor-pointer w-full"
                 >
                   <img
                     src={item.image || ""}
@@ -415,14 +453,14 @@ export default function KFoodCatalog({ recipes = [], products = [], initialTab =
             })}
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-4 max-w-5xl mx-auto w-full">
             {filteredItems.map((item, index) => {
               const uniqueKey = item._id || getItemId(item) || `list-${index}`;
               return (
                 <Link
                   key={uniqueKey}
                   href={`/kfood/${getItemId(item)}`}
-                  className="group flex-col sm:flex-row items-center justify-between gap-6 p-4 sm:p-6 rounded-2xl bg-neutral-900 border border-neutral-800 shadow-md transition-all duration-300 hover:border-amber-500/50 hover:bg-neutral-900/80 block cursor-pointer"
+                  className="group flex flex-col sm:flex-row items-center justify-between gap-6 p-4 sm:p-6 rounded-2xl bg-neutral-900 border border-neutral-800 shadow-md transition-all duration-300 hover:border-amber-500/50 hover:bg-neutral-900/80 block cursor-pointer"
                 >
                   <div className="flex items-center gap-5 w-full sm:w-auto">
                     <div className="relative w-24 h-24 sm:w-20 sm:h-20 rounded-xl overflow-hidden shrink-0 border border-neutral-800">
@@ -433,7 +471,7 @@ export default function KFoodCatalog({ recipes = [], products = [], initialTab =
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <span className="px-2.5 py-0.5 rounded-full bg-neutral-800 text-amber-400 text-[10px] font-bold tracking-wider uppercase">
                           {formatCategory(item.subCategory)}
                         </span>
