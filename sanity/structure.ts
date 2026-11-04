@@ -28,15 +28,125 @@ export const structure = (S: StructureBuilder) =>
             ])
         ),
 
-      // K-FOOD Mappa
+// K-FOOD Mappa
       S.listItem()
         .title('K-Food & Gasztro')
         .child(
           S.list()
             .title('K-Food Tartalom')
             .items([
-              S.documentTypeListItem('recipe').title('Receptek'),
-              S.documentTypeListItem('kFoodProduct').title('Termékek & Italok'),
+              // 1. Receptek kategóriákra bontva
+              S.listItem()
+                .title('Receptek')
+                .child(
+                  S.list()
+                    .title('Recept Kategóriák')
+                    .items([
+                      S.listItem()
+                        .title('Összes Recept')
+                        .child(S.documentTypeList('recipe').title('Összes Recept')),
+                      
+                      S.divider(),
+
+                      S.listItem()
+                        .title('Főételek')
+                        .child(
+                          S.documentList()
+                            .title('Főételek')
+                            .schemaType('recipe')
+                            .filter('_type == "recipe" && subCategory == "Hauptgerichte"')
+                            .apiVersion('2023-05-03')
+                        ),
+                      S.listItem()
+                        .title('Levesek & Egytálételek')
+                        .child(
+                          S.documentList()
+                            .title('Levesek & Egytálételek')
+                            .schemaType('recipe')
+                            .filter('_type == "recipe" && subCategory == "Suppen & Eintöpfe"')
+                            .apiVersion('2023-05-03')
+                        ),
+                      S.listItem()
+                        .title('Street Food')
+                        .child(
+                          S.documentList()
+                            .title('Street Food')
+                            .schemaType('recipe')
+                            .filter('_type == "recipe" && subCategory == "Street Food"')
+                            .apiVersion('2023-05-03')
+                        ),
+                      S.listItem()
+                        .title('Desszertek & Sütemények')
+                        .child(
+                          S.documentList()
+                            .title('Desszertek & Sütemények')
+                            .schemaType('recipe')
+                            .filter('_type == "recipe" && subCategory == "Desserts & Gebäck"')
+                            .apiVersion('2023-05-03')
+                        ),
+                    ])
+                ),
+              
+              // 2. Termékek & Italok (amit az előbb csináltunk)
+              S.listItem()
+                .title('Termékek & Italok')
+                .child(
+                  S.list()
+                    .title('Termék Kategóriák')
+                    .items([
+                      S.listItem()
+                        .title('Összes Termék')
+                        .child(S.documentTypeList('kFoodProduct').title('Összes Termék')),
+                      
+                      S.divider(),
+
+                      S.listItem()
+                        .title('Italok & Soju')
+                        .child(
+                          S.documentList()
+                            .title('Italok & Soju')
+                            .schemaType('kFoodProduct')
+                            .filter('_type == "kFoodProduct" && subCategory == "Getränke & Erfrischungen"')
+                            .apiVersion('2023-05-03')
+                        ),
+                      S.listItem()
+                        .title('Nassolnivalók & Snackek')
+                        .child(
+                          S.documentList()
+                            .title('Nassolnivalók & Snackek')
+                            .schemaType('kFoodProduct')
+                            .filter('_type == "kFoodProduct" && subCategory == "Snacks & Knabbereien"')
+                            .apiVersion('2023-05-03')
+                        ),
+                      S.listItem()
+                        .title('Alapanyagok')
+                        .child(
+                          S.documentList()
+                            .title('Alapanyagok')
+                            .schemaType('kFoodProduct')
+                            .filter('_type == "kFoodProduct" && subCategory == "Zutaten & Grundnahrungsmittel"')
+                            .apiVersion('2023-05-03')
+                        ),
+                      S.listItem()
+                        .title('Szószok, Fűszerek & Tészták')
+                        .child(
+                          S.documentList()
+                            .title('Szószok, Fűszerek & Tészták')
+                            .schemaType('kFoodProduct')
+                            .filter('_type == "kFoodProduct" && subCategory == "Würzsaucen, Gewürze & Nudeln"')
+                            .apiVersion('2023-05-03')
+                        ),
+                      S.listItem()
+                        .title('Édességek & Desszertek')
+                        .child(
+                          S.documentList()
+                            .title('Édességek & Desszertek')
+                            .schemaType('kFoodProduct')
+                            .filter('_type == "kFoodProduct" && subCategory == "Süßwaren & Desserts"')
+                            .apiVersion('2023-05-03')
+                        ),
+                    ])
+                ),
             ])
         ),
 
