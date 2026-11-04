@@ -28,18 +28,19 @@ interface KFoodCatalogProps {
   initialCategory?: string;
 }
 
-// Kategóriák leképezése magyar DB értékekről német UI feliratokra
+// Kategóriák leképezése magyar/régi DB értékekről az új német UI feliratokra
 const CATEGORY_MAP: Record<string, string> = {
   'Minden': 'Alle',
   'Főételek': 'Hauptgerichte',
   'Levesek & Egytálételek': 'Suppen & Eintöpfe',
   'Street Food': 'Street Food',
   'Desszertek & Sütemények': 'Desserts & Gebäck',
-  'Italok & Soju': 'Getränke & Erfrischungen',
+  'Italok': 'Getränke & Erfrischungen',
   'Italok & Frissítők': 'Getränke & Erfrischungen',
   'Nassolnivalók & Snackek': 'Snacks & Knabbereien',
   'Alapanyagok': 'Zutaten & Grundnahrungsmittel',
-  'Szószok, Fűszerek & Tészták': 'Würzsaucen, Gewürze & Nudeln',
+  // ITT A LÉNYEG: A bal oldal a régi DB érték, a jobb oldal az új megjelenő név!
+  'Würzsaucen, Gewürze & Nudeln': 'Ramen & Instant-Gerichte',
   'Édességek & Desszertek': 'Süßwaren & Desserts',
 };
 

@@ -27,10 +27,10 @@ export default {
       type: 'string',
       options: {
         list: [
-          { title: 'Italok & Soju', value: 'Getränke & Erfrischungen' },
+          { title: 'Italok', value: 'Getränke & Erfrischungen' },
           { title: 'Nassolnivalók & Snackek', value: 'Snacks & Knabbereien' },
           { title: 'Alapanyagok', value: 'Zutaten & Grundnahrungsmittel' },
-          { title: 'Szószok, Fűszerek & Tészták', value: 'Würzsaucen, Gewürze & Nudeln' },
+          { title: 'Ramenek & Készételek', value: 'Ramen & Instant-Gerichte' },
           { title: 'Édességek & Desszertek', value: 'Süßwaren & Desserts' },
         ],
         layout: 'dropdown',
@@ -78,9 +78,9 @@ export default {
     },
     {
       name: 'order',
-      title: 'Sorrend (Index)',
+      title: 'Sorrend (Sorszám)',
       type: 'number',
-      hidden: true,
+      description: 'Add meg számokkal (pl. 1, 2, 3...), hogy milyen sorrendben jelenjenek meg.',
     },
     {
       name: 'spiceLevel',
