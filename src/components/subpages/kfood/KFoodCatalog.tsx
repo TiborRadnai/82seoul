@@ -100,7 +100,7 @@ function EmblaCategoryRow({ items, getItemId, renderSpiceBadge }: {
               <Link
                 key={uniqueKey}
                 href={`/kfood/${getItemId(item)}`}
-                className="group relative min-w-[300px] sm:min-w-[360px] lg:min-w-[400px] h-96 rounded-3xl overflow-hidden bg-neutral-900 border border-neutral-800 shadow-xl transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-12px_rgba(234,88,12,0.25)] hover:border-amber-500/50 shrink-0 block cursor-pointer"
+                className="group relative min-w-75 sm:min-w-90 lg:min-w-100 h-96 rounded-3xl overflow-hidden bg-neutral-900 border border-neutral-800 shadow-xl transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-12px_rgba(234,88,12,0.25)] hover:border-amber-500/50 shrink-0 block cursor-pointer"
               >
                 <img
                   src={item.image || ""}
@@ -461,7 +461,7 @@ export default function KFoodCatalog({
                 <Link
                   key={uniqueKey}
                   href={`/kfood/${getItemId(item)}`}
-                  className="group flex flex-col sm:flex-row items-center justify-between gap-6 p-4 sm:p-6 rounded-2xl bg-neutral-900 border border-neutral-800 shadow-md transition-all duration-300 hover:border-amber-500/50 hover:bg-neutral-900/80 block cursor-pointer"
+                  className="group flex-col sm:flex-row items-center justify-between gap-6 p-4 sm:p-6 rounded-2xl bg-neutral-900 border border-neutral-800 shadow-md transition-all duration-300 hover:border-amber-500/50 hover:bg-neutral-900/80 block cursor-pointer"
                 >
                   <div className="flex items-center gap-5 w-full sm:w-auto">
                     <div className="relative w-24 h-24 sm:w-20 sm:h-20 rounded-xl overflow-hidden shrink-0 border border-neutral-800">

@@ -51,7 +51,7 @@ export default function KProductDetailContent({ item }: KProductDetailContentPro
     <section className="relative w-full pt-32 pb-24 px-6 md:px-12 lg:px-20 bg-linear-to-b from-[#0a0a0c] via-[#16161a] to-[#0a0a0c] text-white min-h-screen overflow-hidden">
       
       {/* Háttér hangulatfény */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-amber-600/5 blur-[160px] pointer-events-none rounded-full" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-150 h-150 bg-amber-600/5 blur-[160px] pointer-events-none rounded-full" />
 
       <div className="max-w-7xl mx-auto space-y-10 relative z-10">
         
@@ -73,11 +73,11 @@ export default function KProductDetailContent({ item }: KProductDetailContentPro
               {/* Finom háttér ragyogás a kép mögött */}
               <div className="absolute -inset-1 bg-linear-to-r from-amber-500/20 to-orange-500/0 rounded-3xl blur-xl opacity-50 group-hover:opacity-75 transition duration-500 pointer-events-none" />
               
-              <div className="relative rounded-3xl overflow-hidden border border-neutral-800/80 bg-linear-to-b from-neutral-900/90 via-neutral-900/60 to-neutral-950/90 backdrop-blur-xl shadow-2xl p-8 flex items-center justify-center min-h-[420px] lg:min-h-[500px]">
+              <div className="relative rounded-3xl overflow-hidden border border-neutral-800/80 bg-linear-to-b from-neutral-900/90 via-neutral-900/60 to-neutral-950/90 backdrop-blur-xl shadow-2xl p-8 flex items-center justify-center min-h-105 lg:min-h-125">
                 <img
                   src={item.image}
                   alt={item.title || 'Produkt'}
-                  className="w-full h-auto max-h-[460px] object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.5)] transition-transform duration-500 group-hover:scale-105"
+                  className="w-full h-auto max-h-115 object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.5)] transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
             </div>
