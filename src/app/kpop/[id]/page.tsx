@@ -15,9 +15,43 @@ import ArtistMembers from '@/components/subpages/kpop/artist-detail/ArtistMember
 import ArtistOverview from '@/components/subpages/kpop/artist-detail/ArtistOverview';
 import ArtistDiscography from '@/components/subpages/kpop/artist-detail/ArtistDiscography';
 import ArtistDetailClientWrapper from '@/components/subpages/kpop/artist-detail/ArtistDetailClientWrapper';
+import type { Metadata } from 'next';
 
 interface ArtistPageProps {
   params: Promise<{ id: string }>;
+}
+
+// ==========================================
+// DINAMIKUS METADATA GENERÁTOR K-POP ARTISTÁHOZ (NÉMETÜL)
+// ==========================================
+export async function generateMetadata({ params }: ArtistPageProps): Promise<Metadata> {
+  const { id } = await params;
+
+  try {
+    const artist = await client.fetch(getArtistByIdQuery, { id });
+
+    if (!artist) {
+      return {
+        title: 'Künstler nicht gefunden | 82seoul K-Pop',
+        description: 'Der gesuchte K-Pop-Künstler wurde auf 82seoul nicht gefunden.',
+      };
+    }
+
+    return {
+      title: `${artist.name} | 82seoul K-Pop`,
+      description: artist.tagline || artist.description || `Entdecke alles über ${artist.name} – Biografie, Mitglieder, Alben und mehr bei 82seoul.`,
+      openGraph: {
+        title: `${artist.name} | 82seoul K-Pop`,
+        description: artist.tagline || artist.description,
+        images: artist.image ? [artist.image] : [],
+      },
+    };
+  } catch (error) {
+    console.error("METADATA FEHLER (KPOP ARTIST):", error);
+    return {
+      title: '82seoul | K-Pop Artist',
+    };
+  }
 }
 
 export default async function ArtistDetailPage({ params }: ArtistPageProps) {
@@ -55,9 +89,9 @@ export default async function ArtistDetailPage({ params }: ArtistPageProps) {
       />
 
       {/* 
-         Mivel az ArtistMembers és a Modal interaktív (useState-et használ), 
-         ezeket kiszervezhetjük egy "Client Wrapper" komponensbe, 
-         hogy a fő oldal továbbra is Server Component maradhasson.
+          Mivel az ArtistMembers és a Modal interaktív (useState-et használ), 
+          ezeket kiszervezhetjük egy "Client Wrapper" komponensbe, 
+          hogy a fő oldal továbbra is Server Component maradhasson.
       */}
       <ArtistDetailClientWrapper artist={artist} />
 
