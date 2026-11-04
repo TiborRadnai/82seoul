@@ -20,8 +20,24 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "82.Seoul",
-  description: "Korean media and culture portal",
+  metadataBase: new URL('https://82seoul.de'),
+  title: {
+    default: "82seoul | Dein Portal für koreanische Kultur, K-Beauty & Travel",
+    template: "%s | 82seoul",
+  },
+  description: "Entdecke die faszinierende Welt Südkoreas – K-Beauty, K-Dramen, authentische Rezepte, K-Pop und exklusive Reiseführer auf Deutsch.",
+  openGraph: {
+    title: "82seoul | Dein Portal für koreanische Kultur, K-Beauty & Travel",
+    description: "Entdecke die faszinierende Welt Südkoreas – K-Beauty, K-Dramen, authentische Rezepte, K-Pop und exklusive Reiseführer auf Deutsch.",
+    url: 'https://82seoul.de',
+    siteName: '82seoul',
+    locale: 'de_DE',
+    type: 'website',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -30,13 +46,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-  <html
-    lang="hu"
-    className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    data-scroll-behavior="smooth"
+    <html
+      lang="de"
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      data-scroll-behavior="smooth"
     >
       <body className="min-h-full flex flex-col bg-slate-950 text-slate-100">
-        <AuthProvider> {/* <-- AUTHPROVIDER KÖSZÖNTI A USEREKET */}
+        <AuthProvider> 
           <CartProvider>
             {/* Globális Kosár Fiók */}
             <CartDrawer />
