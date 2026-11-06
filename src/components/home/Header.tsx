@@ -204,7 +204,7 @@ export default function Header({ topArtists = [] }: HeaderProps) {
                 <div className="space-y-2 text-white flex-1 min-w-0 pr-6">
                   <div>
                     <span className="text-[10px] uppercase tracking-widest text-amber-300 font-extrabold block mb-0.5 drop-shadow-sm">
-                      Melon Top 10 Chart
+                      Spotify Korea Top 10
                     </span>
                     <h4 className="text-base sm:text-xl font-extrabold tracking-tight truncate drop-shadow">
                       {artistName}

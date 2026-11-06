@@ -33,7 +33,7 @@ interface KPopFilterProps {
 }
 
 const GENDER_OPTIONS: { id: GenderCategory; label: string }[] = [
-  { id: 'top10', label: 'Top 10 Highlights' },
+  { id: 'top10', label: 'Spotify Korea Top 10' },
   { id: 'all', label: 'Alle Künstler' },
   { id: 'gg', label: 'Girlgroups' },
   { id: 'bg', label: 'Boygroups' },
