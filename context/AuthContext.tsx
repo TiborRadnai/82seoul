@@ -48,10 +48,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       body: JSON.stringify({ email, password }),
     });
 
-    const data = await res.json();
+  const data = await res.json();
     if (!data.success) {
-      throw new Error(data.error || 'Bejelentkezési hiba');
-    }
+      throw new Error(data.error || 'Anmeldung fehlgeschlagen');
+    }  
 
     // Újra lekérjük a user adatait
     const meRes = await fetch('/api/me');
@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
         const data = await res.json();
         if (!data.success) {
-        throw new Error(data.error || 'Regisztrációs hiba');
+        throw new Error(data.error || 'Registrierung fehlgeschlagen');
         }
 
         // Beállítjuk a usert közvetlenül a válaszból
