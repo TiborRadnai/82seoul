@@ -30,9 +30,14 @@ export async function generateMetadata({ params }: KBeautyPageProps): Promise<Me
     return {
       title: `${item.title} | 82seoul K-Beauty`,
       description: item.description || 'Entdecke die besten K-Beauty-Produkte und Pflegeroutinen bei 82seoul.',
+      // EZ HIÁNYZOTT ITT IS:
+      alternates: {
+        canonical: `https://www.82seoul.de/kbeauty/${id}`,
+      },
       openGraph: {
         title: item.title,
         description: item.description,
+        url: `https://www.82seoul.de/kbeauty/${id}`,
         images: item.image ? [item.image] : [],
       },
     };

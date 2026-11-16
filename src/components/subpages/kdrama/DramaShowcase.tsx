@@ -5,6 +5,17 @@ import Image from 'next/image';
 import Link from 'next/link';
 import PlatformLogo from '@/components/PlatformLogo';
 
+interface DramaInteractiveShowcaseProps {
+  dramas: any[];
+}
+
+// Sanity optimalizáló segédfüggvény a képek méretezéséhez
+function urlForSanity(sourceUrl: string, width = 1200) {
+  if (!sourceUrl) return "";
+  const separator = sourceUrl.includes('?') ? '&' : '?';
+  return `${sourceUrl}${separator}w=${width}&auto=format&q=80`;
+}
+
 export default function DramaInteractiveShowcase({ dramas }: { dramas: any[] }) {
   const initialIndex = Math.floor((dramas?.length || 1) / 2);
   const [activeIndex, setActiveIndex] = useState(initialIndex);
@@ -14,7 +25,9 @@ export default function DramaInteractiveShowcase({ dramas }: { dramas: any[] }) 
   if (!dramas || dramas.length === 0) return null;
 
   const activeDrama = dramas[activeIndex] || dramas[0];
-  const currentImage = activeDrama.wideImage || activeDrama.image;
+  const rawCurrentImage = activeDrama.wideImage || activeDrama.image;
+  const currentImage = urlForSanity(rawCurrentImage, 1200);
+  const bgBlurImage = urlForSanity(rawCurrentImage, 400);
 
   const handleDragStart = (e: React.TouchEvent | React.MouseEvent) => {
     const clientX = 'touches' in e ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
@@ -44,10 +57,10 @@ export default function DramaInteractiveShowcase({ dramas }: { dramas: any[] }) 
     <section className="relative w-full bg-linear-to-b from-[#e8e8ec] via-[#b8b8c2] to-[#0a0a0e] pt-12 md:pt-20 pb-16 md:pb-32 px-4 md:px-12 lg:px-16 overflow-hidden text-neutral-900">
       
       {/* CSS alapú elmosott háttér */}
-      {currentImage && (
+      {bgBlurImage && (
         <div 
           className="absolute inset-0 opacity-15 pointer-events-none transition-all duration-700 ease-in-out blur-3xl scale-110 bg-cover bg-center"
-          style={{ backgroundImage: `url(${currentImage})` }}
+          style={{ backgroundImage: `url(${bgBlurImage})` }}
         />
       )}
 
@@ -122,7 +135,6 @@ export default function DramaInteractiveShowcase({ dramas }: { dramas: any[] }) 
                 alt={activeDrama.title}
                 fill
                 sizes="(max-width: 1024px) 100vw, 900px"
-                unoptimized
                 className="object-cover object-center animate-fadeIn transition-transform duration-700 hover:scale-105"
               />
             )}
@@ -144,7 +156,8 @@ export default function DramaInteractiveShowcase({ dramas }: { dramas: any[] }) 
           >
             <div className="flex items-center justify-center relative w-full max-w-6xl h-72 md:h-80 overflow-visible">
               {dramas.map((drama, index) => {
-                const thumbnailImage = drama.image || drama.wideImage;
+                const rawThumbnail = drama.image || drama.wideImage;
+                const thumbnailImage = urlForSanity(rawThumbnail, 400);
                 const isSelected = index === activeIndex;
                 const distance = index - activeIndex; 
                 const absDistance = Math.abs(distance);
@@ -176,7 +189,6 @@ export default function DramaInteractiveShowcase({ dramas }: { dramas: any[] }) 
                           alt={drama.title}
                           fill
                           sizes="(max-width: 768px) 144px, 192px"
-                          unoptimized
                           className="object-cover object-center pointer-events-none"
                         />
                       )}

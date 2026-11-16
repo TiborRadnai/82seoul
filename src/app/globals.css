@@ -1,6 +1,8 @@
 @import "tailwindcss";
+
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 /* Kártyák lágy, áttetsző üveghatása (glassmorphism) */
@@ -11,6 +13,7 @@ html {
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
+/* Marquee animáció */
 @keyframes marquee {
   0% { transform: translateX(0%); }
   100% { transform: translateX(-50%); }
@@ -21,9 +24,10 @@ html {
 }
 
 .animate-marquee:hover {
-  animation-play-state: paused; /* Ha rámegy az egérrel, megáll a szalag */
+  animation-play-state: paused;
 }
 
+/* Lebegő animációk */
 @keyframes float {
   0%, 100% { transform: translateY(0px) translateX(0px); }
   50% { transform: translateY(-12px) translateX(6px); }
@@ -41,13 +45,12 @@ html {
   animation: float 4s ease-in-out infinite;
 }
 
-/* Megfordítja a Swiper Coverflow 3D tengelyét a tökéletes kifelé dőlő tálca hatásért */
+/* Swiper 3D coverflow finomítások */
 .swiper-3d .swiper-slide-shadow-left,
 .swiper-3d .swiper-slide-shadow-right {
-  display: none; /* ha nem akarsz árnyékokat */
+  display: none;
 }
 
-/* Itt kényszerítjük ki, hogy a kártyák a helyes irányba dőljenek a coverflow-ban */
 .swiper-effect-coverflow .swiper-slide {
   transform-style: preserve-3d;
 }

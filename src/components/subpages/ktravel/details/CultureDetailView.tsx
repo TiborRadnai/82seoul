@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState } from "react";
 import Link from "next/link";
@@ -25,7 +25,7 @@ interface DetailViewProps {
     image?: any;
     gallery?: GalleryItem[];
     body?: any;
-    quickFacts?: QuickFactItem[]; // <-- Dinamikus quickFacts mező
+    quickFacts?: QuickFactItem[];
   };
 }
 
@@ -80,13 +80,14 @@ export default function CultureDetailView({ article }: DetailViewProps) {
           )}
         </div>
 
-        {/* Kiemelt Kép (Borító) */}
+        {/* Kiemelt Kép (Borító) - Sanity optimalizált URL-lel */}
         {article.image && (
           <div className="relative w-full h-110 sm:h-140 rounded-2xl overflow-hidden border border-neutral-300/80 shadow-2xl bg-neutral-900">
             <Image
-              src={article.image}
+              src={`${typeof article.image === 'string' ? article.image : article.image?.asset?.url || article.image}${typeof article.image === 'string' && article.image.includes('?') ? '&' : '?' }w=1200&auto=format&q=80`}
               alt={article.title}
               fill
+              sizes="100vw"
               className="object-cover"
               priority
             />
@@ -100,7 +101,7 @@ export default function CultureDetailView({ article }: DetailViewProps) {
           {article.body && <PortableText value={article.body} />}
         </div>
 
-        {/* Képgaléria (Gallery) + Lightbox Trigger */}
+        {/* Képgaléria (Gallery) + Lightbox Trigger - Sanity optimalizált URL-lel */}
         {gallery.length > 0 && (
           <div className="space-y-8 pt-12 border-t border-neutral-300/80">
             <div className="flex items-center gap-2 text-xs font-mono tracking-[0.2em] uppercase text-orange-600">
@@ -116,9 +117,10 @@ export default function CultureDetailView({ article }: DetailViewProps) {
                     className="relative h-80 rounded-2xl overflow-hidden border border-neutral-300/80 bg-neutral-900 shadow-xl group cursor-pointer"
                   >
                     <Image
-                      src={item.url}
+                      src={`${item.url}${item.url.includes('?') ? '&' : '?' }w=600&auto=format&q=80`}
                       alt={item.caption || `${article.title} gallery image ${index + 1}`}
                       fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
                       className="object-cover hover:scale-105 transition-transform duration-700"
                     />
                     <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -139,7 +141,7 @@ export default function CultureDetailView({ article }: DetailViewProps) {
           </div>
         )}
 
-        {/* Dinamikus Quick Facts Doboz (Teljes szélességű & Reszponzív 3 oszlopos rács) */}
+        {/* Dinamikus Quick Facts Doboz */}
         {quickFacts.length > 0 && (
           <div className="w-full mt-16 p-8 md:p-10 rounded-3xl bg-white/70 border border-neutral-300/80 backdrop-blur-md space-y-6 shadow-xl">
             <h4 className="text-xs font-mono tracking-[0.2em] uppercase text-orange-600">
@@ -196,9 +198,10 @@ export default function CultureDetailView({ article }: DetailViewProps) {
             className="relative max-w-5xl w-full h-[70vh] rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-neutral-950 flex items-center justify-center"
           >
             <Image
-              src={activeImage.url}
+              src={`${activeImage.url}${activeImage.url.includes('?') ? '&' : '?' }w=1200&auto=format&q=80`}
               alt={activeImage.caption || "Detailansicht"}
               fill
+              sizes="(max-width: 1024px) 100vw, 1024px"
               className="object-contain"
               priority
             />

@@ -1,7 +1,15 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight, Scroll } from "lucide-react";
 import { client } from "@sanity/lib/client";
 import { getTravelArticlesByCategoryQuery } from "@sanity/queries";
+
+// Sanity optimalizáló segédfüggvény a képek méretezéséhez
+function urlForSanity(sourceUrl: string, width = 1200) {
+  if (!sourceUrl) return "";
+  const separator = sourceUrl.includes('?') ? '&' : '?';
+  return `${sourceUrl}${separator}w=${width}&auto=format&q=80`;
+}
 
 export default async function CultureSection() {
   // Lekérdjük a 'culture' kategória kiemelt elemeit a Sanity-ből, sorrend szerint
@@ -15,7 +23,7 @@ export default async function CultureSection() {
     <section id="culture" className="w-full pb-16 md:pb-24 bg-slate-100 text-neutral-900 relative overflow-hidden border-t border-slate-200/60">
       
       {/* Finom meleg háttérfény a hagyományok hangulatához */}
-      <div className="absolute top-1/3 -left-40 w-150 h-150 bg-amber-500/5 rounded-full blur-[160px] pointer-events-none" />
+      <div className="absolute top-1/3 -left-40 w-[600px] h-[600px] bg-amber-500/5 rounded-full blur-[160px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 z-10 relative space-y-24">
         
@@ -38,28 +46,30 @@ export default async function CultureSection() {
         {/* --- ASZIMMETRIKUS KULTÚRA GRID --- */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           
-          {/* 1. SZTORI BLOKK: Paloták & Hanbok (vagy az 1. elem) */}
+          {/* 1. SZTORI BLOKK: Paloták & Hanbok */}
           <div className="lg:col-span-7 space-y-8">
             <Link
-              href={`/ktravel/${palaces.slug || 'culture-palaces'}`}
-              className="block relative w-full h-[55vh] md:h-[65vh] overflow-hidden group cursor-pointer rounded-2xl shadow-xl"
+              href={`/ktravel/${typeof palaces.slug === 'string' ? palaces.slug : palaces.slug?.current || 'culture-palaces'}`}
+              className="block relative w-full h-[55vh] md:h-[65vh] overflow-hidden group cursor-pointer rounded-2xl shadow-xl bg-neutral-900"
             >
               {palaces.image && (
-                <img
-                  src={palaces.image}
+                <Image
+                  src={urlForSanity(typeof palaces.image === 'string' ? palaces.image : palaces.image?.asset?.url || palaces.image, 1200)}
                   alt={palaces.title || 'Gyeongbokgung Palast und Hanbok'}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-103"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 700px"
+                  className="object-cover transition-transform duration-1000 ease-out group-hover:scale-103"
                 />
               )}
-              <div className="absolute inset-0 bg-linear-to-t from-neutral-950/80 via-neutral-950/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/80 via-neutral-950/20 to-transparent z-10" />
               
-              <div className="absolute top-6 left-6">
+              <div className="absolute top-6 left-6 z-20">
                 <span className="px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md text-xs font-mono tracking-widest text-neutral-900 uppercase shadow-md">
                   {palaces.tag || '01 // Paläste & Hanbok'}
                 </span>
               </div>
 
-              <div className="absolute bottom-8 left-8 right-8 text-white space-y-2">
+              <div className="absolute bottom-8 left-8 right-8 text-white space-y-2 z-20">
                 <h4 className="text-2xl md:text-4xl font-light tracking-tight">
                   {palaces.title || 'Königliche Eleganz in Seoul'}
                 </h4>
@@ -72,7 +82,7 @@ export default async function CultureSection() {
             <div className="flex items-center justify-between pt-2">
               <span className="text-xs font-mono text-neutral-500 uppercase tracking-widest">Fokus // Architektur & Zeremonie</span>
               <Link
-                href={`/ktravel/${palaces.slug || 'culture-palaces'}`}
+                href={`/ktravel/${typeof palaces.slug === 'string' ? palaces.slug : palaces.slug?.current || 'culture-palaces'}`}
                 className="inline-flex items-center gap-2 text-sm font-medium text-neutral-900 hover:text-amber-700 transition-colors group"
               >
                 <span>Kapitel lesen</span>
@@ -81,7 +91,7 @@ export default async function CultureSection() {
             </div>
           </div>
 
-          {/* 2. SZTORI BLOKK: Gyeongju & Tempel (vagy a 2. elem) */}
+          {/* 2. SZTORI BLOKK: Gyeongju & Tempel */}
           <div className="lg:col-span-5 space-y-10 lg:pt-12">
             
             <div className="space-y-4">
@@ -95,22 +105,24 @@ export default async function CultureSection() {
             </div>
 
             <Link
-              href={`/ktravel/${gyeongju.slug || 'culture-gyeongju'}`}
-              className="block relative w-full h-[40vh] md:h-[45vh] overflow-hidden group cursor-pointer rounded-2xl shadow-xl"
+              href={`/ktravel/${typeof gyeongju.slug === 'string' ? gyeongju.slug : gyeongju.slug?.current || 'culture-gyeongju'}`}
+              className="block relative w-full h-[40vh] md:h-[45vh] overflow-hidden group cursor-pointer rounded-2xl shadow-xl bg-neutral-900"
             >
               {gyeongju.image && (
-                <img
-                  src={gyeongju.image}
+                <Image
+                  src={urlForSanity(typeof gyeongju.image === 'string' ? gyeongju.image : gyeongju.image?.asset?.url || gyeongju.image, 1000)}
                   alt={gyeongju.title || 'Bulguksa Tempel Gyeongju'}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-103"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 500px"
+                  className="object-cover transition-transform duration-1000 ease-out group-hover:scale-103"
                 />
               )}
-              <div className="absolute inset-0 bg-neutral-950/20 group-hover:bg-transparent transition-colors duration-500" />
+              <div className="absolute inset-0 bg-neutral-950/20 group-hover:bg-transparent transition-colors duration-500 z-10" />
             </Link>
 
             <div className="pt-2">
               <Link
-                href={`/ktravel/${gyeongju.slug || 'culture-gyeongju'}`}
+                href={`/ktravel/${typeof gyeongju.slug === 'string' ? gyeongju.slug : gyeongju.slug?.current || 'culture-gyeongju'}`}
                 className="inline-flex items-center gap-2 text-sm font-medium text-neutral-900 hover:text-amber-700 transition-colors group"
               >
                 <span>Gyeongju erkunden</span>

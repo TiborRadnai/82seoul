@@ -5,41 +5,52 @@ import LogoMarquee from '@/components/subpages/kpop/LogoMarquee';
 import KPopGroupList from '@/components/subpages/kpop/KPopGroupList';
 import KPopGlossaryBubbles from '@/components/subpages/kpop/KPopGlossaryBubbles';
 import GraffitiItem from '@/components/subpages/kpop/GraffitiItem';
+import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
+export const metadata: Metadata = {
+  title: 'K-Pop Künstler, Gruppen & Musik | 82seoul K-Pop',
+  description: 'Entdecke alle K-Pop-Gruppen, Künstler, Alben und Charts aus Südkorea auf 82seoul.',
+  alternates: {
+    canonical: 'https://www.82seoul.de/kpop',
+  },
+  openGraph: {
+    title: 'K-Pop Künstler & Gruppen | 82seoul K-Pop',
+    description: 'Entdecke alle K-Pop-Gruppen, Künstler und Alben aus Südkorea.',
+    url: 'https://www.82seoul.de/kpop',
+  },
+};
 
-// Sanity importok (figyelj a visszalépések számára a gyökérben lévő sanity mappáig!)
 import { client } from '../../../sanity/lib/client';
 import { getArtistsQuery } from '../../../sanity/queries';
 
 export default async function KPopPage() {
-  // Lekérjük a bandákat a Sanityből
+  // Lekérjük az összes bandát a Sanityből egyszer
   const artists = await client.fetch(getArtistsQuery);
 
+  // Kiválogatjuk a Top 3-at a Hero-hoz már itt a szerveren!
+  const topThreeHeroes = artists
+    ?.filter((artist: any) => typeof artist.rank === 'number')
+    ?.sort((a: any, b: any) => a.rank - b.rank)
+    ?.slice(0, 3) || [];
+
   return (
-    // Ne tegyünk ide egyedi háttérszínt (pl. bg-[#e8e8e8]), mert az elrontja a szekciók saját átmeneteit!
     <main className="min-h-screen w-full overflow-x-hidden bg-white text-zinc-900">
-      {/* 1. NAVBAR */}
       <Navbar />
 
-      {/* 2. HERO SZEKCIÓ */}
-      <KPopHero />
+      {/* Átadjuk a kész Top 3 adatot a Hero-nak */}
+      <KPopHero initialArtists={topThreeHeroes} />
 
-      {/* 3. LOGÓSÁV */}
       <LogoMarquee />
 
-      {/* 4. BANDÁK LISTÁJA - Átadjuk a Sanity adatait */}
       <KPopGroupList initialArtists={artists} />
 
-      {/* 3. Graffity SZEKCIÓ */}
       <GraffitiItem />
 
-      {/* 5. SZÓTÁR BUBORÉKOK */}
       <KPopGlossaryBubbles />
 
-      {/* 6. FOOTER */}
       <Footer />
     </main>
   );

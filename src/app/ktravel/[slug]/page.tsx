@@ -50,9 +50,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
       title: `${article.title} | 82seoul K-Travel (${categoryLabel})`,
       description: article.description || `Entdecke spannende Einblicke und Tipps zu ${article.title} in Südkorea auf 82seoul.`,
+      // EZ HIÁNYZOTT:
+      alternates: {
+        canonical: `https://www.82seoul.de/ktravel/${slug}`,
+      },
       openGraph: {
         title: article.title,
         description: article.description,
+        url: `https://www.82seoul.de/ktravel/${slug}`,
         images: article.image ? [article.image] : [],
       },
     };

@@ -94,7 +94,7 @@ export default function ActorModal({ actor, onClose }: ActorModalProps) {
             </div>
 
             <div className="flex-1 flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 min-w-0">
-              <div className={`font-medium text-sm sm:text-base transition-colors ${accentColor} wrap-break-words`}>
+              <div className={`font-medium text-sm sm:text-base transition-colors ${accentColor} wrap-break-word`}>
                 {item.title}
               </div>
 

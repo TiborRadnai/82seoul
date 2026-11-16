@@ -40,9 +40,14 @@ export async function generateMetadata({ params }: ArtistPageProps): Promise<Met
     return {
       title: `${artist.name} | 82seoul K-Pop`,
       description: artist.tagline || artist.description || `Entdecke alles über ${artist.name} – Biografie, Mitglieder, Alben und mehr bei 82seoul.`,
+      // EZ HIÁNYZOTT ITT IS:
+      alternates: {
+        canonical: `https://www.82seoul.de/kpop/${id}`,
+      },
       openGraph: {
         title: `${artist.name} | 82seoul K-Pop`,
         description: artist.tagline || artist.description,
+        url: `https://www.82seoul.de/kpop/${id}`,
         images: artist.image ? [artist.image] : [],
       },
     };

@@ -2,20 +2,22 @@ import Image from "next/image";
 
 export default function NatureHeader() {
   return (
-    <div className="relative w-full h-[85vh] min-h-150 flex flex-col justify-center overflow-hidden bg-black text-white">
+    <div className="relative w-full h-[85vh] min-h-[600px] flex flex-col justify-center overflow-hidden bg-black text-white">
       {/* Háttérkép lassan pulzáló zoom effekttel */}
       <div className="absolute inset-0 overflow-hidden">
         <Image
           src="/images/NatureHeaderBackground.webp"
           alt="Natur & Jeju - Vulkane, Küsten und grüne Oasen"
           fill
+          sizes="100vw"
           className="object-cover object-center scale-105 animate-[pulse_10s_ease-in-out_infinite] transition-transform duration-1000"
           priority
+          quality={85}
         />
       </div>
 
       {/* Többrétegű, prémium magazin sötétítés */}
-      <div className="absolute inset-0 bg-linear-to-t from-black/95 via-black/40 to-black/70" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/70" />
 
       {/* Monumentális Hero Tartalom – Zöldes természet akcentusokkal */}
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center my-auto">

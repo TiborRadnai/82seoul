@@ -19,18 +19,19 @@ export default function TravelGuideSection({ initialGuideItems }: TravelGuideSec
   if (!primaryItem) return null;
 
   return (
-    <section id="guide" className="w-full py-28 md:py-40 bg-linear-to-b from-slate-100 via-neutral-900 to-neutral-950 text-white relative overflow-hidden">
+    <section id="guide" className="w-full py-28 md:py-40 bg-gradient-to-b from-slate-100 via-neutral-900 to-neutral-950 text-white relative overflow-hidden">
       
-       {/* Világosabb, elegáns ezüstös-kékes háttérfény */}
-       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-175 h-100 bg-slate-300/10 rounded-full blur-[180px] pointer-events-none" />
+       {/* Világosabb, elegáns ezüstös háttérfény (kék nélkül) */}
+       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-slate-300/10 rounded-full blur-[180px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 z-10 relative space-y-20">
         
         {/* EDITORIAL FEJLÉC */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 pb-8 border-b border-slate-700/60">
           <div className="space-y-4 max-w-2xl">
-            <div className="inline-flex items-center gap-2 text-slate-200 text-xs font-mono tracking-[0.25em] uppercase bg-slate-800/80 px-4 py-1.5 border border-slate-500/40 backdrop-blur-md">
-              <Sparkles className="w-3.5 h-3.5 text-slate-300" />
+            {/* Tiszta szürke/ezüst tónusú felirat és ikon */}
+            <div className="inline-flex items-center gap-2 text-slate-300 text-xs font-mono tracking-[0.25em] uppercase">
+              <Sparkles className="w-3.5 h-3.5 text-slate-400" />
               <span>Kapitel 04 // Curated Essentials</span>
             </div>
             <h2 className="text-4xl sm:text-6xl md:text-7xl font-light tracking-tight text-white leading-none">
@@ -48,7 +49,7 @@ export default function TravelGuideSection({ initialGuideItems }: TravelGuideSec
           {/* FŐ KIEMELT KÁRTYA */}
           <div 
             onClick={() => setSelectedItem(primaryItem)}
-            className="lg:col-span-7 group p-8 sm:p-12 rounded-3xl bg-linear-to-br from-slate-800/90 via-neutral-900/95 to-neutral-950 border border-slate-400/40 hover:border-slate-200 transition-all duration-500 flex flex-col justify-between cursor-pointer relative overflow-hidden shadow-2xl backdrop-blur-xl"
+            className="lg:col-span-7 group p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-slate-800/90 via-neutral-900/95 to-neutral-950 border border-slate-400/40 hover:border-slate-200 transition-all duration-500 flex flex-col justify-between cursor-pointer relative overflow-hidden shadow-2xl backdrop-blur-xl"
           >
             {/* Jól látható, elegáns háttérrepülő vízjel */}
             <div className="absolute -bottom-10 -right-10 text-slate-200/6 group-hover:text-slate-200/12 transition-colors duration-500 pointer-events-none select-none">
@@ -56,7 +57,7 @@ export default function TravelGuideSection({ initialGuideItems }: TravelGuideSec
             </div>
 
             {/* Felső fényes becsillanás */}
-            <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-slate-300/40 to-transparent pointer-events-none" />
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-slate-300/40 to-transparent pointer-events-none" />
 
             <div className="space-y-6 relative z-10">
               <div className="flex items-center justify-between">
@@ -97,9 +98,9 @@ export default function TravelGuideSection({ initialGuideItems }: TravelGuideSec
                 <div
                   key={item._id || index}
                   onClick={() => setSelectedItem(item)}
-                  className="group p-6 sm:p-8 rounded-3xl bg-linear-to-br from-slate-800/90 via-neutral-900/95 to-neutral-950 border border-slate-400/40 hover:border-slate-200 transition-all duration-500 flex flex-col justify-between cursor-pointer relative overflow-hidden shadow-xl backdrop-blur-xl"
+                  className="group p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-800/90 via-neutral-900/95 to-neutral-950 border border-slate-400/40 hover:border-slate-200 transition-all duration-500 flex flex-col justify-between cursor-pointer relative overflow-hidden shadow-xl backdrop-blur-xl"
                 >
-                  <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-slate-300/30 to-transparent pointer-events-none" />
+                  <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-slate-300/30 to-transparent pointer-events-none" />
 
                   <div className="space-y-3 relative z-10">
                     <div className="flex items-center justify-between">

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface TopArtist {
   _id?: string;
@@ -189,12 +190,15 @@ export default function Header({ topArtists = [] }: HeaderProps) {
                   #{currentArtist.rank || (currentIndex + 1)}
                 </span>
 
-                {/* Előadó kép */}
+                {/* Előadó kép (Next.js Image komponensre cserélve, hogy ne húzza be a gigászi méretet) */}
                 <div className="relative w-24 h-24 sm:w-28 sm:h-28 bg-slate-900 rounded-2xl overflow-hidden shrink-0 flex items-center justify-center border border-white/10 shadow-md">
                   {currentArtist.image && (
-                    <img
+                    <Image
                       src={currentArtist.image}
-                      alt="Artist"
+                      alt={artistName}
+                      width={112}
+                      height={112}
+                      sizes="112px"
                       className="w-full h-full object-cover"
                     />
                   )}

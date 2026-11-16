@@ -1,21 +1,28 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight, Compass } from "lucide-react";
 import { getTravelArticlesByCategoryQuery } from "../../../../sanity/queries";
 import { client } from "../../../../sanity/lib/client";
+
+// Sanity optimalizáló segédfüggvény a képek méretezéséhez
+function urlForSanity(sourceUrl: string, width = 1200) {
+  if (!sourceUrl) return "";
+  const separator = sourceUrl.includes('?') ? '&' : '?';
+  return `${sourceUrl}${separator}w=${width}&auto=format&q=80`;
+}
 
 export default async function MetropolisSection() {
   // Lekérdjük a 'city' kategória elemeit a Sanity-ből, sorrend szerint
   const articles = await client.fetch(getTravelArticlesByCategoryQuery, { category: 'city' });
 
-  // Biztonsági adatok az 1. és 2. elemhez (hardkódolt fallback nélkül)
   const firstCity = articles[0] || {};
   const secondCity = articles[1] || {};
 
   return (
-    <section id="city" className="w-full pt-16 pb-16 md:pb-24 bg-linear-to-b from-neutral-950 via-slate-900 to-slate-100 text-neutral-900 relative overflow-hidden">
+    <section id="city" className="w-full pt-16 pb-16 md:pb-24 bg-gradient-to-b from-neutral-950 via-slate-900 to-slate-100 text-neutral-900 relative overflow-hidden">
       
       {/* Finom, hangulatos háttérfény */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-200 h-125 bg-sky-500/10 rounded-full blur-[180px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-sky-500/10 rounded-full blur-[180px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 z-10 relative space-y-24">
         
@@ -46,7 +53,7 @@ export default async function MetropolisSection() {
                 </h3>
               </div>
               <Link
-                href={firstCity.slug ? `/ktravel/${firstCity.slug}` : '#'}
+                href={firstCity.slug ? `/ktravel/${typeof firstCity.slug === 'string' ? firstCity.slug : firstCity.slug.current}` : '#'}
                 className="inline-flex items-center gap-2 text-sm font-medium text-sky-300 hover:text-white transition-colors group"
               >
                 <span>Artikel lesen</span>
@@ -55,19 +62,21 @@ export default async function MetropolisSection() {
             </div>
 
             <Link
-              href={firstCity.slug ? `/ktravel/${firstCity.slug}` : '#'}
+              href={firstCity.slug ? `/ktravel/${typeof firstCity.slug === 'string' ? firstCity.slug : firstCity.slug.current}` : '#'}
               className="block relative w-full h-[60vh] md:h-[75vh] overflow-hidden group cursor-pointer rounded-2xl shadow-2xl bg-neutral-900"
             >
               {firstCity.image && (
-                <img
-                  src={firstCity.image}
+                <Image
+                  src={urlForSanity(typeof firstCity.image === 'string' ? firstCity.image : firstCity.image?.asset?.url || firstCity.image, 1400)}
                   alt={firstCity.title}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-103"
+                  fill
+                  sizes="100vw"
+                  className="object-cover transition-transform duration-1000 ease-out group-hover:scale-103"
                 />
               )}
-              <div className="absolute inset-0 bg-linear-to-t from-neutral-950 via-transparent to-transparent opacity-80" />
+              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent opacity-80 z-10" />
               
-              <div className="absolute bottom-8 left-8 md:bottom-12 md:left-12 max-w-xl">
+              <div className="absolute bottom-8 left-8 md:bottom-12 md:left-12 max-w-xl z-20">
                 <p className="text-slate-200 text-base md:text-lg font-light leading-relaxed drop-shadow-md">
                   {firstCity.description}
                 </p>
@@ -90,7 +99,7 @@ export default async function MetropolisSection() {
               </p>
               <div className="pt-2">
                 <Link
-                  href={secondCity.slug ? `/ktravel/${secondCity.slug}` : '#'}
+                  href={secondCity.slug ? `/ktravel/${typeof secondCity.slug === 'string' ? secondCity.slug : secondCity.slug.current}` : '#'}
                   className="inline-flex items-center gap-2 text-sm font-medium text-sky-300 hover:text-white transition-colors group"
                 >
                   <span>Artikel lesen</span>
@@ -101,17 +110,19 @@ export default async function MetropolisSection() {
 
             <div className="lg:col-span-7">
               <Link
-                href={secondCity.slug ? `/ktravel/${secondCity.slug}` : '#'}
+                href={secondCity.slug ? `/ktravel/${typeof secondCity.slug === 'string' ? secondCity.slug : secondCity.slug.current}` : '#'}
                 className="block relative w-full h-[50vh] md:h-[65vh] overflow-hidden group cursor-pointer rounded-2xl shadow-2xl bg-neutral-900"
               >
                 {secondCity.image && (
-                  <img
-                    src={secondCity.image}
+                  <Image
+                    src={urlForSanity(typeof secondCity.image === 'string' ? secondCity.image : secondCity.image?.asset?.url || secondCity.image, 1000)}
                     alt={secondCity.title}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-103"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 700px"
+                    className="object-cover transition-transform duration-1000 ease-out group-hover:scale-103"
                   />
                 )}
-                <div className="absolute inset-0 bg-neutral-950/20 group-hover:bg-transparent transition-colors duration-500" />
+                <div className="absolute inset-0 bg-neutral-950/20 group-hover:bg-transparent transition-colors duration-500 z-10" />
               </Link>
             </div>
 
