@@ -21,7 +21,7 @@ export default function KFoodHero() {
   }, []);
 
   return (
-    <section className="relative w-full min-h-137.5 lg:min-h-162.5 flex items-center justify-center py-28 lg:py-36 px-6 md:px-12 lg:px-16 text-center overflow-hidden bg-neutral-950 text-white border-b border-neutral-800/60">
+    <section className="relative w-full min-h-[550px] lg:min-h-[650px] flex items-center justify-center py-28 lg:py-36 px-6 md:px-12 lg:px-16 text-center overflow-hidden bg-neutral-950 text-white border-b border-neutral-800/60">
       
       {/* HÁTTÉR SLIDER & HÁTTÉRFÉNYEK */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">

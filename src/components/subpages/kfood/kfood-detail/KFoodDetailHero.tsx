@@ -66,7 +66,7 @@ export default function KFoodDetailHero({ item }: KFoodDetailHeroProps) {
       {/* Háttér kép finom elmosással és sötétítéssel */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div
-          className="absolute inset-0 opacity-25 scale-105 blur-xs"
+          className="absolute inset-0 opacity-25 scale-105 blur-[1px]"
           style={{
             backgroundImage: `url(${item.image})`,
             backgroundSize: 'cover',

@@ -30,9 +30,14 @@ export async function generateMetadata({ params }: DramaPageProps): Promise<Meta
     return {
       title: `${drama.title} | 82seoul K-Drama`,
       description: drama.description || 'Entdecke fesselnde K-Dramen und Hintergrundinformationen auf 82seoul.',
+      // EZ HIÁNYZOTT ITT IS:
+      alternates: {
+        canonical: `https://www.82seoul.de/kdrama/${id}`,
+      },
       openGraph: {
         title: drama.title,
         description: drama.description,
+        url: `https://www.82seoul.de/kdrama/${id}`,
         images: drama.image ? [drama.image] : [],
       },
     };

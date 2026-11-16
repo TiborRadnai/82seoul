@@ -53,6 +53,13 @@ export default function KFoodSection({ items = [] }: KFoodSectionProps) {
     return '';
   };
 
+  // Sanity CDN képoptimalizáló segédfüggvény (méretre vágás & WebP konverzió a háttérben)
+  const getOptimizedImageUrl = (url: string, width: number = 1200) => {
+    if (!url) return "";
+    const separator = url.includes("?") ? "&" : "?";
+    return `${url}${separator}w=${width}&auto=format&q=85`;
+  };
+
   // Segédfüggvény a csípősség jelölés megjelenítéséhez
   const renderSpiceBadge = (level?: '1' | '2' | '3') => {
     if (!level) return null;
@@ -103,7 +110,7 @@ export default function KFoodSection({ items = [] }: KFoodSectionProps) {
             className="lg:col-span-7 group relative h-120 md:h-135 rounded-3xl overflow-hidden bg-black border border-neutral-800 shadow-2xl transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[0_25px_50px_-12px_rgba(234,88,12,0.25)] hover:border-amber-500/50 block cursor-pointer"
           >
             <img
-              src={featuredItem.image || ""}
+              src={getOptimizedImageUrl(featuredItem.image, 1200)}
               alt={featuredItem.title}
               className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             />
@@ -152,7 +159,7 @@ export default function KFoodSection({ items = [] }: KFoodSectionProps) {
                 className="group relative h-60 md:h-64 rounded-3xl overflow-hidden bg-black border border-neutral-800 shadow-xl transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-12px_rgba(234,88,12,0.2)] hover:border-amber-500/40 block cursor-pointer"
               >
                 <img
-                  src={mediumItem.image || ""}
+                  src={getOptimizedImageUrl(mediumItem.image, 800)}
                   alt={mediumItem.title}
                   className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
@@ -187,7 +194,7 @@ export default function KFoodSection({ items = [] }: KFoodSectionProps) {
                   className="group relative h-56 md:h-64 rounded-3xl overflow-hidden bg-black border border-neutral-800 shadow-xl transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-12px_rgba(234,88,12,0.2)] hover:border-amber-500/40 block cursor-pointer"
                 >
                   <img
-                    src={item.image || ""}
+                    src={getOptimizedImageUrl(item.image, 500)}
                     alt={item.title}
                     className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />

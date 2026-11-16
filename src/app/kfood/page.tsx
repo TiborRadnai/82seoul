@@ -4,9 +4,23 @@ import KFoodHero from '@/components/subpages/kfood/KFoodHero';
 import KFoodCatalog from '@/components/subpages/kfood/KFoodCatalog';
 import { client } from '../../../sanity/lib/client';
 import { getRecipesQuery, getProductsQuery } from '../../../sanity/queries';
+import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+
+export const metadata: Metadata = {
+  title: 'K-Food Rezepte & Koreanische Produkte | 82seoul K-Food',
+  description: 'Entdecke authentische koreanische Rezepte, traditionelle Gerichte und K-Food Produkte auf 82seoul.',
+  alternates: {
+    canonical: 'https://www.82seoul.de/kfood',
+  },
+  openGraph: {
+    title: 'K-Food Rezepte & Produkte | 82seoul K-Food',
+    description: 'Entdecke authentische koreanische Rezepte und traditionelle Gerichte.',
+    url: 'https://www.82seoul.de/kfood',
+  },
+};
 
 interface KFoodMainPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

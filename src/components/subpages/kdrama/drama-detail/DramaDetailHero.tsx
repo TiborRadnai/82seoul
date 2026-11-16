@@ -8,30 +8,42 @@ interface DramaDetailHeroProps {
   drama: any;
 }
 
+// Sanity optimalizáló segédfüggvény
+function urlForSanity(sourceUrl: string, width = 1200) {
+  if (!sourceUrl) return "";
+  const separator = sourceUrl.includes('?') ? '&' : '?';
+  return `${sourceUrl}${separator}w=${width}&auto=format&q=75`;
+}
+
 export default function DramaDetailHero({ drama }: DramaDetailHeroProps) {
-  const wideImg = drama.wideImage || drama.image;
-  const mobileImg = drama.image || drama.wideImage;
+  // Mobilon az álló kép (image) kell, hogy a szereplők ne lógjanak ki!
+  const rawMobile = drama.image || drama.wideImage;
+  // Deszktopon a fekvő kép (wideImage), ha van, különben az álló
+  const rawWide = drama.wideImage || drama.image;
+
+  const mobileImg = urlForSanity(rawMobile, 500); // Mobilon kicsi, gyors álló kép
+  const wideImg = urlForSanity(rawWide, 1400);   // Deszktopon széles kép
 
   return (
-    <div className="relative w-full h-[85vh] min-h-150 flex items-end overflow-hidden bg-neutral-950">
+    <div className="relative w-full h-[85vh] min-h-137.5 flex items-end overflow-hidden bg-neutral-950">
       
-      {/* Háttérképek - Reszponzív váltás (Desktopon wide, mobilon álló kép) */}
+      {/* Háttérképek - Külön mobil (álló) és deszktop (fekvő) ág */}
       <div className="absolute inset-0">
+        
+        {/* Deszktop háttér (Fekvő) - NINCS priority, hogy mobilon ne terhelje a sávszélességet! */}
         {wideImg && (
           <div className="hidden md:block absolute inset-0">
             <Image
               src={wideImg}
               alt={drama.title}
               fill
-              priority
-              loading="eager"
               sizes="100vw"
-              unoptimized
-              className="object-cover object-top opacity-55 scale-100"
+              className="object-cover object-top opacity-55"
             />
           </div>
         )}
 
+        {/* Mobil háttér (Álló) - LCP elem priority-vel, eager töltéssel és fetchPriority="high"-val */}
         {mobileImg && (
           <div className="block md:hidden absolute inset-0">
             <Image
@@ -40,14 +52,14 @@ export default function DramaDetailHero({ drama }: DramaDetailHeroProps) {
               fill
               priority
               loading="eager"
+              fetchPriority="high"
               sizes="100vw"
-              unoptimized
-              className="object-cover object-center opacity-60 scale-100"
+              className="object-cover object-center opacity-60"
             />
           </div>
         )}
 
-        {/* Sötétítő gradiensek, hogy a szöveg olvasható maradjon */}
+        {/* Sötétítő gradiensek */}
         <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0c] via-[#0a0a0c]/50 to-black/30" />
         <div className="absolute inset-0 bg-linear-to-r from-[#0a0a0c]/90 via-transparent to-transparent" />
       </div>
@@ -75,7 +87,7 @@ export default function DramaDetailHero({ drama }: DramaDetailHeroProps) {
             </span>
           )}
           {drama.rating && (
-            <span className="text-xs font-bold text-amber-300 bg-amber-950/80 px-2.5 py-0.5 rounded-md border border-amber-800/80">
+            <span className="text-xs font-bold text-amber-300 bg-amber-950/80 px-2.5 py-0.5 rounded-md border border-amber-800">
               ★ {drama.rating}
             </span>
           )}

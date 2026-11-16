@@ -49,7 +49,7 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
   const isEven = index % 2 === 0;
   const rankBadge = getRankBadgeStyle(band.rank);
 
-  // Intelligens segédfüggvény a tagok vagy a nemhelyes szóló státusz megjelenítésére
+  // Intelligens segédfüggvény a tagok vagy a szóló státusz megjelenítésére
   const renderMemberInfo = () => {
     if (band.membersList?.length) {
       return `${band.membersList.length} Mitglieder`;
@@ -57,7 +57,6 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
     if (band.members) {
       return `${band.members} Mitglieder`;
     }
-    // Ha szóló előadó, a Sanity-ben megadott gender alapján döntsük el:
     if (band.gender === 'female') {
       return 'Solo-Künstlerin';
     }
@@ -112,6 +111,8 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
     }
   };
 
+  const imageUrl = band.wideImage || band.image;
+
   return (
     <div className="relative py-6 transform-gpu backface-hidden">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
@@ -137,7 +138,7 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
             </span>
           </div>
 
-          <div className="relative flex items-center justify-between w-full mb-4 min-h-20 sm:min-h-27.5 overflow-hidden">
+          <div className="relative flex items-center justify-between w-full mb-4 min-h-[80px] sm:min-h-[110px] overflow-hidden">
             <h2 
               className={`font-serif font-normal text-zinc-900 tracking-tight leading-none z-10 break-normal ${
                 band.name?.length > 10 
@@ -183,7 +184,7 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
           </p>
         </motion.div>
 
-        {/* --- KÉP BLOKK --- */}
+        {/* --- KÉP BLOKK (Hivatalos Next.js Image komponens) --- */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -194,7 +195,7 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
           }`}
         >
           <Link href={detailHref} className="block group">
-            <div className="relative w-full aspect-21/9 rounded-none border-none shadow-2xl overflow-hidden bg-zinc-300 transform-gpu">
+            <div className="relative w-full aspect-[21/9] rounded-none border-none shadow-2xl overflow-hidden bg-zinc-300 transform-gpu">
               
               {showRank && (
                 <div className="absolute top-4 right-4 z-20 pointer-events-none">
@@ -207,14 +208,17 @@ export default function KPopGroupCard({ band, index, showRank = true }: KPopGrou
                 </div>
               )}
 
-              {(band.wideImage || band.image) ? (
-                <Image
-                  src={band.wideImage || band.image}
-                  alt={band.name || 'K-Pop Group'}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out transform-gpu"
-                />
+              {imageUrl ? (
+              <Image
+                src={imageUrl}
+                alt={band.name || 'K-Pop Group'}
+                fill
+                loading={index === 0 ? "eager" : "lazy"}
+                priority={index === 0}
+                fetchPriority={index === 0 ? "high" : "auto"}
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out transform-gpu"
+              />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-zinc-500 text-xs font-medium">
                   Kein Bild verfügbar

@@ -4,6 +4,7 @@ import React, { useMemo, useEffect } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import KPopGroupCard from './KPopGroupCard';
+import KpopFilterInfoBar from './KpopFilterInfoBar';
 import KPopFilter, { GenderCategory, AgencyCategory, GenerationCategory } from './KPopFilter';
 
 interface KPopGroupListProps {
@@ -15,29 +16,82 @@ export default function KPopGroupList({ initialArtists }: KPopGroupListProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Olvassuk ki az értékeket közvetlenül az URL-ből, vagy adjuk meg az alapértelmezetteket
-  const selectedGender = (searchParams.get('gender') as GenderCategory) || 'top10';
+  // Olvassuk ki az értékeket közvetlenül az URL-ből. 
+  // A gender esetében ha nincs benn, akkor 'top10', de ha benn van ('all', 'gg', stb.), akkor azt használjuk!
+  const genderParam = searchParams.get('gender');
+  const selectedGender: GenderCategory = genderParam ? (genderParam as GenderCategory) : 'top10';
   const selectedAgency = (searchParams.get('agency') as AgencyCategory) || 'all';
   const selectedGeneration = (searchParams.get('generation') as GenerationCategory) || 'all';
   const searchQuery = searchParams.get('q') || '';
 
-  // Segédfüggvény az URL paraméterek frissítésére anélkül, hogy újra töltené az oldalt (router.replace)
-  const updateQueryParam = (key: string, value: string) => {
+  // Segédfüggvény az URL paraméterek frissítésére
+  const updateQueryParams = (updates: Record<string, string>) => {
     const params = new URLSearchParams(searchParams.toString());
-    
-    if (value) {
-      params.set(key, value);
-    } else {
-      params.delete(key);
-    }
-    
+
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value) {
+        if (key === 'gender') {
+          // A gender értéket MINDIG beírjuk az URL-be (top10, all, gg, bg, solo), nem törölhetjük ki!
+          params.set('gender', value);
+        } else if (value !== 'all') {
+          params.set(key, value);
+        } else {
+          params.delete(key);
+        }
+      } else {
+        if (key === 'gender') {
+          params.set('gender', 'top10');
+        } else {
+          params.delete(key);
+        }
+      }
+    });
+
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
-  const setSelectedGender = (val: GenderCategory) => updateQueryParam('gender', val);
-  const setSelectedAgency = (val: AgencyCategory) => updateQueryParam('agency', val);
-  const setSelectedGeneration = (val: GenerationCategory) => updateQueryParam('generation', val);
-  const setSearchQuery = (val: string) => updateQueryParam('q', val);
+  // 1. Kategória váltás (Top 10, Alle, Girlgroups, Boygroups, Solos)
+  const setSelectedGender = (val: GenderCategory) => {
+    if (val === 'top10') {
+      updateQueryParams({
+        gender: 'top10',
+        agency: 'all',
+        generation: 'all',
+        q: '',
+      });
+    } else {
+      updateQueryParams({
+        gender: val,
+        agency: 'all',
+        generation: 'all',
+      });
+    }
+  };
+
+  // 2. Ügynökség szűrés: ha beállítanak egy ügynökséget, a kategória automatikusan 'all'-ra vált, hogy a teljes bázisból szűrjön
+  const setSelectedAgency = (val: AgencyCategory) => {
+    updateQueryParams({
+      agency: val,
+      gender: val !== 'all' ? 'all' : selectedGender,
+    });
+  };
+
+  // 3. Generáció szűrés: szintén 'all'-ra állítja a kategóriát
+  const setSelectedGeneration = (val: GenerationCategory) => {
+    updateQueryParams({
+      generation: val,
+      gender: val !== 'all' ? 'all' : selectedGender,
+    });
+  };
+
+  // 4. Keresés
+  const setSearchQuery = (val: string) => {
+    const updates: Record<string, string> = { q: val };
+    if (val.trim() && selectedGender === 'top10') {
+      updates.gender = 'all';
+    }
+    updateQueryParams(updates);
+  };
 
   // Ha visszalépünk egy horgonnyal (pl. #artist-bts), automatikusan odagörgetünk
   useEffect(() => {
@@ -66,7 +120,7 @@ export default function KPopGroupList({ initialArtists }: KPopGroupListProps) {
     }));
   }, [initialArtists]);
 
-  // ---> ITT A MEGOLDÁS: A TELJES LISTA A SCHNELLINDEX DRAWERNEK <---
+  // TELJES LISTA A SCHNELLINDEX DRAWERNEK
   const completeArtistsList = useMemo(() => {
     return initialArtists.map((item) => ({
       id: item.id,
@@ -79,57 +133,94 @@ export default function KPopGroupList({ initialArtists }: KPopGroupListProps) {
     }));
   }, [initialArtists]);
 
-const handleSelectArtist = (id: string) => {
-    // Navigáció az előadó saját aloldalára
+  const handleSelectArtist = (id: string) => {
     router.push(`/kpop/${id}`);
   };
 
   const filteredGroups = useMemo(() => {
-    const sortedData = [...initialArtists].sort((a, b) => (a.rank || 99) - (b.rank || 99));
+    // Rendezés: akiknek van érvényes rank-ja (> 0), azok előre kerülnek sorrendben, a többiek hátra
+    const sortedData = [...initialArtists].sort((a, b) => {
+      const rankA = a.rank && a.rank > 0 ? a.rank : 999;
+      const rankB = b.rank && b.rank > 0 ? b.rank : 999;
+      return rankA - rankB;
+    });
 
     return sortedData.filter((item) => {
+      // 1. Kategória ('top10', 'all', 'bg', 'gg', 'solo')
+      // Ha 'top10' vagy 'all' van kiválasztva, akkor minden kategória átmegy ('all' esetén is mind a 28)
       const matchesGender =
         selectedGender === 'top10' ||
         selectedGender === 'all' ||
-        item.category === selectedGender;
+        item.category?.toLowerCase() === selectedGender.toLowerCase();
 
+      // 2. Ügynökség ('HYBE', 'SM', 'YG', 'JYP', 'OTHER') - kis/nagybetű független
       const matchesAgency =
-        selectedAgency === 'all' || item.filterAgency === selectedAgency;
+        selectedAgency === 'all' ||
+        item.filterAgency?.toUpperCase() === selectedAgency.toUpperCase();
 
-      const matchesGeneration =
-        selectedGeneration === 'all' || item.generation === selectedGeneration;
+      // 3. Generáció ('3rd', '4th', '5th' stb.) - számjegy vagy szöveg egyezés
+      let matchesGeneration = true;
+      if (selectedGeneration !== 'all') {
+        const dbGen = String(item.generation || '').toLowerCase().trim();
+        const filterGen = String(selectedGeneration).toLowerCase().trim();
+        
+        const dbNum = dbGen.replace(/\D/g, '');
+        const filterNum = filterGen.replace(/\D/g, '');
 
+        if (dbNum && filterNum) {
+          matchesGeneration = dbNum === filterNum;
+        } else {
+          matchesGeneration = dbGen === filterGen;
+        }
+      }
+
+      // 4. Keresőszó
       let matchesSearch = true;
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
         const matchesName = item.name?.toLowerCase().includes(q) || false;
         const matchesAgencyName = (item.agency || item.filterAgency || '').toLowerCase().includes(q);
-        const matchesDescription = (item.description || '').toLowerCase().includes(q) ||
+        const matchesDescription =
+          (item.description || '').toLowerCase().includes(q) ||
           (item.tagline ? item.tagline.toLowerCase().includes(q) : false);
         const matchesFandom = item.fandom ? item.fandom.toLowerCase().includes(q) : false;
-        const matchesGenQuery = item.generation ? item.generation.toLowerCase().includes(q) : false;
-        
-        const matchesMembers = item.membersList?.some((m: any) => {
-          if (typeof m === 'string') return m.toLowerCase().includes(q);
-          return (
-            m.name?.toLowerCase().includes(q) ||
-            (m.role ? m.role.toLowerCase().includes(q) : false)
-          );
-        }) ?? false;
+        const matchesGenQuery = item.generation ? String(item.generation).toLowerCase().includes(q) : false;
 
-        matchesSearch = matchesName || matchesAgencyName || matchesDescription || matchesFandom || matchesGenQuery || matchesMembers;
+        const matchesMembers =
+          item.membersList?.some((m: any) => {
+            if (typeof m === 'string') return m.toLowerCase().includes(q);
+            return (
+              m.name?.toLowerCase().includes(q) ||
+              (m.role ? m.role.toLowerCase().includes(q) : false)
+            );
+          }) ?? false;
+
+        matchesSearch =
+          matchesName ||
+          matchesAgencyName ||
+          matchesDescription ||
+          matchesFandom ||
+          matchesGenQuery ||
+          matchesMembers;
       }
 
       return matchesGender && matchesAgency && matchesGeneration && matchesSearch;
     });
   }, [initialArtists, selectedGender, selectedAgency, selectedGeneration, searchQuery]);
 
+  // Csak akkor vágjuk 10-re és mutatunk rangsort, ha tényleg a tiszta Top 10 nézet van aktív
+  const isPureTop10 =
+    selectedGender === 'top10' &&
+    selectedGeneration === 'all' &&
+    selectedAgency === 'all' &&
+    !searchQuery.trim();
+
   const displayedGroups = useMemo(() => {
-    if (selectedGender === 'top10' && selectedGeneration === 'all' && selectedAgency === 'all' && !searchQuery.trim()) {
+    if (isPureTop10) {
       return filteredGroups.slice(0, 10);
     }
     return filteredGroups;
-  }, [filteredGroups, selectedGender, selectedGeneration, selectedAgency, searchQuery]);
+  }, [filteredGroups, isPureTop10]);
 
   const handleResetFilters = () => {
     router.replace(pathname, { scroll: false });
@@ -137,7 +228,6 @@ const handleSelectArtist = (id: string) => {
 
   return (
     <section className="max-w-[1800px] mx-auto px-4 sm:px-8 py-12 sm:py-20">
-      
       <KPopFilter
         selectedGender={selectedGender}
         onSelectGender={setSelectedGender}
@@ -149,8 +239,16 @@ const handleSelectArtist = (id: string) => {
         onSearchChange={setSearchQuery}
         totalCount={displayedGroups.length}
         artists={artistIndexData}
-        allArtists={completeArtistsList}  // <-- ITT ADJUK ÁT A TELJES LISTÁT A DRAWERNEK
+        allArtists={completeArtistsList}
         onSelectArtist={handleSelectArtist}
+      />
+
+      <KpopFilterInfoBar
+        activeFilter={selectedGender}
+        selectedAgency={selectedAgency}
+        selectedGeneration={selectedGeneration}
+        searchQuery={searchQuery}
+        totalCount={displayedGroups.length}
       />
 
       {displayedGroups.length === 0 ? (
@@ -178,17 +276,16 @@ const handleSelectArtist = (id: string) => {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.4 }}
               >
-                <KPopGroupCard 
-                  band={group} 
-                  index={index} 
-                  showRank={selectedGender === 'top10' && !searchQuery.trim()} 
+                <KPopGroupCard
+                  band={group}
+                  index={index}
+                  showRank={isPureTop10}
                 />
               </motion.div>
             ))}
           </AnimatePresence>
         </motion.div>
       )}
-
     </section>
   );
 }

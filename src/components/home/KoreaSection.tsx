@@ -14,6 +14,13 @@ export default async function KoreaSection() {
   const culture = cultureArticles[0] || {};
   const nature = natureArticles[0] || {};
 
+  // Sanity CDN képoptimalizáló segédfüggvény (méretre vágás & WebP konverzió a háttérben)
+  const getOptimizedImageUrl = (url: string, width: number = 1200) => {
+    if (!url) return "";
+    const separator = url.includes("?") ? "&" : "?";
+    return `${url}${separator}w=${width}&auto=format&q=85`;
+  };
+
   return (
     <section className="w-screen relative left-1/2 -translate-x-1/2 py-24 md:py-36 bg-linear-to-b from-neutral-950 via-slate-100 to-slate-50 text-neutral-900 overflow-hidden border-t border-neutral-800/60">
       
@@ -54,7 +61,7 @@ export default async function KoreaSection() {
           >
             {city.image && (
               <img
-                src={city.image}
+                src={getOptimizedImageUrl(city.image, 1200)}
                 alt={city.title || "Seoul Skyline"}
                 className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               />
@@ -95,7 +102,7 @@ export default async function KoreaSection() {
           >
             {culture.image && (
               <img
-                src={culture.image}
+                src={getOptimizedImageUrl(culture.image, 1000)}
                 alt={culture.title || "Traditionelles koreanisches Hanok"}
                 className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               />
@@ -128,7 +135,7 @@ export default async function KoreaSection() {
           >
             {nature.image && (
               <img
-                src={nature.image}
+                src={getOptimizedImageUrl(nature.image, 800)}
                 alt={nature.title || "Jeju Vulkan Küste"}
                 className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               />

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from "next/navigation";
-import { Sparkles, ArrowLeft, Building2, Mail, Phone, FileText } from "lucide-react";
+import { Sparkles, ArrowLeft, Building2, Mail, Phone, FileText, Image as ImageIcon } from "lucide-react";
 
 export default function ImpressumPage() {
   const router = useRouter();
@@ -70,7 +70,7 @@ export default function ImpressumPage() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
               <div className="bg-slate-50 border border-slate-200 p-5 rounded-2xl space-y-2 shadow-xs">
-                <h3 className="text-slate-900 font-bold text-sm tracking-wide uppercase text-amber-600 flex items-center gap-2">
+                <h3 className=" font-bold text-sm tracking-wide uppercase text-amber-600 flex items-center gap-2">
                   <Mail className="w-4 h-4" /> Kontakt
                 </h3>
                 <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
@@ -80,7 +80,7 @@ export default function ImpressumPage() {
               </div>
 
               <div className="bg-slate-50 border border-slate-200 p-5 rounded-2xl space-y-2 shadow-xs">
-                <h3 className="text-slate-900 font-bold text-sm tracking-wide uppercase text-rose-600 flex items-center gap-2">
+                <h3 className=" font-bold text-sm tracking-wide uppercase text-rose-600 flex items-center gap-2">
                   <FileText className="w-4 h-4" /> Steuernummer & W-IdNr.
                 </h3>
                 <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
@@ -91,7 +91,21 @@ export default function ImpressumPage() {
             </div>
           </section>
 
-          {/* 3. Szekció: Streitbeilegung */}
+          {/* 3. Szekció: Bildnachweise & Urheberrecht (ÚJ!) */}
+          <section className="bg-white border border-slate-200/80 rounded-3xl p-8 md:p-10 relative overflow-hidden space-y-4 shadow-xs">
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-3">
+              <span className="w-2 h-2 rounded-full bg-indigo-500" />
+              Bildnachweise & Urheberrecht
+            </h2>
+            <p className="text-slate-700 text-sm md:text-base leading-relaxed">
+              Die auf dieser Website verwendeten Bilder, Grafiken, Promomaterialien und Cover stammen teilweise von offiziellen Presseportalen, den Social-Media-Präsenzen der Künstler (Instagram/TikTok) oder wurden über lizenzierte Plattformen (Envato Elements) erworben.
+            </p>
+            <p className="text-slate-700 text-sm md:text-base leading-relaxed">
+              Sämtliche Urheber- und Verwertungsrechte der verwendeten Künstlerfotos, Logos und Albencover verbleiben bei den jeweiligen Urhebern, Plattenlabels oder offiziellen Rechteinhabern. Sollten Sie dennoch auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.
+            </p>
+          </section>
+
+          {/* 4. Szekció: Streitbeilegung */}
           <section className="bg-white border border-slate-200/80 rounded-3xl p-8 md:p-10 relative overflow-hidden space-y-4 shadow-xs">
             <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-3">
               <span className="w-2 h-2 rounded-full bg-emerald-500" />

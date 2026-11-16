@@ -42,9 +42,14 @@ export async function generateMetadata({ params }: KFoodPageProps): Promise<Meta
     return {
       title: `${item.title} | 82seoul ${typeSuffix}`,
       description: item.description || 'Entdecke authentische koreanische Rezepte und Lebensmittel bei 82seoul.',
+      // EZ HIÁNYZOTT ITT IS:
+      alternates: {
+        canonical: `https://www.82seoul.de/kfood/${id}`,
+      },
       openGraph: {
         title: item.title,
         description: item.description,
+        url: `https://www.82seoul.de/kfood/${id}`,
         images: item.image ? [item.image] : [],
       },
     };

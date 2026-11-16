@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from "react";
+import Image from "next/image";
 import { Music2, ArrowUpRight } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
@@ -80,12 +81,16 @@ export default function KPopSection({ groups }: { groups: any[] }) {
                 onClick={() => handleCardClick(group)}
                 className="w-75 sm:w-95 md:w-105 shrink-0 group relative h-120 md:h-125 rounded-3xl overflow-hidden cursor-pointer bg-neutral-900 border border-slate-200/60 shadow-xl transition-all duration-500 ease-out hover:-translate-y-2 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] hover:border-slate-300"
               >
-                <img
-                  src={group.image}
-                  alt={group.name}
-                  draggable={false}
-                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                />
+                {/* Optimalizált Next.js Image komponens a slider kártyákhoz */}
+                {group.image && (
+                  <Image
+                    src={group.image}
+                    alt={group.name}
+                    fill
+                    sizes="(max-width: 640px) 300px, (max-width: 768px) 380px, 420px"
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                )}
 
                 <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 via-45% to-transparent opacity-85 transition-opacity duration-300 group-hover:opacity-95" />
 

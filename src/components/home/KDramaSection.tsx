@@ -92,6 +92,13 @@ export default function KDramaSection() {
     setSelectedDrama(drama);
   };
 
+  // Sanity CDN képoptimalizáló segédfüggvény (méretre vágás & WebP konverzió háttérben)
+  const getOptimizedImageUrl = (url: string, width: number = 1200) => {
+    if (!url) return "";
+    const separator = url.includes("?") ? "&" : "?";
+    return `${url}${separator}w=${width}&auto=format&q=85`;
+  };
+
   if (loading) {
     return (
       <section className="w-full py-24 bg-neutral-950 text-white relative overflow-hidden border-t border-neutral-800/60 flex items-center justify-center min-h-125">
@@ -190,7 +197,7 @@ export default function KDramaSection() {
                 <div className="relative w-14 h-14 rounded-md overflow-hidden shrink-0 border border-neutral-700/50">
                   {currentSlide?.wideImage ? (
                     <img 
-                      src={currentSlide.wideImage} 
+                      src={getOptimizedImageUrl(currentSlide.wideImage, 150)} 
                       alt={currentSlide.title} 
                       className="w-full h-full object-cover transition-transform duration-500 group-hover/mini:scale-110"
                     />
@@ -248,7 +255,7 @@ export default function KDramaSection() {
                   >
                     {slide.wideImage ? (
                       <img
-                        src={slide.wideImage}
+                        src={getOptimizedImageUrl(slide.wideImage, 1200)}
                         alt={slide.title}
                         className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
                       />
@@ -327,7 +334,7 @@ export default function KDramaSection() {
                   >
                     {slide.wideImage && (
                       <img
-                        src={slide.wideImage}
+                        src={getOptimizedImageUrl(slide.wideImage, 300)}
                         alt={slide.title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />

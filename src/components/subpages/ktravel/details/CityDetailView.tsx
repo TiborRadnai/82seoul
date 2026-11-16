@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState } from "react";
 import Link from "next/link";
@@ -25,25 +25,22 @@ interface DetailViewProps {
     image?: any;
     gallery?: GalleryItem[];
     body?: any;
-    quickFacts?: QuickFactItem[]; // <-- Dinamikus quickFacts mező
+    quickFacts?: QuickFactItem[];
   };
 }
 
 export default function CityDetailView({ article }: DetailViewProps) {
-  // Index alapú state a lightboxhoz (null, ha nincs megnyitva, különben a kép sorszáma)
   const [currentIndex, setCurrentIndex] = useState<number | null>(null);
 
   const gallery = article.gallery || [];
   const quickFacts = article.quickFacts || [];
 
-  // Lapozás előre (végtelenítve)
   const nextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (gallery.length === 0) return;
     setCurrentIndex((prev) => (prev !== null ? (prev + 1) % gallery.length : 0));
   };
 
-  // Lapozás hátra (végtelenítve)
   const prevImage = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (gallery.length === 0) return;
@@ -53,7 +50,7 @@ export default function CityDetailView({ article }: DetailViewProps) {
   const activeImage = currentIndex !== null ? gallery[currentIndex] : null;
 
   return (
-    <div className="w-full min-h-screen bg-linear-to-b from-[#0d0d0f] via-[#dce7f0] to-[#eaf2fb] text-neutral-900 selection:bg-[#0284c7]/30 pt-28 pb-32 px-6 lg:px-16 relative">
+    <div className="w-full min-h-screen bg-linear-to-b from-[#0d0d0f] via-[#dce7f0] to-[#eaf2fb] text-neutral-900 selection:bg-[#0284c7]/30 pt-36 pb-32 px-6 lg:px-16 relative">
       <article className="max-w-7xl mx-auto space-y-16">
         
         {/* Navigáció & Kategória Tag */}
@@ -71,7 +68,7 @@ export default function CityDetailView({ article }: DetailViewProps) {
           </span>
         </div>
 
-        {/* Cím és Rövid leírás (Description) */}
+        {/* Cím és Rövid leírás */}
         <div className="space-y-6 max-w-5xl">
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-light tracking-tight text-white leading-[1.1]">
             {article.title}
@@ -83,27 +80,28 @@ export default function CityDetailView({ article }: DetailViewProps) {
           )}
         </div>
 
-        {/* Kiemelt Kép (Borító - 'image') */}
+        {/* Kiemelt Kép (Borító) - Sanity optimalizált URL-lel */}
         {article.image && (
           <div className="relative w-full h-110 sm:h-140 rounded-2xl overflow-hidden border border-neutral-300/80 shadow-2xl bg-neutral-900">
             <Image
-              src={article.image}
+              src={`${typeof article.image === 'string' ? article.image : article.image?.asset?.url || article.image}${typeof article.image === 'string' && article.image.includes('?') ? '&' : '?' }w=1200&auto=format&q=80`}
               alt={article.title}
               fill
+              sizes="100vw"
               className="object-cover"
               priority
             />
           </div>
         )}
 
-        {/* Részletes szerkesztőségi tartalom (Body - Portable Text) */}
+        {/* Részletes szerkesztőségi tartalom */}
         <div className="max-w-5xl prose prose-lg md:prose-xl font-light leading-relaxed space-y-8 text-neutral-800 
           prose-headings:text-neutral-950 prose-headings:font-light prose-h2:text-3xl prose-h3:text-2xl 
           prose-a:text-[#0284c7] prose-strong:text-neutral-950 prose-strong:font-normal pt-4">
           {article.body && <PortableText value={article.body} />}
         </div>
 
-        {/* Képgaléria (Gallery) + Lightbox Trigger & Képaláírások */}
+        {/* Képgaléria - Sanity optimalizált URL-lel és sizes-szal */}
         {gallery.length > 0 && (
           <div className="space-y-8 pt-12 border-t border-neutral-300/80">
             <div className="flex items-center gap-2 text-xs font-mono tracking-[0.2em] uppercase text-[#0284c7]">
@@ -114,15 +112,15 @@ export default function CityDetailView({ article }: DetailViewProps) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               {gallery.map((item, index) => (
                 <div key={index} className="space-y-3">
-                  {/* Kattintható Kép Kártya index átadással */}
                   <div 
                     onClick={() => setCurrentIndex(index)}
                     className="relative h-80 rounded-2xl overflow-hidden border border-neutral-300/80 bg-neutral-900 shadow-xl group cursor-pointer"
                   >
                     <Image
-                      src={item.url}
+                      src={`${item.url}${item.url.includes('?') ? '&' : '?' }w=600&auto=format&q=80`}
                       alt={item.caption || `${article.title} gallery image ${index + 1}`}
                       fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
                       className="object-cover hover:scale-105 transition-transform duration-700"
                     />
                     <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -132,7 +130,6 @@ export default function CityDetailView({ article }: DetailViewProps) {
                     </div>
                   </div>
 
-                  {/* Képaláírás a kép alatt */}
                   {item.caption && (
                     <p className="text-xs font-mono text-neutral-600 tracking-wide px-1">
                       // {item.caption}
@@ -144,7 +141,7 @@ export default function CityDetailView({ article }: DetailViewProps) {
           </div>
         )}
 
-        {/* Dinamikus Quick Facts Doboz (Teljes szélességű & Reszponzív 3 oszlopos rács) */}
+        {/* Quick Facts Doboz */}
         {quickFacts.length > 0 && (
           <div className="w-full mt-16 p-8 md:p-10 rounded-3xl bg-white/70 border border-neutral-300/80 backdrop-blur-md space-y-6 shadow-xl">
             <h4 className="text-xs font-mono tracking-[0.2em] uppercase text-[#0284c7]">
@@ -166,13 +163,12 @@ export default function CityDetailView({ article }: DetailViewProps) {
 
       </article>
 
-      {/* --- VÉGTELENÍTETT LAPOZHATÓ LIGHTBOX MODÁLIS ABLAK --- */}
+      {/* Lightbox Modális Ablak */}
       {activeImage && (
         <div 
           onClick={() => setCurrentIndex(null)}
           className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex flex-col items-center justify-center p-4 sm:p-12 animate-fade-in select-none"
         >
-          {/* Bezáró Gomb */}
           <button 
             onClick={() => setCurrentIndex(null)}
             className="absolute top-6 right-6 text-white bg-white/10 hover:bg-white/20 p-3 rounded-full transition-colors border border-white/20 cursor-pointer z-50"
@@ -181,7 +177,6 @@ export default function CityDetailView({ article }: DetailViewProps) {
             <X className="w-6 h-6" />
           </button>
 
-          {/* Balra Nyíl (Előző kép) */}
           <button 
             onClick={prevImage}
             className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 text-white bg-white/10 hover:bg-white/20 p-3 sm:p-4 rounded-full transition-colors border border-white/20 cursor-pointer z-50"
@@ -190,7 +185,6 @@ export default function CityDetailView({ article }: DetailViewProps) {
             <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8" />
           </button>
 
-          {/* Jobbra Nyíl (Következő kép) */}
           <button 
             onClick={nextImage}
             className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 text-white bg-white/10 hover:bg-white/20 p-3 sm:p-4 rounded-full transition-colors border border-white/20 cursor-pointer z-50"
@@ -199,21 +193,20 @@ export default function CityDetailView({ article }: DetailViewProps) {
             <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" />
           </button>
 
-          {/* Nagyított kép konténer */}
           <div 
             onClick={(e) => e.stopPropagation()} 
             className="relative max-w-5xl w-full h-[70vh] rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-neutral-950 flex items-center justify-center"
           >
             <Image
-              src={activeImage.url}
+              src={`${activeImage.url}${activeImage.url.includes('?') ? '&' : '?' }w=1200&auto=format&q=80`}
               alt={activeImage.caption || "Detailansicht"}
               fill
+              sizes="(max-width: 1024px) 100vw, 1024px"
               className="object-contain"
               priority
             />
           </div>
 
-          {/* Alul a képaláírás és az aktuális pozíció számlálója (pl. 1 / 4) */}
           <div 
             onClick={(e) => e.stopPropagation()}
             className="mt-6 max-w-3xl text-center px-4 space-y-2"

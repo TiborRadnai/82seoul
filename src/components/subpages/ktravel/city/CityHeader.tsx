@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function CityHeader() {
   return (
-    <div className="relative w-full h-[85vh] min-h-150 flex flex-col justify-center overflow-hidden bg-black text-white">
+    <div className="relative w-full h-[85vh] min-h-[600px] flex flex-col justify-center overflow-hidden bg-black text-white">
       {/* A fenséges helyi háttérkép lassan pulzáló zoom effekttel */}
       <div className="absolute inset-0 overflow-hidden">
         <Image
@@ -15,7 +15,7 @@ export default function CityHeader() {
       </div>
 
       {/* Többrétegű, prémium magazin sötétítés */}
-      <div className="absolute inset-0 bg-linear-to-t from-black/95 via-black/40 to-black/70" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/70" />
 
       {/* Központi, monumentális Hero Tartalom – Tiszta, szellős és grandiózus */}
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center my-auto">

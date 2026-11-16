@@ -17,6 +17,13 @@ interface DramaHeroProps {
   dramas?: any[];
 }
 
+// Sanity optimalizáló segédfüggvény
+function urlForSanity(sourceUrl: string, width = 1200) {
+  if (!sourceUrl) return "";
+  const separator = sourceUrl.includes('?') ? '&' : '?';
+  return `${sourceUrl}${separator}w=${width}&auto=format&q=75`;
+}
+
 export default function DramaHero({
   title,
   koreanTitle,
@@ -32,12 +39,10 @@ export default function DramaHero({
   const isDetailPage = Boolean(title);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Csak azok a drámák maradnak bent a listában, amelyeknél a 'featured' értéke igaz
   const list = dramas && dramas.length > 0 
     ? dramas.filter((drama) => drama.featured === true) 
     : [];
 
-  // Smooth képváltás időzítője
   useEffect(() => {
     if (isDetailPage || list.length <= 1) return;
     const interval = setInterval(() => {
@@ -48,27 +53,32 @@ export default function DramaHero({
 
   const activeDrama = list[currentIndex];
   
-  // Képek meghatározása (külön kezelve a wide és a sima mobilos képet)
-  const currentWideImg = wideImage || activeDrama?.wideImage || activeDrama?.image;
-  const currentMobileImg = image || activeDrama?.image || activeDrama?.wideImage;
+  const rawWideImg = wideImage || activeDrama?.wideImage || activeDrama?.image;
+  const rawMobileImg = image || activeDrama?.image || activeDrama?.wideImage;
+
+  const currentWideImg = urlForSanity(rawWideImg, 1400);
+  const currentMobileImg = urlForSanity(rawMobileImg, 500);
   
   const displayTitle = title || "Filme & Serien";
   const displayTagline = tagline || "Entdecke die beliebtesten südkoreanischen Dramen, Filme und die faszinierende Welt hinter den Kulissen an einem Ort.";
   
   const activeDramaId = activeDrama?.id;
   const activeDramaTitle = activeDrama?.title;
-  const activeDramaImage = activeDrama?.image || activeDrama?.wideImage;
+  const rawActiveDramaImage = activeDrama?.image || activeDrama?.wideImage;
+  const activeDramaImage = urlForSanity(rawActiveDramaImage, 200);
 
   return (
     <div className="relative w-full h-[85vh] min-h-162.5 max-h-237.5 overflow-hidden bg-[#050507] flex flex-col justify-between">
       
-      {/* Háttérképek - Reszponzív váltás (Desktopon wide, mobilon sima image) */}
       {list.length > 0 && !isDetailPage ? (
         <div className="absolute inset-0 z-0">
           {list.map((drama, idx) => {
-            const wideUrl = drama.wideImage || drama.image;
-            const mobileUrl = drama.image || drama.wideImage;
-            if (!wideUrl && !mobileUrl) return null;
+            const rawWide = drama.wideImage || drama.image;
+            const rawMobile = drama.image || drama.wideImage;
+            if (!rawWide && !rawMobile) return null;
+            
+            const wideUrl = urlForSanity(rawWide, 1400);
+            const mobileUrl = urlForSanity(rawMobile, 500);
             const isActive = idx === currentIndex;
             
             return (
@@ -86,8 +96,6 @@ export default function DramaHero({
                       alt={drama.title || "Drama"}
                       fill
                       sizes="100vw"
-                      unoptimized
-                      priority={idx === 0}
                       className={`object-cover object-center transform transition-transform duration-7000 ease-out ${
                         isActive ? 'scale-105' : 'scale-100'
                       }`}
@@ -95,7 +103,7 @@ export default function DramaHero({
                   </div>
                 )}
 
-                {/* Mobil kép (Álló / Normál) */}
+                {/* Mobil kép (Álló) - LCP elem fetchpriority-vel */}
                 {mobileUrl && (
                   <div className="block md:hidden absolute inset-0">
                     <Image
@@ -103,8 +111,9 @@ export default function DramaHero({
                       alt={drama.title || "Drama"}
                       fill
                       sizes="100vw"
-                      unoptimized
                       priority={idx === 0}
+                      loading="eager"
+                      fetchPriority={idx === 0 ? "high" : "auto"}
                       className={`object-cover object-center transform transition-transform duration-7000 ease-out ${
                         isActive ? 'scale-105' : 'scale-100'
                       }`}
@@ -125,8 +134,6 @@ export default function DramaHero({
                 alt={displayTitle}
                 fill
                 sizes="100vw"
-                unoptimized
-                priority
                 className="object-cover object-center opacity-75"
               />
             </div>
@@ -136,8 +143,9 @@ export default function DramaHero({
                 alt={displayTitle}
                 fill
                 sizes="100vw"
-                unoptimized
                 priority
+                loading="eager"
+                fetchPriority="high"
                 className="object-cover object-center opacity-75"
               />
             </div>
@@ -186,13 +194,13 @@ export default function DramaHero({
                 </span>
               )}
               {releaseYear && <span className="text-sm text-neutral-200">{releaseYear}</span>}
-              {episodes && <span className="text-sm text-neutral-200">• {episodes}</span>}
+              {episodes && <span className="text-sm text-neutral-200">{episodes}</span>}
               {rating && <span className="px-2.5 py-0.5 rounded bg-amber-500/30 text-amber-300 text-xs font-bold border border-amber-500/40">★ {rating}</span>}
             </div>
           )}
         </div>
 
-        {/* Jobb oldal: Kiemelt kártya német feliratokkal */}
+        {/* Jobb oldal: Kiemelt kártya */}
         {!isDetailPage && activeDrama && activeDramaId && (
           <Link 
             href={`/kdrama/${activeDramaId}`}
@@ -204,7 +212,7 @@ export default function DramaHero({
                   src={activeDramaImage}
                   alt={activeDramaTitle || "Drama"}
                   fill
-                  sizes="(max-width: 768px) 80px, 96px"
+                  sizes="80px"
                   className="object-cover group-hover:scale-110 transition-transform duration-500"
                 />
               </div>

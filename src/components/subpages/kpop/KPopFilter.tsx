@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
+import { SlidersHorizontal, Search, X } from 'lucide-react';
 
 export type GenderCategory = 'top10' | 'all' | 'bg' | 'gg' | 'solo';
 export type AgencyCategory = 'all' | 'HYBE' | 'SM' | 'YG' | 'JYP' | 'OTHER';
@@ -64,24 +65,54 @@ export default function KPopFilter({
   onSelectArtist,
 }: KPopFilterProps) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [drawerSearch, setDrawerSearch] = useState('');
   const drawerSourceArtists = allArtists || artists;
 
-  
-
-  const uniqueGenerations = Array.from(new Set(artists.map(a => a.generation).filter(Boolean)))
-    .sort() as string[];
+  // Mindig a teljes adatbázisból (drawerSourceArtists) szedjük ki a generációkat
+  const uniqueGenerations = useMemo(() => {
+    return Array.from(new Set(drawerSourceArtists.map(a => a.generation).filter(Boolean)))
+      .sort() as string[];
+  }, [drawerSourceArtists]);
 
   const generationOptions = [
     { id: 'all', label: 'Alle Generationen' },
     ...uniqueGenerations.map(gen => ({ id: gen, label: `${gen}. Gen` }))
   ];
 
+  // A modalon belüli aktuális szűrők (Ügynökség + Generáció) szerinti valós globális találatszám
+  const modalFilteredCount = useMemo(() => {
+    return drawerSourceArtists.filter((artist) => {
+      const matchesAgency =
+        selectedAgency === 'all' ||
+        artist.filterAgency?.toUpperCase() === selectedAgency.toUpperCase();
+
+      let matchesGeneration = true;
+      if (selectedGeneration !== 'all') {
+        const dbGen = String(artist.generation || '').toLowerCase().trim();
+        const filterGen = String(selectedGeneration).toLowerCase().trim();
+        const dbNum = dbGen.replace(/\D/g, '');
+        const filterNum = filterGen.replace(/\D/g, '');
+
+        if (dbNum && filterNum) {
+          matchesGeneration = dbNum === filterNum;
+        } else {
+          matchesGeneration = dbGen === filterGen;
+        }
+      }
+
+      return matchesAgency && matchesGeneration;
+    }).length;
+  }, [drawerSourceArtists, selectedAgency, selectedGeneration]);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsDrawerOpen(false);
+      if (e.key === 'Escape') {
+        setIsDrawerOpen(false);
+        setIsFilterModalOpen(false);
+      }
     };
-    if (isDrawerOpen) {
+    if (isDrawerOpen || isFilterModalOpen) {
       window.addEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'hidden';
     }
@@ -89,7 +120,7 @@ export default function KPopFilter({
       window.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'auto';
     };
-  }, [isDrawerOpen]);
+  }, [isDrawerOpen, isFilterModalOpen]);
 
   const filteredArtists = drawerSourceArtists.filter((artist) => {
     const searchLower = drawerSearch.toLowerCase();
@@ -99,87 +130,174 @@ export default function KPopFilter({
     );
   });
 
+  const hasActiveFilters = selectedAgency !== 'all' || selectedGeneration !== 'all';
+
+  // Modal megnyitásakor azonnal 'all'-ra tesszük a kategóriát, hogy ne ragadjon benn pl. 'solo'-ban
+  const handleOpenFilterModal = () => {
+    if (selectedGender !== 'all') {
+      onSelectGender('all');
+    }
+    setIsFilterModalOpen(true);
+  };
+
   return (
     <>
-      <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-8 mb-10">
-        <div className="flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-4 pb-6 border-b border-zinc-200/80">
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 pt-1 no-scrollbar sm:flex-wrap -mx-4 px-4 sm:mx-0 sm:px-0 shrink-0">
+      <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-8 mb-8">
+        <div className="flex flex-col gap-3.5 pb-6 border-b border-zinc-200/80">
+          
+          {/* 1. SOR: Fő kategóriák */}
+          <div className="w-full overflow-x-auto pb-1 no-scrollbar flex items-center gap-2">
             {GENDER_OPTIONS.map((opt) => (
               <button
                 key={opt.id}
                 onClick={() => onSelectGender(opt.id)}
-                className={`px-5 py-2 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer shrink-0 ${
+                className={`px-4 py-2 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${
                   selectedGender === opt.id
-                    ? 'bg-zinc-800 text-white shadow-sm'
-                    : 'bg-zinc-200/50 text-zinc-600 hover:bg-zinc-200 hover:text-zinc-900'
+                    ? 'bg-zinc-900 text-white shadow-sm'
+                    : 'bg-zinc-200/60 text-zinc-600 hover:bg-zinc-200 hover:text-zinc-900'
                 }`}
               >
                 {opt.label}
               </button>
             ))}
-            <div className="hidden sm:block h-4 w-px bg-zinc-300 mx-1 shrink-0" />
-            
-            {/* Kiadó Dropdown */}
-            <div className="relative shrink-0">
-              <select
-                value={selectedAgency}
-                onChange={(e) => onSelectAgency(e.target.value as AgencyCategory)}
-                className="appearance-none bg-zinc-200/50 hover:bg-zinc-200 text-zinc-700 text-xs font-medium rounded-full pl-4 pr-8 py-2 focus:outline-none transition-all cursor-pointer border-none"
-              >
-                {AGENCIES.map((agency) => (
-                  <option key={agency.id} value={agency.id} className="bg-white text-zinc-800">
-                    {agency.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Generáció Dropdown */}
-            <div className="relative shrink-0">
-              <select
-                value={selectedGeneration}
-                onChange={(e) => onSelectGeneration(e.target.value as GenerationCategory)}
-                className="appearance-none bg-zinc-200/50 hover:bg-zinc-200 text-zinc-700 text-xs font-medium rounded-full pl-4 pr-8 py-2 focus:outline-none transition-all cursor-pointer border-none"
-              >
-                {generationOptions.map((gen) => (
-                  <option key={gen.id} value={gen.id} className="bg-white text-zinc-800">
-                    {gen.label}
-                  </option>
-                ))}
-              </select>
-            </div>
           </div>
 
-          <div className="flex items-center gap-3 w-full xl:w-auto justify-between xl:justify-end flex-wrap sm:flex-nowrap">
-            <button
-              onClick={() => setIsDrawerOpen(true)}
-              className="px-4 py-2 rounded-full bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 text-zinc-700 text-xs font-medium transition-all flex items-center gap-2 cursor-pointer shrink-0 shadow-sm"
-            >
-              <span className="w-2 h-2 rounded-full bg-pink-500 animate-pulse" />
-              <span>Schnellindex ({artists.length})</span>
-            </button>
-
-            <div className="relative w-full sm:w-56">
+          {/* 2. SOR: Kereső, Filter gomb, Index gomb és Találati szám */}
+          <div className="flex items-center justify-between gap-2.5 flex-wrap sm:flex-nowrap pt-1">
+            
+            {/* Keresőmező */}
+            <div className="relative flex-1 min-w-40 sm:max-w-xs">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-400" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
-                placeholder="Suche..."
+                placeholder="Künstler suchen..."
                 className="w-full bg-zinc-100 text-zinc-800 text-xs font-normal rounded-full pl-9 pr-8 py-2 border border-zinc-200 focus:border-zinc-400 focus:bg-white focus:outline-none transition-all"
               />
+              {searchQuery && (
+                <button onClick={() => onSearchChange('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700">
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
-            <span className="text-[11px] font-medium text-zinc-500 whitespace-nowrap px-3 py-1.5 rounded-full bg-zinc-100 border border-zinc-200/60 shrink-0">
-              {totalCount} Treffer
-            </span>
+
+            {/* Asztali nézet aktív szűrő info */}
+            <div className="hidden md:flex items-center gap-4 text-xs text-zinc-500 font-medium">
+              <span>Agentur: <strong className="text-zinc-800">{AGENCIES.find(a => a.id === selectedAgency)?.label}</strong></span>
+              <span>Generation: <strong className="text-zinc-800">{selectedGeneration === 'all' ? 'Alle' : `${selectedGeneration}. Gen`}</strong></span>
+            </div>
+
+            {/* Jobb oldali akció gombok és találat */}
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                onClick={handleOpenFilterModal}
+                className={`relative px-3.5 py-2 rounded-full border text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer shadow-sm ${
+                  hasActiveFilters 
+                    ? 'bg-amber-500 text-black border-amber-600 font-bold' 
+                    : 'bg-zinc-100 hover:bg-zinc-200 border-zinc-200 text-zinc-700'
+                }`}
+              >
+                <SlidersHorizontal className="w-3.5 h-3.5" />
+                <span>Filter</span>
+                {hasActiveFilters && <span className="w-2 h-2 rounded-full bg-black animate-ping absolute -top-0.5 -right-0.5" />}
+              </button>
+
+              <button
+                onClick={() => setIsDrawerOpen(true)}
+                className="px-3.5 py-2 rounded-full bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 text-zinc-700 text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+              >
+                <span className="w-2 h-2 rounded-full bg-pink-500 animate-pulse" />
+                <span>Index ({drawerSourceArtists.length})</span>
+              </button>
+
+              <span className="text-[11px] font-medium text-zinc-500 whitespace-nowrap px-3 py-1.5 rounded-full bg-zinc-100 border border-zinc-200/60 hidden xs:inline-block">
+                {totalCount} Treffer
+              </span>
+            </div>
+
           </div>
+
         </div>
       </div>
 
+      {/* --- RÉSZLETES SZŰRŐ MODAL --- */}
+      {isFilterModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+          <div onClick={() => setIsFilterModalOpen(false)} className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity" />
+          <div className="relative w-full max-w-lg bg-white rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl z-10 border border-zinc-200 space-y-6 animate-in slide-in-from-bottom duration-300">
+            <div className="flex items-center justify-between border-b border-zinc-100 pb-4">
+              <h3 className="text-base font-bold text-zinc-900">Erweiterte Filter</h3>
+              <button onClick={() => setIsFilterModalOpen(false)} className="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center text-zinc-500 hover:text-zinc-900 cursor-pointer">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-zinc-600 uppercase tracking-wider">Agentur / Label</label>
+              <div className="grid grid-cols-2 gap-2">
+                {AGENCIES.map((agency) => (
+                  <button
+                    key={agency.id}
+                    onClick={() => { onSelectAgency(agency.id); }}
+                    className={`px-3 py-2.5 rounded-xl text-xs font-medium text-left transition-all cursor-pointer border ${
+                      selectedAgency === agency.id
+                        ? 'bg-zinc-900 text-white border-zinc-900 font-bold shadow-sm'
+                        : 'bg-zinc-50 text-zinc-700 border-zinc-200 hover:bg-zinc-100'
+                    }`}
+                  >
+                    {agency.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-zinc-600 uppercase tracking-wider">Generation</label>
+              <div className="flex flex-wrap gap-2">
+                {generationOptions.map((gen) => (
+                  <button
+                    key={gen.id}
+                    onClick={() => { onSelectGeneration(gen.id); }}
+                    className={`px-3.5 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer border ${
+                      selectedGeneration === gen.id
+                        ? 'bg-zinc-900 text-white border-zinc-900 font-bold shadow-sm'
+                        : 'bg-zinc-50 text-zinc-700 border-zinc-200 hover:bg-zinc-100'
+                    }`}
+                  >
+                    {gen.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-zinc-100 flex items-center justify-between">
+              <button
+                onClick={() => {
+                  onSelectAgency('all');
+                  onSelectGeneration('all');
+                  onSelectGender('all');
+                }}
+                className="text-xs text-zinc-500 hover:text-zinc-900 font-medium underline cursor-pointer"
+              >
+                Filter zurücksetzen
+              </button>
+              <button
+                onClick={() => setIsFilterModalOpen(false)}
+                className="px-6 py-2.5 rounded-full bg-zinc-900 text-white text-xs font-bold hover:bg-zinc-800 cursor-pointer shadow-md"
+              >
+                Anwenden ({modalFilteredCount} Treffer)
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* --- SCHNELLINDEX DRAWER --- */}
       {isDrawerOpen && (
         <div onClick={() => setIsDrawerOpen(false)} className="fixed inset-0 bg-black/70 backdrop-blur-xs z-50 transition-opacity" />
       )}
 
-      {/* Finomabb, kevésbé nyomasztó háttér (#0c0c10) */}
       <div className={`fixed top-0 right-0 h-full w-full max-w-md bg-[#0c0c10] border-l border-white/10 shadow-[-20px_0_50px_rgba(0,0,0,0.8)] z-50 transform transition-transform duration-300 ease-out flex flex-col ${isDrawerOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="p-6 border-b border-white/10 flex items-center justify-between bg-[#121218]/50 backdrop-blur-md">
           <div>

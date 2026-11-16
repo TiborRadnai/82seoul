@@ -37,6 +37,7 @@ export default function LogoMarquee() {
                 alt={logo.name}
                 fill
                 sizes="(max-width: 640px) 128px, 160px"
+                priority={idx < 4} // Az első néhány logónál jelöljük, hogy fontos a betöltés
                 className="object-contain p-1"
               />
             </div>

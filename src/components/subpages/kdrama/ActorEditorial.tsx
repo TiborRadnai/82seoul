@@ -14,6 +14,13 @@ interface Actor {
   bio?: string;
 }
 
+// Sanity optimalizáló segédfüggvény a képek méretezéséhez
+function urlForSanity(sourceUrl: string, width = 1000) {
+  if (!sourceUrl) return "";
+  const separator = sourceUrl.includes('?') ? '&' : '?';
+  return `${sourceUrl}${separator}w=${width}&auto=format&q=80`;
+}
+
 export default function ActorEditorial({ actors }: { actors: Actor[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedModalActor, setSelectedModalActor] = useState<Actor | null>(null);
@@ -21,16 +28,18 @@ export default function ActorEditorial({ actors }: { actors: Actor[] }) {
   if (!actors || actors.length === 0) return null;
 
   const currentActor = actors[activeIndex] || actors[0];
+  const optimizedBgImage = urlForSanity(currentActor.image, 1200);
+  const optimizedCardImage = urlForSanity(currentActor.image, 600);
 
   return (
     <section className="relative w-full bg-[#0a0a0e] text-white py-20 md:py-32 px-6 md:px-12 lg:px-16 overflow-hidden border-t border-neutral-800/60">
       
-      {/* Háttérportré: CSS alapú megoldás (Nincs több Image sizes hiba) */}
+      {/* Háttérportré: CSS alapú megoldás (optimalizált URL-lel) */}
       <div className="absolute inset-0 z-0 opacity-42 pointer-events-none transition-all duration-1000 ease-in-out">
         {currentActor.image && (
           <div 
             className="absolute inset-0 bg-cover bg-center filter grayscale contrast-125 scale-105 transition-transform duration-1000"
-            style={{ backgroundImage: `url(${currentActor.image})` }}
+            style={{ backgroundImage: `url(${optimizedBgImage})` }}
           />
         )}
         <div className="absolute inset-0 bg-linear-to-r from-[#0a0a0e] via-[#0a0a0e]/75 to-[#0a0a0e]/30" />
@@ -67,7 +76,7 @@ export default function ActorEditorial({ actors }: { actors: Actor[] }) {
               {currentActor.image && (
                 <Image
                   key={currentActor.id}
-                  src={currentActor.image}
+                  src={optimizedCardImage}
                   alt={currentActor.name}
                   fill
                   sizes="(max-width: 768px) 384px, (max-width: 1024px) 500px, 450px"
