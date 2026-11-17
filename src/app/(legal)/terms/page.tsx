@@ -1,11 +1,16 @@
-'use client';
+import Link from "next/link";
+import { Sparkles, ArrowLeft } from "lucide-react";
+import type { Metadata } from 'next';
 
-import { useRouter } from "next/navigation";
-import { Sparkles, ArrowLeft, FileText, Scale, ShoppingBag, RotateCcw } from "lucide-react";
+export const metadata: Metadata = {
+  title: 'AGB & Widerrufsbelehrung | 82seoul',
+  description: 'Allgemeine Geschäftsbedingungen und Verbraucherinformationen für den Online-Shop von 82seoul.',
+  alternates: {
+    canonical: 'https://www.82seoul.de/terms',
+  },
+};
 
 export default function TermsPage() {
-  const router = useRouter();
-
   return (
     <main className="min-h-screen bg-neutral-50 text-slate-900 font-sans antialiased selection:bg-rose-500/20 selection:text-slate-900 relative overflow-hidden">
       
@@ -20,13 +25,13 @@ export default function TermsPage() {
         
         {/* Vissza gomb */}
         <div className="mb-12">
-          <button 
-            onClick={() => router.back()}
+          <Link 
+            href="/"
             className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-slate-600 hover:text-slate-900 bg-white border border-slate-200 px-4 py-2.5 rounded-full transition-all duration-300 hover:border-slate-300 shadow-xs cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Zurück</span>
-          </button>
+            <span>Zurück zur Startseite</span>
+          </Link>
         </div>
 
         {/* Fejléc / Kategória badge */}

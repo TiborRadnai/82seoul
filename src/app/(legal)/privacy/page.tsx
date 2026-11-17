@@ -1,11 +1,16 @@
-'use client';
+import Link from "next/link";
+import { Sparkles, ArrowLeft } from "lucide-react";
+import type { Metadata } from 'next';
 
-import { useRouter } from "next/navigation";
-import { Sparkles, ArrowLeft, ShieldCheck, Database, Server, UserCheck, Lock } from "lucide-react";
+export const metadata: Metadata = {
+  title: 'Datenschutzerklärung | 82seoul',
+  description: 'Transparenz und Schutz deiner personenbezogenen Daten nach den Vorgaben der Datenschutz-Grundverordnung (DSGVO) auf 82seoul.',
+  alternates: {
+    canonical: 'https://www.82seoul.de/privacy',
+  },
+};
 
 export default function DatenschutzPage() {
-  const router = useRouter();
-
   return (
     <main className="min-h-screen bg-neutral-50 text-slate-900 font-sans antialiased selection:bg-rose-500/20 selection:text-slate-900 relative overflow-hidden">
       
@@ -18,15 +23,15 @@ export default function DatenschutzPage() {
 
       <div className="max-w-4xl mx-auto px-6 pt-28 pb-24 relative z-10">
         
-        {/* Vissza gomb */}
+        {/* Vissza gomb (Link-ként megvalósítva, így nem kell hozzá 'use client') */}
         <div className="mb-12">
-          <button 
-            onClick={() => router.back()}
+          <Link 
+            href="/"
             className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-slate-600 hover:text-slate-900 bg-white border border-slate-200 px-4 py-2.5 rounded-full transition-all duration-300 hover:border-slate-300 shadow-xs cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Zurück</span>
-          </button>
+            <span>Zurück zur Startseite</span>
+          </Link>
         </div>
 
         {/* Fejléc / Kategória badge */}
@@ -64,7 +69,7 @@ export default function DatenschutzPage() {
               2. Hosting & Content Delivery (Vercel & Sanity)
             </h2>
             <p className="text-slate-700 text-sm md:text-base leading-relaxed">
-              Wir hosten die Inhalte unserer Website bei externen Anbietern (z. B. Vercel). Die personenbezogenen Daten, die auf dieser Website erfasst werden, werden auf den Servern des Hosters gespeichert. Hierbei kann es sich v. a. um IP-Adressen, Kontaktanfragen, Meta- und Kommunikationsdaten handeln. Zudem nutzen wir Sanity CMS zur Verwaltung unserer redaktionellen Inhalte.
+              Wir hosten die Inhalte unserer Website bei externen Anbietern (z. B. Netcup). Die personenbezogenen Daten, die auf dieser Website erfasst werden, werden auf den Servern des Hosters gespeichert. Hierbei kann es sich v. a. um IP-Adressen, Kontaktanfragen, Meta- und Kommunikationsdaten handeln. Zudem nutzen wir Sanity CMS zur Verwaltung unserer redaktionellen Inhalte.
             </p>
           </section>
 
@@ -83,7 +88,7 @@ export default function DatenschutzPage() {
             </div>
           </section>
 
-          {/* 4. Szekció: Regisztráció és törlési logika (Kiemelten fontos nálad!) */}
+          {/* 4. Szekció: Regisztráció és törlési logika */}
           <section className="bg-white border border-slate-200/80 rounded-3xl p-8 md:p-10 relative overflow-hidden space-y-6 shadow-xs">
             <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-3">
               <span className="w-2 h-2 rounded-full bg-purple-500" />
@@ -95,14 +100,14 @@ export default function DatenschutzPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
               <div className="bg-slate-50 border border-slate-200 p-5 rounded-2xl space-y-2 shadow-xs">
-                <h3 className="text-slate-900 font-bold text-sm tracking-wide uppercase text-emerald-600">Ohne Käufe (Löschung)</h3>
+                <h3 className=" font-bold text-sm tracking-wide uppercase text-emerald-600">Ohne Käufe (Löschung)</h3>
                 <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
                     Löscht ein Nutzer sein Konto und hat bisher keine kostenpflichtigen Transaktionen getätigt, werden sämtliche personenbezogenen Daten <strong>vollständig und unwiderruflich gelöscht</strong>.
                 </p>
               </div>
 
               <div className="bg-slate-50 border border-slate-200 p-5 rounded-2xl space-y-2 shadow-xs">
-                <h3 className="text-slate-900 font-bold text-sm tracking-wide uppercase text-rose-600">Mit Käufen (Aufbewahrung)</h3>
+                <h3 className=" font-bold text-sm tracking-wide uppercase text-rose-600">Mit Käufen (Aufbewahrung)</h3>
                 <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
                   Wurden Käufe getätigt, sind wir aufgrund gesetzlicher handels- und steuerrechtlicher Aufbewahrungspflichten (z. B. 10 Jahre für Rechnungen) verpflichtet, die Rechnungsdaten zu speichern.
                 </p>
@@ -117,7 +122,7 @@ export default function DatenschutzPage() {
               5. Analyse-Tools & Consent Management
             </h2>
             <p className="text-slate-700 text-sm md:text-base leading-relaxed">
-              Diese Website verwendet Analysetools (wie Google Analytics) und Cookies ausschließlich im Einklang mit den DSGVO-Vorgaben. Die Datenerfassung und das Tracking erfolgen erst nach deiner ausdrücklichen Einwilligung über unser Cookie-Consent-Management.
+              Diese Website verwendet Analysetools und Cookies ausschließlich im Einklang mit den DSGVO-Vorgaben. Die Datenerfassung und das Tracking erfolgen erst nach deiner ausdrücklichen Einwilligung über unser Cookie-Consent-Management.
             </p>
           </section>
 
