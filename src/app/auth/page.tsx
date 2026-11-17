@@ -6,6 +6,7 @@ import { useAuth } from '../../../context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
+// Egyszerűsített, biztonságos koreai átíró segédfüggvény
 const convertToKorean = (name: string): string => {
   const map: { [key: string]: string } = {
     a: '아', e: '에', i: '이', o: '오', u: '우',
@@ -20,7 +21,7 @@ const convertToKorean = (name: string): string => {
     na: '나', ne: '네', ni: '니', no: '노', nu: '누',
     pa: '파', pe: '페', pi: '피', po: '포', pu: '푸',
     ra: '라', re: '레', ri: '리', ro: '로', ru: '루',
-    sa: '사', se: '세', si: '시', so: '소', su: 'सु',
+    sa: '사', se: '세', si: '시', so: '소', su: '수',
     ta: '타', te: '테', ti: '티', to: '토', tu: '투',
     va: '바', ve: '베', vi: '비', vo: '보', vu: '부',
     za: '자', ze: '제', zi: '지', zo: '조', zu: '주',
@@ -32,8 +33,8 @@ const convertToKorean = (name: string): string => {
 
   let result = '';
   for (let i = 0; i < lower.length; i += 2) {
-    const chunk = lower.substr(i, 2);
-    const single = lower.substr(i, 1);
+    const chunk = lower.substring(i, i + 2);
+    const single = lower.substring(i, i + 1);
     if (map[chunk]) {
       result += map[chunk];
     } else if (map[single]) {
@@ -59,7 +60,6 @@ export default function AuthPage() {
   const [postalCode, setPostalCode] = useState('');
   const [country, setCountry] = useState('Deutschland');
   
-  // Hírlevél checkbox állapota
   const [subscribeNewsletter, setSubscribeNewsletter] = useState(false);
 
   const [error, setError] = useState('');
@@ -95,7 +95,6 @@ export default function AuthPage() {
           },
         });
 
-        // Ha bepipálta a hírlevelet, elküldjük a saját API-nknak vagy mentjük a Sanitybe
         if (subscribeNewsletter) {
           try {
             await fetch('/api/newsletter', {
@@ -110,9 +109,10 @@ export default function AuthPage() {
 
         router.push('/');
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("AUTH FEHLER:", err);
-      setError(err.message || 'Ein Fehler ist aufgetreten.');
+      const errorMessage = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten.';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -291,7 +291,6 @@ export default function AuthPage() {
                 </div>
               </div>
 
-              {/* Hírlevél Checkbox a sima regisztrációnál */}
               <div className="pt-2 flex items-start gap-3">
                 <input
                   type="checkbox"
@@ -319,6 +318,7 @@ export default function AuthPage() {
 
         <div className="mt-6 text-center">
           <button
+            type="button"
             onClick={() => {
               setIsLogin(!isLogin);
               setError('');

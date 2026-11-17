@@ -1,11 +1,16 @@
-'use client';
+import Link from "next/link";
+import { Sparkles, ArrowLeft, Mail, FileText } from "lucide-react";
+import type { Metadata } from 'next';
 
-import { useRouter } from "next/navigation";
-import { Sparkles, ArrowLeft, Building2, Mail, Phone, FileText, Image as ImageIcon } from "lucide-react";
+export const metadata: Metadata = {
+  title: 'Impressum | 82seoul',
+  description: 'Angaben gemäß § 5 TDDG (Digitale-Dienste-Gesetz) für 82seoul (betrieben über Madevix, Tibor Radnai).',
+  alternates: {
+    canonical: 'https://www.82seoul.de/impressum',
+  },
+};
 
 export default function ImpressumPage() {
-  const router = useRouter();
-
   return (
     <main className="min-h-screen bg-neutral-50 text-slate-900 font-sans antialiased selection:bg-rose-500/20 selection:text-slate-900 relative overflow-hidden">
       
@@ -20,13 +25,13 @@ export default function ImpressumPage() {
         
         {/* Vissza gomb */}
         <div className="mb-12">
-          <button 
-            onClick={() => router.back()}
+          <Link 
+            href="/"
             className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-slate-600 hover:text-slate-900 bg-white border border-slate-200 px-4 py-2.5 rounded-full transition-all duration-300 hover:border-slate-300 shadow-xs cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Zurück</span>
-          </button>
+            <span>Zurück zur Startseite</span>
+          </Link>
         </div>
 
         {/* Fejléc / Kategória badge */}
@@ -70,7 +75,7 @@ export default function ImpressumPage() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
               <div className="bg-slate-50 border border-slate-200 p-5 rounded-2xl space-y-2 shadow-xs">
-                <h3 className=" font-bold text-sm tracking-wide uppercase text-amber-600 flex items-center gap-2">
+                <h3 className="font-bold text-sm tracking-wide uppercase text-amber-600 flex items-center gap-2">
                   <Mail className="w-4 h-4" /> Kontakt
                 </h3>
                 <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
@@ -80,7 +85,7 @@ export default function ImpressumPage() {
               </div>
 
               <div className="bg-slate-50 border border-slate-200 p-5 rounded-2xl space-y-2 shadow-xs">
-                <h3 className=" font-bold text-sm tracking-wide uppercase text-rose-600 flex items-center gap-2">
+                <h3 className="font-bold text-sm tracking-wide uppercase text-rose-600 flex items-center gap-2">
                   <FileText className="w-4 h-4" /> Steuernummer & W-IdNr.
                 </h3>
                 <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
@@ -91,14 +96,14 @@ export default function ImpressumPage() {
             </div>
           </section>
 
-          {/* 3. Szekció: Bildnachweise & Urheberrecht (ÚJ!) */}
+          {/* 3. Szekció: Bildnachweise & Urheberrecht */}
           <section className="bg-white border border-slate-200/80 rounded-3xl p-8 md:p-10 relative overflow-hidden space-y-4 shadow-xs">
             <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-3">
               <span className="w-2 h-2 rounded-full bg-indigo-500" />
               Bildnachweise & Urheberrecht
             </h2>
             <p className="text-slate-700 text-sm md:text-base leading-relaxed">
-              Die auf dieser Website verwendeten Bilder, Grafiken, Promomaterialien und Cover stammen teilweise von offiziellen Presseportalen, den Social-Media-Präsenzen der Künstler (Instagram/TikTok) oder wurden über lizenzierte Plattformen (Envato Elements) erworben.
+              Die auf dieser Website verwendeten Bilder, Grafiken, Promomaterialien und Cover stammen teilweise von offiziellen Presseportalen, den Social-Media-Präsenzen der Künstler (Instagram/TikTok) oder wurden über lizenzierte Plattformen erworben.
             </p>
             <p className="text-slate-700 text-sm md:text-base leading-relaxed">
               Sämtliche Urheber- und Verwertungsrechte der verwendeten Künstlerfotos, Logos und Albencover verbleiben bei den jeweiligen Urhebern, Plattenlabels oder offiziellen Rechteinhabern. Sollten Sie dennoch auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.
@@ -112,7 +117,7 @@ export default function ImpressumPage() {
               Verbraucherstreitbeilegung
             </h2>
             <p className="text-slate-700 text-sm md:text-base leading-relaxed">
-              Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
+              Wir sind nicht bereit vagy verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
             </p>
           </section>
 

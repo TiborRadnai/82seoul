@@ -1,11 +1,16 @@
-"use client";
-
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Sparkles, ArrowLeft, Globe } from "lucide-react";
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Über uns — Die Brücke nach Südkorea | 82seoul',
+  description: 'Deine kuratierte Plattform für authentische koreanische Kultur, Musik und Lifestyle direkt aus Seoul.',
+  alternates: {
+    canonical: 'https://www.82seoul.de/about',
+  },
+};
 
 export default function AboutPage() {
-  const router = useRouter();
-
   return (
     <main className="min-h-screen bg-neutral-50 text-slate-900 font-sans antialiased selection:bg-rose-500/20 selection:text-slate-900 relative overflow-hidden">
       
@@ -18,15 +23,15 @@ export default function AboutPage() {
 
       <div className="max-w-4xl mx-auto px-6 pt-28 pb-24 relative z-10">
         
-        {/* Intelligens Vissza gomb (Oda visz, ahonnan jött) */}
+        {/* Vissza gomb (Link-ként megvalósítva) */}
         <div className="mb-12">
-          <button 
-            onClick={() => router.back()}
+          <Link 
+            href="/"
             className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-slate-600 hover:text-slate-900 bg-white border border-slate-200 px-4 py-2.5 rounded-full transition-all duration-300 hover:border-slate-300 shadow-xs cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Zurück</span>
-          </button>
+            <span>Zurück zur Startseite</span>
+          </Link>
         </div>
 
         {/* Fejléc / Kategória badge */}
@@ -72,14 +77,14 @@ export default function AboutPage() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
               <div className="bg-slate-50 border border-slate-200 p-5 rounded-2xl space-y-2 shadow-xs">
-                <h3 className="text-slate-900 font-bold text-sm tracking-wide uppercase text-amber-600">Unsere Identität</h3>
+                <h3 className=" font-bold text-sm tracking-wide uppercase text-amber-600">Unsere Identität</h3>
                 <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
                   Genauso wie die moderne Architektur Seouls setzen wir auf edle, reduzierte Betontöne, klare Linien und kompromisslose Ästhetik.
                 </p>
               </div>
 
               <div className="bg-slate-50 border border-slate-200 p-5 rounded-2xl space-y-2 shadow-xs">
-                <h3 className="text-slate-900 font-bold text-sm tracking-wide uppercase text-rose-600">Unser Ziel</h3>
+                <h3 className=" font-bold text-sm tracking-wide uppercase text-rose-600">Unser Ziel</h3>
                 <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
                   Wir möchten dieses faszinierende Lebensgefühl direkt zu dir nach Europa bringen und einen verlässlichen Anlaufpunkt schaffen.
                 </p>
