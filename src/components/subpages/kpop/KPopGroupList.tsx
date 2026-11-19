@@ -17,7 +17,7 @@ export default function KPopGroupList({ initialArtists }: KPopGroupListProps) {
   const searchParams = useSearchParams();
 
   // Olvassuk ki az értékeket közvetlenül az URL-ből. 
-  // A gender esetében ha nincs benn, akkor 'top10', de ha benn van ('all', 'gg', stb.), akkor azt használjuk!
+  // A gender esetében ha nincs benn, akkor 'top10', de ha benn van ('all', 'gg', 'bg', 'coed', 'solo'), akkor azt használjuk!
   const genderParam = searchParams.get('gender');
   const selectedGender: GenderCategory = genderParam ? (genderParam as GenderCategory) : 'top10';
   const selectedAgency = (searchParams.get('agency') as AgencyCategory) || 'all';
@@ -31,7 +31,7 @@ export default function KPopGroupList({ initialArtists }: KPopGroupListProps) {
     Object.entries(updates).forEach(([key, value]) => {
       if (value) {
         if (key === 'gender') {
-          // A gender értéket MINDIG beírjuk az URL-be (top10, all, gg, bg, solo), nem törölhetjük ki!
+          // A gender értéket MINDIG beírjuk az URL-be (top10, all, gg, bg, coed, solo), nem törölhetjük ki!
           params.set('gender', value);
         } else if (value !== 'all') {
           params.set(key, value);
@@ -50,7 +50,7 @@ export default function KPopGroupList({ initialArtists }: KPopGroupListProps) {
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
-  // 1. Kategória váltás (Top 10, Alle, Girlgroups, Boygroups, Solos)
+  // 1. Kategória váltás (Top 10, Alle, Girlgroups, Boygroups, Duo & Co-ed, Solos)
   const setSelectedGender = (val: GenderCategory) => {
     if (val === 'top10') {
       updateQueryParams({
@@ -146,8 +146,7 @@ export default function KPopGroupList({ initialArtists }: KPopGroupListProps) {
     });
 
     return sortedData.filter((item) => {
-      // 1. Kategória ('top10', 'all', 'bg', 'gg', 'solo')
-      // Ha 'top10' vagy 'all' van kiválasztva, akkor minden kategória átmegy ('all' esetén is mind a 28)
+      // 1. Kategória ('top10', 'all', 'bg', 'gg', 'coed', 'solo')
       const matchesGender =
         selectedGender === 'top10' ||
         selectedGender === 'all' ||

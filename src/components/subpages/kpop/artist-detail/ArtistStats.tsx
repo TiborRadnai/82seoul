@@ -9,7 +9,7 @@ interface ArtistStatsProps {
   artistId: string;
   agency: string;
   members: string | number;
-  category: 'gg' | 'bg' | 'solo';
+  category: 'gg' | 'bg' | 'solo' | 'coed';
   themeColor?: string;
 }
 
@@ -111,6 +111,7 @@ export default function ArtistStats({ artistId, agency, members, category, theme
             >
               {category === 'gg' && 'Girlgroup'}
               {category === 'bg' && 'Boygroup'}
+              {category === 'coed' && 'Duo & Co-ed'}
               {category === 'solo' && 'Solokünstler'}
             </span>
           </div>
