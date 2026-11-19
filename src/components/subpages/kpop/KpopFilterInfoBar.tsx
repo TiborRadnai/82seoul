@@ -4,10 +4,10 @@ import React from 'react';
 import {
   Sparkles,
   Users,
+  UsersRound,
   Disc3,
   Award,
   Search,
-  SlidersHorizontal,
 } from 'lucide-react';
 
 interface KpopFilterInfoBarProps {
@@ -20,30 +20,20 @@ interface KpopFilterInfoBarProps {
 
 function getSpotifyWeek() {
   const date = new Date();
-
   const target = new Date(date.valueOf());
-
   const dayNr = (date.getDay() + 6) % 7;
 
   target.setDate(target.getDate() - dayNr + 3);
 
   const firstThursday = target.valueOf();
-
   target.setMonth(0, 1);
 
   if (target.getDay() !== 4) {
-    target.setMonth(
-      0,
-      1 + ((4 - target.getDay()) + 7) % 7
-    );
+    target.setMonth(0, 1 + ((4 - target.getDay() + 7) % 7));
   }
 
   const week =
-    1 +
-    Math.ceil(
-      (firstThursday - target.valueOf()) /
-        604800000
-    );
+    1 + Math.ceil((firstThursday - target.valueOf()) / 604800000);
 
   return Math.max(1, week - 1);
 }
@@ -55,30 +45,27 @@ export default function KpopFilterInfoBar({
   searchQuery = '',
   totalCount,
 }: KpopFilterInfoBarProps) {
-  const hasExtraFilters =
-    selectedAgency !== 'all' || selectedGeneration !== 'all';
-
   const getContent = () => {
     if (searchQuery.trim()) {
-        return {
+      return {
         icon: <Search className="w-4 h-4 text-pink-500" />,
         label: 'SUCHERGEBNISSE',
         title: `Suche nach „${searchQuery.trim()}“`,
         description:
-            'Die Ergebnisse umfassen Künstler, Gruppen, Agenturen, Mitglieder sowie weitere Inhalte aus der 82Seoul K-Pop Datenbank.',
+          'Die Ergebnisse umfassen Künstler, Gruppen, Agenturen, Mitglieder sowie weitere Inhalte aus der 82Seoul K-Pop Datenbank.',
         isTop10: false,
-        };
+      };
     }
 
     switch (activeFilter) {
-        case 'top10':
+      case 'top10':
         return {
-            icon: <Award className="w-4 h-4 text-amber-500" />,
-            label: '82SEOUL TOP 10',
-            title: 'Wie entsteht das 82Seoul Top 10 Ranking?',
-            description:
+          icon: <Award className="w-4 h-4 text-amber-500" />,
+          label: '82SEOUL TOP 10',
+          title: 'Wie entsteht das 82Seoul Top 10 Ranking?',
+          description:
             'Das wöchentliche 82Seoul Ranking basiert auf den aktuellen Spotify Korea Top Artists Charts. Da die 82Seoul Datenbank kontinuierlich erweitert wird und noch nicht alle koreanischen Künstler umfasst, werden ausschließlich bereits erfasste Künstler und Gruppen berücksichtigt. Die Platzierungen werden wöchentlich entsprechend der aktuellen Spotify Korea Rankings aktualisiert.',
-            isTop10: true,
+          isTop10: true,
         };
 
       case 'gg':
@@ -88,7 +75,7 @@ export default function KpopFilterInfoBar({
           title: 'Girlgroups der koreanischen Musikszene',
           description:
             'Diese Auswahl umfasst aktive sowie prägende Girlgroups verschiedener K-Pop Generationen innerhalb der 82Seoul Datenbank.',
-          isTop10: false, 
+          isTop10: false,
         };
 
       case 'bg':
@@ -98,7 +85,17 @@ export default function KpopFilterInfoBar({
           title: 'Boygroups der koreanischen Musikszene',
           description:
             'Diese Übersicht zeigt Boygroups unterschiedlicher Generationen, Konzepte und Agenturen innerhalb der 82Seoul Datenbank.',
-          isTop10: false,  
+          isTop10: false,
+        };
+
+      case 'coed':
+        return {
+          icon: <UsersRound className="w-4 h-4 text-rose-500" />,
+          label: 'DUO & CO-ED',
+          title: 'Duos & Co-ed Gruppen der koreanischen Musikszene',
+          description:
+            'Diese Auswahl umfasst gemischte Formationen sowie markante Duos aus Südkorea, die klassische Genregrenzen verbinden und eigene musikalische Akzente setzen.',
+          isTop10: false,
         };
 
       case 'solo':
@@ -108,7 +105,7 @@ export default function KpopFilterInfoBar({
           title: 'Solo-Künstler & Einzelinterpreten',
           description:
             'Die Auswahl umfasst Solo-Künstler, ehemalige Gruppenmitglieder sowie eigenständige Interpreten aus der koreanischen Musikszene.',
-          isTop10: false,  
+          isTop10: false,
         };
 
       default:
@@ -118,7 +115,7 @@ export default function KpopFilterInfoBar({
           title: 'Künstler, Gruppen und Solo Acts',
           description:
             'Diese Übersicht vereint alle derzeit erfassten Künstler, Gruppen und Solo Acts der 82Seoul K-Pop Datenbank.',
-          isTop10: false,  
+          isTop10: false,
         };
     }
   };
@@ -131,9 +128,7 @@ export default function KpopFilterInfoBar({
       <div className="border-t border-zinc-200 mb-6" />
 
       <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
-
         <div className="max-w-4xl">
-
           <div className="flex items-center gap-2 text-xs tracking-[0.25em] uppercase text-zinc-500 mb-3">
             {content.icon}
             <span>{content.label}</span>
@@ -146,39 +141,35 @@ export default function KpopFilterInfoBar({
           <p className="text-sm sm:text-[15px] leading-7 text-zinc-600">
             {content.description}
           </p>
-
         </div>
 
-<div className="shrink-0 lg:text-right">
+        <div className="shrink-0 lg:text-right">
+          {content.isTop10 ? (
+            <>
+              <div className="text-xs uppercase tracking-[0.25em] text-zinc-400 mb-2">
+                Spotify Korea
+              </div>
 
-  {content.isTop10 ? (
-    <>
-      <div className="text-xs uppercase tracking-[0.25em] text-zinc-400 mb-2">
-        Spotify Korea
-      </div>
+              <div className="text-3xl font-light text-zinc-900">
+                KW {spotifyWeek}
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="text-xs uppercase tracking-[0.25em] text-zinc-400 mb-2">
+                Einträge
+              </div>
 
-      <div className="text-3xl font-light text-zinc-900">
-        KW {spotifyWeek}
-      </div>
-    </>
-  ) : (
-    <>
-      <div className="text-xs uppercase tracking-[0.25em] text-zinc-400 mb-2">
-        Einträge
-      </div>
+              <div className="flex lg:justify-end items-center gap-3">
+                <span className="w-2 h-2 rounded-full bg-pink-500" />
 
-      <div className="flex lg:justify-end items-center gap-3">
-        <span className="w-2 h-2 rounded-full bg-pink-500" />
-
-        <span className="text-3xl font-light text-zinc-900">
-          {totalCount}
-        </span>
-      </div>
-    </>
-  )}
-
-</div>
-
+                <span className="text-3xl font-light text-zinc-900">
+                  {totalCount}
+                </span>
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
       <div className="border-b border-zinc-200 mt-6" />

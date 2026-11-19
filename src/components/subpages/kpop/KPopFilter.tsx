@@ -4,14 +4,14 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { SlidersHorizontal, Search, X } from 'lucide-react';
 
-export type GenderCategory = 'top10' | 'all' | 'bg' | 'gg' | 'solo';
+export type GenderCategory = 'top10' | 'all' | 'bg' | 'gg' | 'solo' | 'coed';
 export type AgencyCategory = 'all' | 'HYBE' | 'SM' | 'YG' | 'JYP' | 'OTHER';
 export type GenerationCategory = string;
 
 export interface ArtistIndexItem {
   id: string;
   name: string;
-  category: 'bg' | 'gg' | 'solo';
+  category: 'bg' | 'gg' | 'solo' | 'coed';
   themeColor?: string;
   filterAgency: AgencyCategory;
   generation?: string;
@@ -38,6 +38,7 @@ const GENDER_OPTIONS: { id: GenderCategory; label: string }[] = [
   { id: 'all', label: 'Alle Künstler' },
   { id: 'gg', label: 'Girlgroups' },
   { id: 'bg', label: 'Boygroups' },
+  { id: 'coed', label: 'Duo & Co-ed' },
   { id: 'solo', label: 'Solokünstler' },
 ];
 
@@ -138,6 +139,20 @@ export default function KPopFilter({
       onSelectGender('all');
     }
     setIsFilterModalOpen(true);
+  };
+
+  // Segédfüggvény a kategória rövidítéséhez a gyorslistában
+  const getCategoryShortLabel = (category: ArtistIndexItem['category']) => {
+    switch (category) {
+      case 'gg':
+        return 'GG';
+      case 'bg':
+        return 'BG';
+      case 'coed':
+        return 'Co-ed';
+      default:
+        return 'Solo';
+    }
   };
 
   return (
@@ -363,7 +378,7 @@ export default function KPopFilter({
                   </div>
 
                   <span className="text-[10px] uppercase tracking-widest text-zinc-500 group-hover:text-zinc-300">
-                    {artist.category === 'gg' ? 'GG' : artist.category === 'bg' ? 'BG' : 'Solo'}
+                    {getCategoryShortLabel(artist.category)}
                   </span>
                 </button>
               );
